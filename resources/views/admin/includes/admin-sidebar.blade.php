@@ -12,7 +12,7 @@ $segment3 = Request::segment(3);
     <a href="{{url('/admin/dashboard')}}" class="brand-link">
 <!--        <img src="{{url('sites/users/images/small-logo.png')}}" alt="Tutify" class="brand-image img-circle elevation-3"
    style="opacity: .8">-->
-        <h4 class="admn-title">Rent27 Admin</h4>
+        <h4 class="admn-title">EMPTYTRUCK100 Admin</h4>
     </a>
     <!-- Sidebar -->
     <div class="sidebar">

@@ -22,12 +22,7 @@ class WelcomeController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function landing_index() {
-        if (Auth::check()) {
-            return redirect('/');
-        }
         return view('sites.index');
     }
-
-
 
 }

@@ -50,15 +50,9 @@
                         </ul> 
                     </div>
                 </div>
-
-
             </div>
-
-
         </div>
     </div>
-
-
     <div class="footer-bot">
         <div class="container">
             <div class="row">
@@ -71,249 +65,125 @@
 </footer>
 <!--footer ends-->
 
+<!-- popup form-->
+
+<div class="cd-user-modal"> <!-- this is the entire modal form, including the background -->
+    <div class="cd-user-modal-container"> <!-- this is the container wrapper -->
+        <ul class="cd-switcher">
+            <li><a href="#0">Sign in</a></li>
+            <li><a href="#0">New account</a></li>
+        </ul>
+
+        <div id="cd-login"> 
+            <!-- log in form -->
+            <form class="cd-form" action="{{url('login')}}" id="login_form" method="post">
+                @csrf
+                <p class="fieldset">
+                    <label class="image-replace cd-email" for="username">E-mail</label>
+                    <input class="full-width has-padding has-border" name="username" id="username" type="email" placeholder="E-mail">
+                    <span class="cd-error-message" id="loginErrMsg"></span>
+                </p>
+                <p class="fieldset">
+                    <label class="image-replace cd-password" for="pwd">Password</label>
+                    <input class="full-width has-padding has-border" name="password" id="pwd" type="password"  placeholder="Password">
+                    <a href="#0" class="hide-password">Show</a>
+                    <span class="cd-error-message" id="pwdErrMsg">Error message here!</span>
+                </p>
+
+                <p class="fieldset">
+                    <input type="checkbox" id="remember-me" checked>
+                    <label for="remember-me">Remember me</label>
+                </p>
+
+                <p class="fieldset">
+                    <input class="full-width" type="submit" value="Login" id="user-login-btn">
+                </p>
+            </form>
+            <p class="cd-form-bottom-message"><a href="{{url('password/reset')}}">Forgot your password?</a></p>
+            <!-- <a href="#0" class="cd-close-form">Close</a> -->
+        </div> <!-- cd-login -->
+
+        <div id="cd-signup"> <!-- sign up form -->
+            <form class="cd-form" action="{{url('register')}}" method="post">
+                @csrf
+                <p class="fieldset">
+                    <span class="cd-error-message" id="signUpErr">Error message here!</span>
+                </p>
+
+                <p class="fieldset">
+                    <label class="image-replace cd-username" for="signup-fname">First Name</label>
+                    <input class="full-width has-padding has-border" id="signup-fname" name="fname" type="text" placeholder="First Name">
+                    <span class="cd-error-message">Error message here!</span>
+                </p>
+                <p class="fieldset">
+                    <label class="image-replace cd-username" for="signup-lname">Last Name</label>
+                    <input class="full-width has-padding has-border" id="signup-lname" name="lname" type="text" placeholder="Last Name">
+                    <span class="cd-error-message">Error message here!</span>
+                </p>
+
+                <p class="fieldset">
+                    <label class="image-replace cd-email" for="signup-email">E-mail</label>
+                    <input class="full-width has-padding has-border" id="signup-email" name="email" type="email" placeholder="E-mail">
+                    <span class="cd-error-message">Error message here!</span>
+                </p>
+
+                <p class="fieldset">
+                    <label class="image-replace cd-password" for="signup-password">Password</label>
+                    <input class="full-width has-padding has-border" id="signup-password" type="password" name="password" placeholder="Password">
+                    <a href="#0" class="hide-password">Show</a>
+                    <span class="cd-error-message">Error message here!</span>
+                </p>
+                <p class="fieldset">
+                    <label class="image-replace cd-password" for="signup-cpassword">Confirm Password</label>
+                    <input class="full-width has-padding has-border" id="signup-cpassword" type="password" name="password_confirmation" placeholder="Confirm Password">
+                    <span class="cd-error-message">Error message here!</span>
+                </p>
+                <p class="fieldset">
+                    <label class="image-replace " for="signup-dob">Date of birth</label>
+                    <input class="full-width has-padding has-border" id="signup-dob" type="text" name="dob" placeholder="DOB">
+                </p>
+                <p class="fieldset">
+                    <input type="checkbox" id="accept-terms">
+                    <label for="accept-terms">I agree to the <a href="#0">Terms</a></label>
+                </p>
+                    <input type="submit" class="full-width has-padding" id="signupBtn" value="Create account">
+
+                <p class="fieldset">
+<!--                    <input type="submit" class="full-width has-padding" id="signupBtn" value="Create account">-->
+                </p>
+            </form>
+            <!-- <a href="#0" class="cd-close-form">Close</a> -->
+        </div>
+        <!-- cd-signup -->
+
+        <div id="cd-reset-password"> <!-- reset password form -->
+            <p class="cd-form-message">Lost your password? Please enter your email address. You will receive a link to create a new password.</p>
+
+            <form class="cd-form">
+                <p class="fieldset">
+                    <label class="image-replace cd-email" for="reset-email">E-mail</label>
+                    <input class="full-width has-padding has-border" id="reset-email" type="email" placeholder="E-mail">
+                    <span class="cd-error-message">Error message here!</span>
+                </p>
+
+                <p class="fieldset">
+                    <input class="full-width has-padding" type="submit" value="Reset password">
+                </p>
+            </form>
+            <p class="cd-form-bottom-message"><a href="#0">Back to log-in</a></p>
+        </div> <!-- cd-reset-password -->
+        <a href="#0" class="cd-close-form">Close</a>
+    </div> <!-- cd-user-modal-container -->
+</div> <!-- cd-user-modal -->
+<!-- popup forms end-->
+
 <!-- script -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js"></script>
-
-
-
-
-<script>
-
-    var loginObj = {
-        init: function () {
-            loginObj.holdFormSubmit();
-            loginObj.formValidation();
-            loginObj.loginFunction();
-        },
-        holdFormSubmit: function () {
-            // Form validations
-            $('#login_form').submit(function (e) {
-                e.preventDefault();
-            });
-        },
-        formValidation: function () {
-            $('#login_form').validate({
-                rules: {
-                    username: {
-                        required: true,
-                        validateEmail: true,
-                        email: true,
-                    },
-                    password: {
-                        required: {
-                            depends: function () {
-                                $(this).val($.trim($(this).val()));
-                                return true;
-                            }
-                        },
-                    }
-
-                },
-                messages: {
-                    username: {
-                        required: 'Please enter email address',
-                        email: 'Please enter a valid email id',
-                        validateEmail: 'Please enter a valid email id'
-                    },
-                    password: {
-                        required: 'Please enter password',
-                    },
-                }
-            });
-        },
-        loginFunction: function () {
-            // Login functionality
-            $('#user-login-btn').click(function () {
-                // Check the validation
-                if ($('#login_form').valid()) {
-                    // Hold the button reference
-                    var btn = $(this);
-                    $('#server_resposne').hide();
-                    $('#server_resposne_msg').html('');
-                    var email = $("#username").val()
-                    var password = $("#pwd").val()
-
-                    $.ajax({
-                        url: "{{url('signin')}}",
-                        method: 'post',
-                        data: {
-                            'email': email,
-                            'password': password
-                        },
-                        beforeSend: function () {
-                            // Disable the button
-                            $(btn).attr('disabled', true);
-                            $('#loading_spinner').show();
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        complete: function () {
-                            // Enable the button
-                            $(btn).attr('disabled', false);
-                            $('#loading_spinner').hide();
-                        },
-                        success: function (response) {
-                            console.log(response)
-
-                            if (response.success) {
-                                // Reset the form
-                                $('#errMsg').show();
-                                $('#login_form')[0].reset();
-                                $('#errMsg').removeClass('alert-danger').addClass('alert-success');
-                                $('#errMsg').html(response.message);
-                                location.reload();
-                                window.location.href = "{{url('/')}}"
-                            } else {
-                                $('#errMsg').removeClass('alert-success').addClass('alert-danger');
-                                $('#errMsg').removeClass('alert-success').addClass('alert-danger');
-                                $('#errMsg').html(response.message);
-                                $('#errMsg').show();
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    }
-</script>
-<!-- script ends-->
-<script>
-    $(document).ready(function () {
-        $('#loginModal,#log-in-link').click(function () {
-            $('#LoginModal').modal('toggle');
-            $('#SignUpModal').modal('hide');
-        });
-        $('#signUpModal,#sign-up-link').click(function () {
-            $('#SignUpModal').modal('toggle');
-            $("#manualSignup").hide();
-            $("#socialSignup").show();
-            $('#LoginModal').modal('hide');
-            $('#SignUpModal').removeClass('fixedModal');
-        });
-        $('.modal-backdrop').click(function () {
-            $('#LoginModal').modal('hide');
-            $('#SignUpModal').modal('hide');
-            $('.modal').remove();
-            $('.modal-backdrop').remove();
-            $('body').removeClass("modal-open");
-        });
-        //Banner_v1 script
-        $('#banner_home').owlCarousel({
-            items: 1,
-            //animateOut: 'fadeOut',
-            autoplayTimeout: 10000,
-            loop: true,
-            autoplay: true,
-            nav: false,
-            dots: false,
-            mouseDrag: true,
-            margin: 0,
-        });
-        //Banner_v1 script
-        $('#video_banner').owlCarousel({
-            items: 1,
-            //animateOut: 'fadeOut',
-            autoplayTimeout: 10000,
-            loop: true,
-            autoplay: true,
-            nav: true,
-            dots: false,
-            mouseDrag: true,
-            margin: 0,
-        });
-        // Sticky header header_v9
-        $(window).scroll(function () {
-            var scroll = $(window).scrollTop();
-            if (scroll >= 120) {
-                $("#sticky-top").addClass("sticky-nav");
-            } else if (scroll <= 120) {
-                $("#sticky-top").removeClass("sticky-nav");
-            }
-        });
-    });
-</script>
-<script>
-//fix nav top
-    $(window).scroll(function () {
-        if ($(window).scrollTop() >= 42) {
-            $('.main-nav').addClass('fixed-header');
-            $('.main-nav').addClass('visible-title');
-        } else {
-            $('.main-nav').removeClass('fixed-header');
-            $('.main-nav').removeClass('visible-title');
-        }
-    });
-
-//ll
-
-    $(function () {
-        $('.selectpicker').selectpicker();
-    });
-
-
-//testimonial
-    jQuery("#carouselnew").owlCarousel({
-        autoplay: true,
-        lazyLoad: true,
-        loop: true,
-        margin: 50,
-        /*
-         animateOut: 'fadeOut',
-         animateIn: 'fadeIn',
-         */
-        responsiveClass: true,
-        autoHeight: true,
-        autoplayTimeout: 7000,
-        smartSpeed: 800,
-        nav: true,
-        responsive: {
-            0: {
-                items: 1
-            },
-
-            600: {
-                items: 1
-            },
-
-            1024: {
-                items: 1
-            },
-
-            1366: {
-                items: 1
-            }
-        }
-    });
-
-
-//language script
-    $(function () {
-        $('.selectpicker').selectpicker();
-        $('pick__lang').selectpicker();
-    });
-
-    function go__bahasa() {
-        location = document.pilih__bahasa.ipicked__bahasa.
-                options[document.pilih__bahasa.ipicked__bahasa.selectedIndex].value
-    }
-
-//youtube
-    $(document).ready(function () {
-        var video_src = "https://www.youtube.com/embed/" + $("#video").data("video-id") + "?&autoplay=1";
-        $(".btnPlay").click(function (e) {
-            $("#player").attr("src", video_src).addClass("active")
-            $(".caseStudyImage, .btnPlay").addClass("displayNone");
-            e.preventDefault();
-        });
-    });
-</script>
-
+<script src='{{ url('public/sites/js/jquery.min.js') }}'></script> 
+<script src='{{ url('public/sites/js/owl.carousel.min.js') }}'></script> 
+<script  src="{{ url('public/js/login_script.js') }}"></script> 
+<script src="{{ url('public/sites/js/popper.min.js') }}"></script> 
+<script src="{{ url('public/sites/js/bootstrap.min.js') }}"></script> 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
+<!--<script type="text/javascript" src="{{ url('public/sites/js/main.js') }}"></script>-->
 </body>
 </html>

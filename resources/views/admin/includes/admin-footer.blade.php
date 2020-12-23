@@ -3,7 +3,7 @@
     <div class="float-right d-none d-sm-block">
         <b>Version</b> 1.0.0-pre
     </div>
-    <strong>Copyright &copy; 2020-2021 <a href="{{ url('/')}}">Lottery</a>.</strong> All rights
+    <strong>Copyright &copy; 2020-2021 <a href="{{ url('/')}}">EMPTYTRUCK100</a>.</strong> All rights
     reserved.
 </footer>
 

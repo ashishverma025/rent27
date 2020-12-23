@@ -21,14 +21,11 @@
                         <div class="col-lg-3"><label>Picking Off Hour</label><input type="text" placeholder=""> <i class="fa fa-clock-o" aria-hidden="true"></i></div>
                     </div>
                 </div>
-
                 <p><a href="#">FIND TRUCKS</a></p>
-
             </div>
         </div>
     </div>
 </section>
-
 
 <!--Business covered sec-->
 <section id="business-sec">

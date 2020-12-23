@@ -78,6 +78,7 @@ use RegistersUsers;
                     'state' => @$data['state'],
                     'country' => @$data['country'],
                     'dob' => @$data['dob'],
+                    'role_id' => 3,
                     'password' => Hash::make($data['password']),
         ]);
     }
