@@ -31,7 +31,7 @@ $type_of_truck = @$queryString['type_of_truck'];
                 </div>
                 <div class="serch-row" style="margin-top: 15px">
                     <div class="row">
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <div class="custom-select">
                                 <select name="size">
                                     <option value="">Select truck Size:</option>
@@ -42,7 +42,7 @@ $type_of_truck = @$queryString['type_of_truck'];
                                     @endif
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-md-3">
                             <div class="custom-select">
                                 <select name="type_of_truck">
@@ -58,10 +58,10 @@ $type_of_truck = @$queryString['type_of_truck'];
                             <div class="col-md-3">
                             <div class="custom-select">
                                 <select name="buy rent">
-                                    <option value="">Select truck Services:</option>
-                                   <option value="">Buy:</option>
-                                   <option value="">Rent:</option>
-                                   <option value="">Sale:</option>
+                                    <option value="">Select truck Services</option>
+                                   <option value="">Buy</option>
+                                   <option value="">Rent</option>
+                                   <!-- <option value="">Sale:</option> -->
                                 </select>
                             </div>
                         </div>
@@ -99,7 +99,7 @@ $type_of_truck = @$queryString['type_of_truck'];
                 <div class="col-md-3">
                             <div class="custom-select">
                             <select>
-                                <option value="0">Most Recent Ads</option>
+                                <option value="0">Model</option>
                                 <option value="1">Audi</option>
                                 <option value="2">BMW</option>
                                 <option value="3">Citroen</option>

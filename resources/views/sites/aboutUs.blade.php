@@ -4,7 +4,7 @@
 <section id="business-sec">
     <div class="container">
         <div class="all-head">
-           <h2> About <span> Emptytruck100 </span> </h2>
+           <h2> Thousands of trucks <span> at your fingertips. </span> </h2>
         </div>
         <div class="business-inner">
                 <div class="about-detail" style="padding: 10px;">

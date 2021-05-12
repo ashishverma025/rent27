@@ -53,12 +53,11 @@
 
                 <div class="col-xl-3 col-md-6 col-sm-6"> 
                     <div class="footer-col footer-add">
-                        <h3> Categary </h3>
                         <ul>
-                            <li><span> <i class="fa fa-map-marker" aria-hidden="true"></i> </span>  5399 72 Ave SE, Calgary AB, 1999999 St, Edmonton AB </li>
-                            <li><span> <i class="fa fa-mobile" aria-hidden="true"></i> </span> +1234-546-789 </li>
-                            <li><span> <i class="fa fa-envelope-o" aria-hidden="true"></i> </span> Info@emptytruck100.com </li>
-                            <li><span> <img src="{{asset('assets/sites/images/time-icon.png')}}" alt="time-icon"> </span> 24/7 </li>
+                            <li><span> <i class="fa fa-map-marker" aria-hidden="true"></i> </span>  107 Lawrence Road, Liverpool, UK, L15 0EF </li>
+                            <!-- <li><span> <i class="fa fa-mobile" aria-hidden="true"></i> </span> +1234-546-789 </li> -->
+                            <li><span> <i class="fa fa-envelope-o" aria-hidden="true"></i> </span> enquiry@emptytruck100.com </li>
+                            <!-- <li><span> <img src="{{asset('assets/sites/images/time-icon.png')}}" alt="time-icon"> </span> 24/7 </li> -->
                         </ul> 
                     </div>
                 </div>

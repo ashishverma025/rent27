@@ -12,33 +12,38 @@ function initAutocomplete() {
   
 
   autocomplete = new google.maps.places.Autocomplete(address1Field, {
-    componentRestrictions: { country: ["us","uk","ca","in"] },
+    componentRestrictions: { country: ["uk"] },
     fields: ["address_components", "geometry"],
     types: ["address"],
   });
 
   autocomplete1 = new google.maps.places.Autocomplete(dropping_location, {
-    componentRestrictions: { country: ["us","uk","ca","in"] },
+    componentRestrictions: { country: ["uk"]  },
     fields: ["address_components", "geometry"],
     types: ["address"],
   });
 
   autocomplete2 = new google.maps.places.Autocomplete(from_location, {
-    componentRestrictions: { country: ["us","uk","ca","in"] },
+    componentRestrictions: { country:["uk"]  },
     fields: ["address_components", "geometry"],
     types: ["address"],
   });
   
   autocomplete2 = new google.maps.places.Autocomplete(to_location, {
-    componentRestrictions: { country: ["us","uk","ca","in"] },
+    // componentRestrictions: { country: ["us","uk","ca","in"] },
+    componentRestrictions: { country: ["uk"] },
     fields: ["address_components", "geometry"],
     types: ["address"],
   });
 
   address1Field.focus();
   dropping_location.focus();
-  from_location.focus();
-  to_location.focus();
+  if(from_location){
+    from_location.focus();
+  }
+  if(to_location){
+    to_location.focus();
+  }
 
   autocomplete.addListener("place_changed", fillInAddress);
 
