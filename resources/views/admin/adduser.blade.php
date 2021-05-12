@@ -79,10 +79,10 @@
                                 <div class="form-group">
                                     <label> User Role</label>
                                     <select class="form-control" name="user_role" id="gender">
-                                        <option value="1" <?= ($userDetails->user_type == '1') ? 'selected' : '' ?>>Admin</option>
-                                        <option value="2" <?= ($userDetails->user_type == '2') ? 'selected' : '' ?>>Manager</option>
-                                        <option value="3" <?= ($userDetails->user_type == '3') ? 'selected' : '' ?>>Salesman</option>
-                                        <option value="4" <?= ($userDetails->user_type == '4') ? 'selected' : '' ?>>Employee</option>
+                                        <option value="1" <?= ($userDetails->user_type == '1') ? 'selected' : '' ?>>Company</option>
+                                        <option value="2" <?= ($userDetails->user_type == '2') ? 'selected' : '' ?>>Driver</option>
+                                        <option value="3" <?= ($userDetails->user_type == '3') ? 'selected' : '' ?>>Customer</option>
+                                        <option value="4" <?= ($userDetails->user_type == '4') ? 'selected' : '' ?>>Admin</option>
                                     </select>
                                 </div>
 

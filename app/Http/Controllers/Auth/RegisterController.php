@@ -1,8 +1,10 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
-
+use Session;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserMail;
 use Illuminate\Http\Request;
+use Response;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -10,7 +12,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
+use App\Mail\VerifyMail;
+use Illuminate\Support\Str;
 
+use Redirect;
 class RegisterController extends Controller {
     /*
       |--------------------------------------------------------------------------
@@ -55,7 +61,7 @@ use RegistersUsers;
 //                    'state' => ['required', 'string', 'max:255'],
 //                    'country' => ['required', 'string', 'max:255'],
                     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                    'dob' => ['required', 'string',  'max:255'],
+                    //'dob' => ['required', 'string', 'max:255'],
                     'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -67,78 +73,106 @@ use RegistersUsers;
      * @return \App\User
      */
     protected function create(array $data) {
-        // prd($data);
-        return User::create([
-                    'fname' => $data['fname'],
-                    'lname' => $data['lname'],
-                    'name' => $data['fname'] . ' ' . $data['lname'],
-                    'email' => $data['email'],
-                    'address' => @$data['address'],
-                    'city' => @$data['city'],
-                    'state' => @$data['state'],
-                    'country' => @$data['country'],
-                    'dob' => @$data['dob'],
-                    'role_id' => 3,
-                    'password' => Hash::make($data['password']),
-        ]);
+      //prd($data);
+      return User::create([
+        'fname' => $data['fname'],
+        'lname' => $data['lname'],
+        'name' => $data['fname'] . ' ' . $data['lname'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        'country' => @$data['country'],
+        'role_id' => @$data['role_id'],
+        'company_name' => @$data['company_name'],
+        'truck_number' => @$data['truck_number'],
+        'company_registration_number' => @$data['company_registration_number'],
+        'verifyTocken' => $data['verifyTocken'],
+        'mobile_no' => $data['mobile_no'],
+      ]);
     }
 
     public function register(Request $request) {
         $postData = $request->all();
-//        prd($postData);
+        $password = $postData['password'];
         $email = $postData['email'];
-        $isExist = is_email_exist($email);
-        if ($isExist['status'] == 'exist') {
-            $res['resCode'] = 1;
-            $res['resMsg'] = 'This email has already been taken';
-            return $res;
+
+        $messages = [
+          'email.email'=>'',
+          'email.unique'=>'This Email Id has already been taken','email.required'=>'This field is required',
+          'email.regex' => 'This email id is not valid.',
+          'password.regex'=>'It should be minimum of 8 characters long with the combinations of 1 special char, 1 number,1 uppercase and 1 lowercase letter.',
+          'password.confirmed' => '',
+          'password.required'=>'This field is required',
+          'password.min' => 'Atleast 8 character is required',
+          'password_confirmation.required' => 'This field is required',
+          'password_confirmation.same' => 'Password and confirm password must be same',
+          'termscond.required'=>'Please select Terms & conditions',
+          'mobile_no.required'=>'This field is required',
+          'mobile_no.min'=>'',
+
+        ];
+        $validator = Validator::make($request->all(), [
+            'role_id' => 'required',
+            'fname' => 'required',
+            'lname' => 'required',
+            'termscond'=>'required',
+            // 'mobile_no' => 'required|numeric|min:10',
+            'email' => 'required|email|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'password' => 'required|string|min:8|regex:/^.*(?=.{3,})(?=.*[A-Z][a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#@%*.&%+-]).*$/|confirmed',
+            'password_confirmation' => 'required|same:password',
+            'company_name' => !empty(@$postData['company_name'])?'required':'',
+            'company_registration_number' => !empty(@$postData['company_registration_number'])?'required':'',
+        ],$messages);
+
+        if ($validator->fails())
+        {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+        
+            ), 200);
         }
-        $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
-        $this->guard()->login($user);
-        $res['resCode'] = 0;
-        $res['resMsg'] = 'Congratulations ! you have registered successfully';
-        return $res;
-    }
-    
-    
-    ///////////////////////////////// SEAMO API REGISTRATION //////////////////////////////////////////
-    
-    protected function semovalidator(array $data) {
-        // prd($data);
-        // return Validator::make($data, [
-        //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        //     'password' => ['required', 'string', 'min:8', 'confirmed'],
-        // ]);
-    }
-    
-    protected function seamocreate(array $data) {
-        return User::create([
-            'email' => $data['email'],
-            'email_verified_at' => date('Y-m-d h:i:s'),
-            'password' => Hash::make($data['password']),
-        ]);
-    }
+        if ($validator->passes()) {
+            $requestData = $request->all();
+            $requestData['verifyTocken'] = Str::random(40);
+            event(new Registered($user = $this->create($requestData)));
+            $user_id = $user->id;
+            $email = $user->email;
+            $pass_for_auth = $user->password;
+      			$post = array('password' => $pass_for_auth, 'email' => $email);
+      			$res['resCode'] = 0;
+            $data = [];
+            $data['verify_token'] = $requestData['verifyTocken'];
+            $data['name']         = $user->fname." ".$user->lname;
+            $data['email']        = $email;
+            $data['id']           = $user->id;
+            Mail::to($email)->send(new VerifyMail($data));
+            $res['resMsg'] = 'Congratulations ! you have registered successfully Please activate by a link send to your email';
+            return response()->json(['resCode'=>$res['resCode'], 'resMsg' => $res['resMsg']]);
+        }
 
-    public function seomoUserRegister(Request $request) {
-        $userData = $request->all();
-        $email = $userData['email'];
-        $isExist = is_email_exist($email);
+      }
 
-        // if ($isExist['status'] == 'exist') {
-        //     $res['resCode'] = 1;
-        //     $res['resMsg'] = 'This email has already been taken';
-        //     return $res;
-        // }
 
-        // $this->semovalidator($request->all())->validate();
-        // prd($isExist);
-
-        // event(new Registered($user = $this->seamocreate($request->all())));
-        // $this->guard()->login($user);
-        $password = $userData['password'];
-        return redirect("/seomoUserLogin?email=$email&password=$password&remember=no");
+    public function verifyEmail($email, $verify_token)
+    {
+      $userData = User::where('email', $email)->first();
+      if($userData != NULL || !empty($userData))
+      {
+        if($userData->verifyTocken === $verify_token)
+        {
+          User::where('email', $userData->email)->update(
+            ['verifyTocken' => NULL, 'status' => 1, 'email_verified_at' => date('yyyy-mm-dd h:i:s')]
+          );
+          Auth::login($userData);
+          return "Your Email is verified successfully.<br><a href='https://www.emptytruck100.com/'>Go to website.</a>";
+        }
+        return "User Not Found";
+      }
+      else
+      {
+        return "User Not Found";
+      }
     }
 
 }

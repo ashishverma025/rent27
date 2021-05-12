@@ -31,7 +31,7 @@
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <img src="{{ asset('storage/uploads/company') }}/<?= !empty(@$CompanyDetails->company_logo) ? @$CompanyDetails->company_logo : 'default_profile_user_img.png' ?>" id="userImg" height="80" width="80">
+                                            <img src="<?= !empty(@$CompanyDetails->company_logo) ?  asset('storage/uploads/company').'/'.@$CompanyDetails->company_logo :  asset('storage/images').'/not-available.jpg' ?>" id="userImg" height="80" width="80">
                                         </div>
                                     </div>
                                     <div class="col-md-3">

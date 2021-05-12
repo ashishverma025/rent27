@@ -11,69 +11,118 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Category;
 use App\Type;
-//echo "helper";die;
-if (!function_exists('PPHttpPost')) {
+use App\DealerVehicle;
+use Illuminate\Support\Facades\Auth;
 
-    function PPHttpPost($methodName_, $nvpStr_) {
+//START TRUSTSWIFTLY DOCUMENT VERIFICATION
 
-        $environment = 'sandbox';
-        // Set up your API credentials, PayPal end point, and API version.
-        // $API_UserName = urlencode('sb-475hwt1638794_api1.business.example.com');
-        // $API_Password = urlencode('LVVNYYLN48VUR8E7');
-        // $API_Signature = urlencode('AsLDJ9.m4EOvt0m4bLCC4ceU1Ir9Ads1azXeKNygMQF6hElx5QZL9aWj');
-
-        $API_UserName = urlencode('sb-cp3ue1622267_api1.business.example.com');
-        $API_Password = urlencode('VLAUEKHH45JUHQ2L');
-        $API_Signature = urlencode('AotxXz-JzgVsHQvKTWiUSLnYovpTA02qBKNbROmvZGML-cn9J30X3rNu');
-
-        $API_Endpoint = "https://api-3t.paypal.com/nvp";
-        if ("sandbox" === $environment || "beta-sandbox" === $environment) {
-            $API_Endpoint = "https://api-3t.$environment.paypal.com/nvp";
-        }
-        $version = urlencode('51.0');
-
-        // Set the API operation, version, and API signature in the request.
-        $nvpreq = "METHOD=$methodName_&VERSION=$version&PWD=$API_Password&USER=$API_UserName&SIGNATURE=$API_Signature$nvpStr_";
-
-        // Set the curl parameters.
+if (!function_exists('authenticateTrustSwiftly')) {
+    function authenticateTrustSwiftly(){
+        $url = 'https://emptytruck100.trustswiftly.com/account/api/users';
+        
+        $headers = array(
+            "Accept: application/json",
+            "User-Agent:TrustSwiftly/1.0",
+            "Content-Type: application/json",
+            "Authorization: Bearer 3|anLxGRylpRNL92hlJo5QNVznVrxjvCmIGoabAXQC",
+            // "Authorization: Bearer 1|anNMTWFJ7bVOpQec5X80lz7doNh5KypozWUoS1v4",
+        );
+        
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $API_Endpoint);
-        curl_setopt($ch, CURLOPT_VERBOSE, 1);
-        // Turn off the server and peer verification (TrustManager Concept).
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        // Set the request as a POST FIELD for curl.
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
-        // Get response from the server.
-        $httpResponse = curl_exec($ch);
-
-        if (!$httpResponse) {
-            exit("$methodName_ failed: " . curl_error($ch) . '(' . curl_errno($ch) . ')');
-        }
-        // Extract the response details.
-        $httpResponseAr = explode("&", $httpResponse);
-
-        $httpParsedResponseAr = array();
-        foreach ($httpResponseAr as $i => $value) {
-            $tmpAr = explode("=", $value);
-            if (sizeof($tmpAr) > 1) {
-                $httpParsedResponseAr[$tmpAr[0]] = $tmpAr[1];
-            }
-        }
-        if ((0 == sizeof($httpParsedResponseAr)) || !array_key_exists('ACK', $httpParsedResponseAr)) {
-            exit("Invalid HTTP Response for POST request($nvpreq) to $API_Endpoint.");
-        }
-
-        return $httpParsedResponseAr;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    
+        $response = curl_exec ($ch);
+        $err = curl_error($ch);  //if you need
+        curl_close ($ch);
+        return $response;
     }
+}
+if (!function_exists('createTrustSwiftlyUser')) {
+    function createTrustSwiftlyUser($email,$fname=null,$lname=null)
+    {
+        $url = 'https://emptytruck100.trustswiftly.com/account/api/users';
+    
+        $headers = array(
+        "Accept: application/json",
+        "User-Agent:TrustSwiftly/1.0",
+        "Content-Type: application/json",
+        "Authorization: Bearer 3|anLxGRylpRNL92hlJo5QNVznVrxjvCmIGoabAXQC",
+    );
+        $data =  json_encode(['email' => $email,'first_name'=>$fname,'last_name'=>$lname,'template_id'=>1]);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return $response;
+    }
+}
+if (!function_exists('updateTrustSwiftlyUser')) {
+    function updateTrustSwiftlyUser($uId){
+        $url = "https://emptytruck100.trustswiftly.com/account/api/users/$uId";
+        
+        $headers = array(
+            "Accept: application/json",
+            "User-Agent:TrustSwiftly/1.0",
+            "Content-Type: application/json",
+            "Authorization: Bearer 3|anLxGRylpRNL92hlJo5QNVznVrxjvCmIGoabAXQC",
+            // "Authorization: Bearer 1|anNMTWFJ7bVOpQec5X80lz7doNh5KypozWUoS1v4",
+
+        );
+        $data =  json_encode(["first_name"=> "Test","last_name"=> "User","template_id"=> 3]);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec ($ch);
+        curl_close ($ch);
+        prd($response);
+        return $response;
+    }
+}
+if (!function_exists('createTrustSwiftlyUserToken')) {
+    function createTrustSwiftlyUserToken($uId){
+        $url = "https://emptytruck100.trustswiftly.com/account/api/users/$uId/token";
+        
+        $headers = array(
+            "Accept: application/json",
+            "User-Agent:TrustSwiftly/1.0",
+            "Content-Type: application/json",
+            "Authorization: Bearer 3|anLxGRylpRNL92hlJo5QNVznVrxjvCmIGoabAXQC",
+            // "Authorization: Bearer 1|anNMTWFJ7bVOpQec5X80lz7doNh5KypozWUoS1v4",
+
+        );
+        $data =  json_encode([]);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+
+        $response = curl_exec ($ch);
+        curl_close ($ch);
+        return $response;
+    }
 }
 
 
-if (!function_exists('pr')) {
 
+
+//END TRUSTSWIFTLY DOCUMENT VERIFICATION
+
+
+if (!function_exists('pr')) {
     function pr($variable) {
         echo '<pre>';
         print_r($variable);
@@ -83,7 +132,6 @@ if (!function_exists('pr')) {
 }
 
 if (!function_exists('prd')) {
-
     function prd($variable) {
         echo '<pre>';
         print_r($variable);
@@ -168,18 +216,12 @@ if (!function_exists('upload_site_profile_image')) {
 if (!function_exists('get_site_image_dir')) {
 
     function get_site_image_dir($userID, $folder) {
-        $destinationPath = config('common.SITES_IMG_URL');
-        if (!empty($userID)) {
-//            $result = $destinationPath . $userID . "/" . date('Y') . "/" . date('m') . "/" . date('d') . '/';
-            $result = $destinationPath . $folder . '/' . $userID . "/";
-        } else {
-            $result = $destinationPath . 'dummy.jpg';
-        }
+        $destinationPath = storage_path() . '/uploads/sites/';
+        $result = $destinationPath . $folder . "/" . $userID.'/';
         return $result;
     }
 
 }
-
 
 if (!function_exists('get_admin_image_dir')) {
 
@@ -189,6 +231,7 @@ if (!function_exists('get_admin_image_dir')) {
         $result = $destinationPath . $folder . "/";
         return $result;
     }
+
 }
 
 
@@ -213,6 +256,8 @@ if (!function_exists('upload_admin_images')) {
     }
 
 }
+
+
 
 if (!function_exists('upload_wippli_images')) {
 
@@ -246,8 +291,8 @@ if (!function_exists('upload_site_images')) {
         if (!empty($userID) && !empty($file)) {
             $today = date("Ymds");
             $fileName = $today . $file->getClientOriginalName();
-            $destinationPath = public_path() . get_site_image_dir($userID, $folder);
-//            echo $destinationPath.'/'.$fileName;die;
+            $destinationPath = get_site_image_dir($userID, $folder);
+//            echo $destinationPath.$fileName;die;
             $file->move($destinationPath, $fileName);
             return $fileName;
         } else {
@@ -369,7 +414,7 @@ if (!function_exists('getUserDetailsById')) {
     function getUserDetailsById($userId) {
         $User = "";
         if (!empty($userId)) {
-            $User = DB::table('users')->select('id', 'name', 'fname', 'lname', 'dob', 'avatar', 'user_type', 'email', 'address', 'gender')->where('id', '=', $userId)->get();
+            $User = DB::table('users')->select('id', 'name', 'fname', 'lname', 'dob', 'avatar', 'user_type', 'email', 'address', 'gender','mobile_no','website_url','role_id','company_name','company_registration_number','truck_number')->where('id', '=', $userId)->get();
             $User = $User[0];
         }
         return $User;
@@ -687,7 +732,7 @@ function mailSend($toMail, $subject, $message) {
 
 if (!function_exists('sendMail')) {
 
-    function sendMail($request, $bodyData, $message, $email, $subject, $fromName, $templateName) {
+    function sendMail($bodyData, $message, $email, $subject, $fromName, $templateName) {
         Mail::send("Email-Templates.$templateName", ['data' => $bodyData], function ($message) use ($email, $fromName, $subject) {
             $message->from('wippli@mail.com', $fromName);
             $message->to($email)->subject($subject);
@@ -816,6 +861,77 @@ if (!function_exists('generatePlanFolder')) {
             }
         }
         return 'success';
+    }
+
+}
+
+/******* Nishant Code *******/
+
+if (!function_exists('applyFilterTrucks')) {
+
+    function applyFilterTrucks($param) {
+        $truckData = DealerVehicle::where('status', '1');
+        if(isset($param['pickup_location']) && $param['pickup_location'] != '')
+        {
+            $truckData = $truckData->where('source_address', 'like', $param['pickup_location']);
+        }
+        if (isset($param['from']) && $param['from'] != '') 
+        {
+            $truckData = $truckData->Where('source_address', 'like', $param['from']);
+        }
+        if(isset($param['dropping_location']) && $param['dropping_location'] != '')
+        {
+            $truckData = $truckData->Where('destination_address', 'like', $param['dropping_location']);
+        }
+        if (isset($param['to']) && $param['to'] != '') 
+        {
+            $truckData = $truckData->Where('destination_address', 'like', $param['to']);
+        }
+        if (isset($param['size']) && $param['size'] != '') 
+        {
+            $truckData = $truckData->Where('size', 'like', $param['size']);
+        }
+        if (isset($param['type_of_truck']) && $param['type_of_truck'] != '') 
+        {
+            $truckData = $truckData->Where('vehicle_type_id', $param['type_of_truck']);
+        }
+        if(isset($param['pickup_date']) && $param['pickup_date'] != '')
+        {
+            $truckData = $truckData->Where('pickup_date', '<=', $param['pickup_date']);
+        }
+        if(isset($param['drop_date']) && $param['drop_date'] != '')
+        {
+            $truckData = $truckData->Where('drop_date', '>=', $param['drop_date']);
+        }
+        return $truckData = $truckData->get();
+    }
+
+}
+
+if (!function_exists('checkIfUserSubscribed')) {
+
+    function checkIfUserSubscribed($userId) {
+        $date = date('Y-m-d');
+        $subscriptionData = DB::table('user_subscriptions')->where('user_id', $userId)
+            ->orderBy('id', 'desc')
+            ->first();
+        if(isset($subscriptionData) && $subscriptionData->end_date >= $date)
+        {
+            return true;
+        }
+        return false;
+    }
+
+}
+
+
+if(!function_exists('sendMail')) {
+
+    function sendMail($bodyData, $message, $email, $subject, $fromName, $templateName) {
+        Mail::send("Email-Templates.$templateName", ['data' => $bodyData], function ($message) use ($email, $fromName, $subject) {
+            $message->from('emptytruck100@gmail.com', $fromName);
+            $message->to($email)->subject($subject);
+        });
     }
 
 }

@@ -104,7 +104,7 @@
         } else {
             var url = base_url + '/fetchVehicle/' + user_type
         }
-        console.log(url);
+       // console.log(url);
         //alert(base_url + '/admin/fetchUsers');
 
         var table = $('#editable_table');

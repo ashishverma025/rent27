@@ -81,4 +81,69 @@ class PaymentController extends Controller {
         }
     }
 
+    public function handlePaymentResponse(Request $request)
+    {
+        $plan_id = $request->input('plan_id');
+        $paymentData = [
+            'user_id' => Auth::user()->id,
+            'payment_response' => json_encode($request->input('payment_response')),
+            'transaction_id' => $request->input('transaction_id'),
+            'status' => $request->input('status'),
+            'amount' => $request->input('amount'),
+            'payment_method' => $request->input('payment_method'),
+            'currency_code' => $request->input('currency_code'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        $paymentId = DB::table('payments')->insertGetId($paymentData);
+        if($paymentId)
+        {
+            $paymentData = DB::table('payments')
+                ->where('id', $plan_id)
+                ->first();
+
+            // get Plan data
+            $planData = DB::table('plans')
+                ->select('name', 'price', 'plan_days', 'discount')
+                ->where('id', $plan_id)
+                ->first();
+
+            $subscriptionData = [
+                'user_id' => Auth::user()->id,
+                'payment_id' => $paymentData->id,
+                'plan_id' => $plan_id,
+                'plan_name' => $planData->name,
+                'total_amount' => $planData->price,
+                'discount' => $planData->discount,
+                'plan_days' => $planData->plan_days,
+                'start_date' => date('Y-m-d'),
+                'end_date' => date('Y-m-d', strtotime(date('Y-m-d'). ' + 30')),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ];
+            $subscriptionId = DB::table('user_subscriptions')->insertGetId($subscriptionData);
+            if($subscriptionId)
+            {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Successfully subscribed for the plan '.$planData->name. '. Enjoy our services. Thank you!',
+                    'total_paid' => $paymentData->amount,
+                    'payment_currency' => $paymentData->currency_code,
+                    'payment_date' => $paymentData->created_at,
+                    'transaction_id' => $paymentData->transaction_id,
+                    'payment_method' => $paymentData->payment_method,
+                    'subscribed_plan' => $planData->name
+                ]);
+            }
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Sorry! There was an error on user subscription. Please contact to administrator.'
+            ]);
+        }
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Sorry! There was an error on payment. Please contact to administrator.'
+        ]);
+    }
+
 }

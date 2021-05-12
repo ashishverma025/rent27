@@ -113,6 +113,8 @@ return [
       | this array to grant expanded functionality to your applications.
       |
      */
+
+
     'providers' => [
         /*
          * Laravel Framework Service Providers...
@@ -139,6 +141,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+			Laravel\Socialite\SocialiteServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -152,7 +155,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Laravel\Socialite\SocialiteServiceProvider::class,
+       
         Yajra\DataTables\DataTablesServiceProvider::class,
         
     ],
@@ -208,5 +211,6 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+		'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ],
 ];

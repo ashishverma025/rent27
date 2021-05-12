@@ -50,7 +50,7 @@
                                         <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                                <label class="form-check-label" for="remember">
-                                            {{ __('Remember Me') }}
+                                            {{ __('Remember Mes') }}
                                         </label>
                                     </div>
                                 </div>
@@ -66,6 +66,9 @@
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                     @endif 
+									 <a href="{{ url('') }}" style="margin-top: 20px;" class="btn btn-lg btn-success btn-block">
+                                  <strong>Login With Google</strong>
+                                </a> 
                                 </div>
 
                             </div>
@@ -79,7 +82,13 @@
                                     <a href="{{ url('/google-login') }}" class="btn btn-danger"> {{ __('Login with Google+') }} </a>
                                 </div>
                             </div>
-
+  <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <a href="{!! url('auth/facebook') !!}" class="btn btn-primary btn-block">
+                                    Login with facebook
+                                </a>
+                            </div>
+                        </div>
                         </form>
 
                         <div class="form-group">

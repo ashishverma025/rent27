@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Rent27 - Admin</title>
+        <title>EMPTYTRUCK100 - Admin</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <!-- <link rel="shortcut icon" href="{{ asset('public/admn/img/logo.ico')}}"/> -->
         <!--Global styles -->

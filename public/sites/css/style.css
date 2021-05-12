@@ -1,0 +1,297 @@
+body {font-family: 'Poppins', sans-serif; font-weight:300; line-height: 1; background-color: #f4f2f3; }
+p { margin-bottom:0; font-family: 'Poppins', sans-serif; line-height: 20px; }
+h1,h2,h3,h4,h5,h6{font-family: 'Poppins', sans-serif; }
+input, select { vertical-align: middle; } 
+
+.topheader { padding: 25px 0; background-color: #313131; }
+.topheader .logo { max-width: 200px; }
+.topheader .logo img { display: none; }
+.topheader .logo p { font-size: 45px; color: #fff; position: relative; z-index: 999; text-transform: uppercase; letter-spacing: 5px; margin-top: 25px; }
+.topheader .topcontact { text-align: right; width: 100%; padding: 0; margin: 0; }
+.topheader .topcontact ul { margin: 0; padding: 10px 0; }
+.topheader .topcontact ul  li  { list-style-type: none; float: left; margin: 0 20px 0 0; }
+.topheader .topcontact ul  li  a { line-height: 24px; font-size: 14px;text-transform: uppercase; z-index: 999; position: relative; padding: 10px 20px; color: #fff; }
+.topheader .topcontact ul li.signup a { color: #fff; background-color: #efd048; text-transform: uppercase; border-color: #efd048; color: #333; font-weight: 600; min-width: 100px; }
+.topheader .topcontact ul  li.signup:hover a { background: none; color: #efd048; }
+.topheader .topcontact ul li.active a { font-weight: bold; }
+.topheader .topcontact ul  li  a i  { padding-right: 10px; }
+
+.bannerslider { position: relative; }
+.bannerslider .image {opacity: 1; height: 100%; position: relative; }
+.bannerslider .image:after { content: " "; position: absolute; right: -5%; top: 9%; width: 3px; z-index: 999; background: linear-gradient(#fff, #fff);
+                             -webkit-box-shadow: 2px 0px 6px 0px 0px rgba(0,0,0,0.25); -moz-box-shadow: 2px 0px 6px 0px rgba(0,0,0,0.25); box-shadow: 2px 0px 6px 0px rgba(0,0,0,0.25); bottom: -2%; }
+.bannerslider .image:before { content: " "; position: absolute; right: -5%; bottom: -2%; width: 100%; height: 3px; background: #fff; z-index: 999;  -webkit-box-shadow: 2px 0px 6px 0px 0px rgba(0,0,0,0.25); -moz-box-shadow: 2px 0px 6px 0px rgba(0,0,0,0.25); box-shadow: 0px 22px 13px 1px rgba(0,0,0,0.25);}
+.bannerslider .image img { border: 5px solid #fff; width: 100%; float: left; }
+.bannerslider .image img.banerimage:before { }
+span.btn-slide { background: rgba(0,0,0,0.8); padding: 10px 12px; }
+.carousel-control-next, .carousel-control-prev{width:5%;}
+.bannerslider .carousel-caption { right: 20%; left: 20%; }
+.bannerslider .carousel-item img{width:100%;} 
+
+.bannerslider .carousel-item { height: 600px;}
+.bannerslider .carousel-indicators { bottom: 90px; }
+.bannerslider .carousel-indicators li { background-color: #444243; }
+.bannerslider .carousel-indicators .active { background-color: #efd048; }
+
+/*===================Services */
+.title-heading .title { font-size: 36px; text-transform: uppercase; margin-bottom: 25px; }
+.services { position: relative; display: block;  width: 100%; margin-top: -80px; background-color: #444243; padding: 50px 0; }
+.service_item {position: relative; align-items: center; background-color: #444243; padding: 35px 15px; color: #fff; text-align: center; border-color: #efd048; }
+.service_item .sub-title-top { font-weight: 600; font-size: 20px; text-transform: uppercase; }
+.service_item .title-main { font-size: 36px; font-weight: bold; text-align: center; text-transform: uppercase; }
+.service_item .title-main span { color: #efd048; }
+.service_item .sub-title-bottom { color: #efd048; font-size: 16px; text-transform: uppercase; margin-bottom: 25px; }
+.service_item .play-now-btn { background-color: #efd048; text-transform: uppercase;  border-color: #efd048; color: #333; font-weight: 600; }
+.card.service_item.bg-2 { background-color: #3c3c3c; }
+.card.service_item.bg-1 { background-color: #313131; }
+.scratch-win-section { position: relative; display: block; padding: 65px 0; }
+.view-more-btn { background-color: #efd048; text-transform: uppercase; border-color: #efd048; color: #333; font-weight: 600; }
+.view-more-btn:hover { background-color: #444243; border-color: #444243; }
+
+/* Start Year of impect */
+.year-impact-section { position: relative; display: block; width: 100%; background-color: #444243; padding: 50px 0; color: #fff; }
+/* Start Year of impect */
+
+
+/* Start  Artical Block Section */
+.blog-section { position: relative; display: block; padding: 65px 0; }
+.blog-section  .heading h2 { font-size: 36px; text-transform: uppercase; text-align: center; margin: 0px auto; margin-bottom: 35px; }
+.blog-section  .articlesingle { position: relative; display: block; background-color: #f5f5f5; padding: 30px; }
+.blog-section .articlesingle .text { position: relative;  display: block; } 
+.blog-section .articlesingle .text h3 { font-size: 28px; } 
+.blog-section .articlesingle .text h3 a { color: #333; text-decoration: none; }
+.blog-section .articlesingle .text .info { margin-bottom: 5px; } 
+.blog-section .articlesingle .text .info span.date { font-size: 14px; color: #9c9c9c; } 
+.blog-section .articlesingle .text p { font-size: 16px; margin-bottom: 15px; }
+.blog-section .articlesingle .text .read-more-btn {  user-select: none; border: 1px solid transparent;  text-align: center; white-space: nowrap;
+                                                     vertical-align: middle; display: inline-block; padding: .5rem 1rem; font-size: 1.25rem;  line-height: 1.5; border-radius: .3rem;   background-color: #efd048; text-transform: uppercase; border-color: #efd048; color: #333; font-weight: 600; }
+/* End  Artical Block Section */
+
+/* QUICK GAME SECTION HOME */
+.quickgame { background: #fff; padding: 60px 0;  }
+.quickgame .heading { }
+.quickgame .heading h2 { text-align: center; margin: 0 0 25px 0; font-size: 36px; text-transform: uppercase; }
+.quickgame .quickright img { object-fit: cover; width: 100%; height: 100%; max-height: 500px; }
+.quickgame .quickleft { background: url(../images/back.jpg); background-size: 100% 100%; }
+.quickgame .quickleft .text { padding: 15px; }
+.quickgame .quickleft .text h2 { font-size: 24px; text-align: center; color: #fff; }
+.quickgame .quickleft .text input.form-control.topscore { width: 70px; margin: 15px auto; }
+.quickgame .quickleft .text .mobile { display: flex; }
+.quickgame .quickleft .text select.form-control.countrycode { width: 100px; border-radius: 5px 0 0 5px; border: 0; border-right: 1px solid #000; } 
+.quickgame .quickleft .text input.form-control.mobilenumber { border-radius: 0px 5px 5px 0px; border: 0px; }
+.quickgame .quickleft .text select.form-control.country { border-radius: 5px 5px 5px 5px; width: 80px; margin-left: 20px; } 
+.quickgame .quickleft .text p { font-size: 16px; color: #fff; width: 100%;  padding: 15px 0; font-weight: 600; }
+.quickgame .quickleft .text .selectpicks { }
+.quickgame .quickleft .text .selectpicks .fullbtn { width: 200px; background: #efd048; border: 2px solid #efd048; color: #000; margin: 15px 0; float: left; }
+.quickgame .quickleft .text .selectpicks ul { float: left; margin: 15px 0; padding: 0; }
+.quickgame .quickleft .text .selectpicks ul li { float: left; width: 40px;  height: 40px; border-radius: 5px;  background: #fff; list-style-type: none;margin-left: 15px; padding: 0; }
+.quickgame .quickleft .text .selectpicks ul li input { padding: 5px; text-align: center; height: 40px; }
+.quickgame .quickleft .text .finaltext { text-align: center; font-size: 14px; }
+.quickgame .quickleft .text  input.lastbtn { width: 200px; background: #efd048; border: 2px solid #efd048; color: #000; margin: 15px auto; }
+.quickgame .quickleft .text  input.lastbtn:hover { background: transparent; color: #fff; }
+.quickgame .quickleft .text p.lastpara { text-align: center; font-weight: 400; padding-top: 15px; }
+/* QUICK GAME SECTION END */
+
+/* START OF FOOTER */
+.footer { background-color: #444243; padding: 40px 0px; } 
+.footer .item1 { padding-right: 50px; }
+.footer .item1  img { }
+.footer .item1 p { font-size: 14px; padding-top: 15px; text-align: justify; color: #fff; }
+.footer .item1 .logo { font-size: 45px;  color: #fff; position: relative; z-index: 999;  text-transform: uppercase; letter-spacing: 5px; }
+.footer .item1 .logo a { color: #efd048; text-decoration: none; }
+.footer .item2 h4 { font-size: 18px; padding-top: 20px; color: #efd048; font-weight: 600;  padding-bottom: 15px;}
+.footer .item2 ul { margin: 0; padding: 0; list-style-type: none; }
+.footer .item2 ul li { padding-bottom: 10px; }
+.footer .item2 ul li a { font-size: 14px; color: #fff; }
+.footer .item3 h4 { font-size: 18px; padding-top: 20px; color: #efd048; font-weight: 600; padding-bottom: 15px; }
+.footer .item3 p { padding-bottom: 15px; font-size: 14px; } 
+.footer .item3 p a { color: #4d6d58; padding-right: 15px; }
+.footer .item3  h5 { }
+.footer .item3  h5 img { max-width: 200px; margin-bottom: 10px; max-height: 39px; margin-right: 5px; }
+.footer .item3 { color: #fff; }
+.footer .item3 .social-icon { list-style: none; position: relative; display: inline-block; vertical-align: top; width: 100%; text-align: left; padding-left: 0; }
+.footer .item3 .social-icon>li { display: inline-block; position: relative; vertical-align: middle; }
+.footer .item3 .social-icon>li>a { display: inline-block; position: relative; padding: 4px; text-decoration: none; color: #fff; font-size: 18px; vertical-align: middle; }
+/* END OF FOOTER */
+
+/* START OF FOOTER BOTTOM */
+.footerbottom { padding: 10px 0; background-color: #313131; /* border-top: 1px solid #676767; */ color: #fff; }
+.footerbottom .text p { font-size: 14px; text-align: center; color: #fff; padding: 0; font-weight: 400; margin: 0; }
+/* END OF FOOTER BOTTOM */
+
+/* LOGIN MODAL */
+.login-model .modal-lg{ max-width: 600px; }
+.login-model .btn-dismiss-modal { position: absolute; border: none; font-size: 40px; color: #b9b9b9; right: 0; height: 50px; width: 50px; line-height: 50px; top: 10px; transition: all 0.3s linear; color: #000; background: #fff; }
+.login-model .modal-body { padding: 20px 50px; }
+.login-model .modal-header { position: relative; height: 70px; }
+.login-model .modal-header h2 { font-size: 30px; color: #000; text-align: center;  margin: 0 auto; padding: 0; }
+.login-model .btn-facebook { display: inline-block; transition-duration: 0.2s;  transition-timing-function: ease-out; position: relative; display: inline-block;text-align: center; width: 100%; font-size: 14px; line-height: 15px;letter-spacing: normal; padding-top: 10px; padding-bottom: 10px; color: rgb(255, 255, 255); text-decoration: none; border-radius: 4px; border-width: 2px; border-style: solid; background: rgb(69, 104, 178); border-color: transparent; }
+.login-model .btn-facebook:hover { color: #fff; text-decoration: none; }
+.login-model .btn-google { display: inline-block; cursor: pointer; transition-property: background, border-color, color; transition-duration: 0.2s; transition-timing-function: ease-out; position: relative; display: inline-block; text-align: center; width: 100%; font-size: 14px; line-height: 15px;
+                           letter-spacing: normal; padding-top: 10px;  padding-bottom: 10px; padding-left: 22px; padding-right: 22px; color: rgb(72, 72, 72);text-decoration: none;
+                           border-radius: 4px;  border-width: 2px; border-style: solid; background: rgb(255, 255, 255); border-color: rgb(118, 118, 118); margin-top: 10px; }
+.login-model .btn-google:hover { color: #000; text-decoration: none; }
+.login-model .btn-google  span.icon-container.g-icon img { width: 20px; }
+.login-model .signup-or-separator { background: none; position: relative; text-align: center; padding: 10px 0; }
+.login-model .signup-or-separator span.h6.signup-or-separator--text { background: #fff; z-index: 999; width: 40px; position: relative; height: 40px; }
+.login-model .signup-or-separator hr { position: absolute; top: 4px; width: 100%; z-index: 888; }
+.login-model .login-model  .form-control { font-size: 14px; }
+.login-model .form-field .form-icon { height: 15px; width: 15px; position: absolute; right: 8px; top: 10px; }
+.login-model .container1 span { font-size: 12px; color: #000; }
+.login-model .remember { padding-left: 30px; margin-bottom: 15px; }
+.login-model .forget_section { padding-right: 30px; margin-bottom: 15px; }
+.login-model .forget_section .btn { font-size: 12px; padding: 0; text-align: right; float: right; color: #8c7409; text-decoration: underline; }
+.login-model .accountsignup { }
+.login-model .accountsignup .donotaccount { font-size: 12px; }
+.login-model .accountsignup .signup a { font-size: 12px; padding: 0; float: right; line-height: 10px; color: #8c7409; text-decoration: underline; }
+.login-model .form-field .form-icon img { width: 100%; } 
+.login-model .error { color: #ff5a5f; font-weight: 300; font-size: 12px; }
+
+
+/* REGISTER MODAL */
+.SignUpModal .modal-lg { max-width: 600px; }
+.SignUpModal .btn-dismiss-modal { position: absolute; border: none; font-size: 40px; color: #b9b9b9; right: 0; height: 50px; width: 50px; line-height: 50px; top: 10px; transition: all 0.3s linear; color: #000; background: #fff; }
+.SignUpModal .modal-body { padding: 20px 50px; }
+.SignUpModal .modal-header { position: relative; height: 70px; }
+.SignUpModal .modal-header h2 { font-size: 30px; color: #000; text-align: center;  margin: 0 auto; padding: 0; }
+.SignUpModal .btn-facebook { display: inline-block; transition-duration: 0.2s;  transition-timing-function: ease-out; position: relative; display: inline-block;text-align: center; width: 100%; font-size: 14px; line-height: 15px;letter-spacing: normal; padding-top: 10px; padding-bottom: 10px; color: rgb(255, 255, 255); text-decoration: none; border-radius: 4px; border-width: 2px; border-style: solid; background: rgb(69, 104, 178); border-color: transparent; }
+.SignUpModal .btn-facebook:hover { color: #fff; text-decoration: none; }
+.SignUpModal .btn-google { display: inline-block; cursor: pointer; transition-property: background, border-color, color; transition-duration: 0.2s; transition-timing-function: ease-out; position: relative; display: inline-block; text-align: center; width: 100%; font-size: 14px; line-height: 15px;
+                           letter-spacing: normal; padding-top: 10px;  padding-bottom: 10px; padding-left: 22px; padding-right: 22px; color: rgb(72, 72, 72);text-decoration: none;
+                           border-radius: 4px;  border-width: 2px; border-style: solid; background: rgb(255, 255, 255); border-color: rgb(118, 118, 118); margin-top: 10px; }
+.SignUpModal .btn-google:hover { color: #000; text-decoration: none; }
+.SignUpModal .btn-google  span.icon-container.g-icon img { width: 20px; }
+.SignUpModal .signup-or-separator { background: none; position: relative; text-align: center; padding: 10px 0; }
+.SignUpModal .signup-or-separator span.h6.signup-or-separator--text { background: #fff; z-index: 999; width: 40px; position: relative; height: 40px; }
+.SignUpModal .signup-or-separator hr { position: absolute; top: 4px; width: 100%; z-index: 888; }
+.SignUpModal .login-model  .form-control { font-size: 14px; }
+.SignUpModal .form-field .form-icon { height: 15px; width: 15px; position: absolute; right: 8px; top: 10px; }
+.SignUpModal .container1 { position: relative; }
+.SignUpModal .container1 input { width: 10px; top: 12px; position: absolute; left: 0; }
+.SignUpModal .container1 small { font-size: 12px; color: #000; padding-left: 20px; margin: 10px 0; line-height: 15px; display: block; }
+.SignUpModal .remember { margin-bottom: 15px; }
+.SignUpModal .remember p { font-size: 12px; padding: 10px 0; }
+.SignUpModal .forget_section { padding-right: 30px; margin-bottom: 15px; }
+.SignUpModal .forget_section .btn { font-size: 12px; padding: 0; text-align: right; float: right; color: #8c7409; text-decoration: underline; }
+.SignUpModal .accountsignup { }
+.SignUpModal .accountsignup .donotaccount { font-size: 12px; }
+.SignUpModal .accountsignup .signup a { font-size: 12px; padding: 0; float: right; line-height: 10px; color: #8c7409; text-decoration: underline; }
+.SignUpModal .form-inline .form-control { width: 100%; }
+.SignUpModal .form-field .form-icon img { width: 100%; } 
+.SignUpModal .error { color: #ff5a5f; font-weight: 300; font-size: 12px; }
+
+@media (min-width: 767px){ 
+
+}
+.form-field { margin: 8px 0; }
+.form-field { position: relative; }
+
+/* START OF MEDIA QUERY */
+@media only screen and (max-width: 992px){
+
+}
+
+@media only screen and (max-width: 767px){
+
+}
+
+@media only screen and (max-width: 480px){
+
+
+
+}
+
+
+/*/ BETTING DETAIL PAGE CSS START /*/
+.innerbanner { min-height: 300px; object-fit: cover; background-size: 100% 125% !important; }
+.gameplay { padding: 80px 0; }
+.gameplay .gameplayinner { box-shadow: 3px 5px 20px 3px rgba(0,0,0,.2); border-radius: 10px; padding: 30px; }
+.gameplay .gameplayinner .gameplayinnerleft  { }
+.gameplay .gameplayinner .gameplayinnerleft  h2 { }
+.gameplay .gameplayinner .gameplayinnerleft  p { font-size: 14px; font-weight: 600; }
+.gameplay .gameplayinner .gameplayinnerleft  .numberbox { background: #eae5e5; padding: 5px; border-radius: 10px; margin-top: 30px; }
+.gameplay .gameplayinner .gameplayinnerleft  .numberbox span { width: 30px; height: 30px; display: inline-block; text-align: center; margin: 6px;
+                                                               background: #9c820f; line-height: 30px; color: #fff; border-radius: 50%; font-size: 12px; }
+.gameplay .gameplayinner .gameplayinnerleft  .numberbox .seltd {background: gray}
+
+
+
+.gameplay .gameplayinner .gameplayinnerright { }
+.gameplay .gameplayinner .gameplayinnerright h2 { display: inline-block; width: 100%; }
+.gameplay .gameplayinner .gameplayinnerright h2 i { font-size: 25px; float: right; margin-top: 50px;visibility: hidden; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails { display: block; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .gamedetailssingle { display: flex; border-bottom: 1px solid #ccc; padding: 15px 0; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .gamedetailssingle .imagezig  { width: 100px; padding: 0 15px; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .gamedetailssingle .imagezig  img { width: 60px;margin-top: 15px; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .buttonround { width: 400px; display: flex;margin-top: 21px;}
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .buttonround .round { width: 35px; height: 35px; background: #ccc;  margin: 0 10px 0 0; border-radius: 50%; display: inline-block;line-height: 35px;text-align: center; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .increasedecrease { width: 200px; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .increasedecrease p { font-size: 12px; display: block; text-align: center; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .increasedecrease .increasebuttons { display: flex; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .increasedecrease .increasebuttons .decrease { width: 25px; height: 25px; background: #9c820f; display: block; text-align: center; line-height: 25px; border-radius: 50%; color: #fff; margin-top: 5px; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .increasedecrease .increasebuttons .value { width: 100px; margin: 0 10px; display: inline; background: #9c820f; border: 0;  text-align: center; padding: 7px 0; color: #fff;  float: left; }
+.gameplay .gameplayinner .gameplayinnerright .gamedetails .increasedecrease .increasebuttons .increase { width: 25px; height: 25px; background: #9c820f; display: block; text-align: center; line-height: 25px; border-radius: 50%; color: #fff; margin-top: 5px; }
+
+.gameplay .gameplayinner .gameplayinnerright .closeitem { width: 100px; display: inline-flex;  }
+.gameplay .gameplayinner .gameplayinnerright  .closeitem span { float: right; text-align: right; flex: auto; opacity: 0.6; font-size: 20px; }
+.gameplay .gameplayinner .gameplayinnerright  .closeitem span i {  }
+
+.gameplay .gameplayinner .morelines { visibility: hidden; width: 200px; background: #9c820f; border-radius: 5px;  padding: 5px; text-align: center; color: #fff; margin: 20px 20px; }
+.gameplay .gameplayinner .morelines i { margin-right: 5px; }
+.gameplay .gameplayinner .buy { width: 300px; text-align: center; background: red;  margin: 0 auto; line-height: 20px; font-size: 24px; padding: 20px 0;
+                                border-radius: 7px; color: #fff; }
+.gameplay .gameplayinner .buy span { font-size: 14px; line-height: 12px; padding-top: 20px; }
+.gameplay .gameplayinner .maximum { text-align: center; font-size: 14px; }
+/*/ BETTING DETAIL PAGE CSS END /*/
+
+.gamelisting  { padding: 80px 0; }
+.gamelisting .gameitem  { padding: 17px; margin: 0 0 35px 0; border: 1px solid #ccc; border-radius: 7px; } 
+.gamelisting .gameitem  .image { padding: 0; }
+.gamelisting .gameitem  .image  .imageinner { }
+.gamelisting .gameitem  .image .imageinner img { width: 100%; height: auto;  max-height: 200px; object-fit: cover; border-radius: 10px; }
+.gamelisting .gameitem .text  { padding-right: 0px; }
+.gamelisting .gameitem .text .textinner { }
+.gamelisting .gameitem .text .textinner h2 { text-transform: uppercase; font-size: 22px; }
+.gamelisting .gameitem .text .textinner p { font-size: 16px; line-height: 26px; }
+.gamelisting .gameitem .text .textinner span { float: right; margin: 50px 0 0 0; }
+.gamelisting .gameitem .text .textinner span  a {  text-align: center; font-size: 17px;  background: red; padding: 10px; border-radius: 7px 7px 7px 0px; color: #fff; } 
+.firstpopup { top: 50%; left: 50%; transform: translate(-50%, -50%); bottom: auto; }
+.firstpopup .modal-dialog { width: 600px; }
+.firstpopup .modal-content { border-radius: 0; }
+.firstpopup .modal-header { border: 0px; padding: 0; }
+.firstpopup h2.popuptitle { font-size: 20px; display: block; text-align: center; padding: 10px 0; text-transform: uppercase; font-weight: 400;  }
+.firstpopup .modal-header .close { position: absolute; top: 8px; right: 25px; opacity: 1;  cursor: pointer; z-index: 999; width: 25px; height: 25px; }
+.firstpopup .modal-body { padding: 0 30px 0 30px; }
+.firstpopup .modal-body .image { width: 100%; margin-bottom: 15px; }
+.firstpopup .modal-body .image img { width: 100%; height: 160px; object-fit: cover;  }
+.firstpopup .modal-body .text { width: 100%; }
+.firstpopup .modal-body .text  h2 { font-size: 20px; }
+.firstpopup .modal-body .text p { font-size: 14px;  line-height: 20px; }
+
+.firstpopup .modal-footer { border: 0px; padding-bottom: 15px; }
+.firstpopup .proceed-btn { display: block; padding: 0px 20px; background-color: #191919; font-size: 16px; color: #fff; text-transform: uppercase; text-decoration: none; border: 1px solid transparent; border-radius: 0; line-height: 40px; max-width: 220px; margin: 0 auto; }
+.firstpopup .proceed-btn:hover { background-color: #666; color: #fff; border-color: #e5e5e5; }
+.firstpopup .selectpicks { }
+.firstpopup .selectpicks .fullbtn { width: 160px; background: #efd048; border: 2px solid #efd048; color: #000; margin: 15px 0; float: left; text-align: center; }
+.firstpopup .selectpicks ul { float: left; margin: 15px 0; padding: 0; }
+.firstpopup .selectpicks ul li { float: left; width: 40px;  height: 40px; border-radius: 5px;  background: #fff; list-style-type: none; margin-right: 15px; padding: 0; }
+.firstpopup .selectpicks ul li input { padding: 5px; text-align: center; height: 40px; }
+.successMsg{color:green;text-align:center;margin-left:250px;}
+
+
+/*/ MY ACCOUNT CSS START /*/
+.myaccountpage { padding: 80px 0; position: relative; }
+.accordion { display: block; width: 100%; }
+.accordion .card { margin-bottom: 15px; border-color: #efd048; }
+.accordion .card-header { padding: 0px; background: #efd048; border-color: #efd048; }
+.accordion .card-header a { padding: 10px; display: block; text-decoration: none; }
+.accordion .card-header h5 { font-size: 18px; color: #000; text-transform: uppercase; letter-spacing: 1.5px; }
+.accordion .card-header h5 i { float: right; }
+.accordion .card-body { padding: 15px 30px; }
+.accordion .card-body h2 { font-size: 18px; text-align: center; padding: 20px 0; text-transform: uppercase; }
+.accordion .card-body p { font-size: 14px; }
+.accordion .card-body select { max-width: 200px; margin: 20px auto; }
+.accordion .card-body form { max-width: 500px; margin: 20px auto; }
+.accordion .submitbtn { background-color: #efd048; border-color: #efd048; color: #000; }
+.accordion  img.profilepic { width: 100%; margin-bottom: 25px; border-radius: 50%; max-width: 200px;  height: 200px; border: 2px solid #efd048; padding: 5px; } 
+/*/ MY ACCOUNT CSS END /*/

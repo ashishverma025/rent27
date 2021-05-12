@@ -98,8 +98,8 @@
                                     <thead>
                                         <tr role="row">
                                             <th class="wid-20" tabindex="0" rowspan="1" colspan="1">Sl</th>
+                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Company Image</th>
                                             <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Company Name</th>
-                                            <!--<th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Image</th>-->
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Action</th>
                                         </tr>
                                     </thead>
@@ -157,6 +157,7 @@
                 {"className": "dt-center", "targets": [0, 2, 2]}
             ],
             "aoColumns": [
+                {'bSortable': true},
                 {'bSortable': true},
                 {'bSortable': true},
                 {'bSortable': false, "width": "10%"}

@@ -43,11 +43,16 @@ return [
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
     ],
+     
+   
+   
     'google' => [
-        'client_id'     => '220173305017-1qg0itvvhdlghvhifhjj8pr465ogavns.apps.googleusercontent.com',
-        'client_secret' => 'ow7JBX3sDPfu_nuteTCPksFN',
-        'redirect'      => 'https://tutify.com.sg/google-callback'
+        'client_id' => '959708623775-78ulsh4m2f3apebklokofjj6qiuvsj57.apps.googleusercontent.com',
+        'client_secret' => 'ZWZn--l43mjwKfH9eMe61f6z',
+        'redirect' => 'https://emptytruck100.com/auth/google/callback',
     ],
+
+   
     
     // 'google' => [
     //     'client_id'     => '451787054448-i4a3k3l1fupi671juqbqllojjmgk7fms.apps.googleusercontent.com',
@@ -55,10 +60,14 @@ return [
     //     'redirect'      => 'http://tutify.com.sg/google-callback'
     // ],
 
-    'facebook' => [
-        'client_id' => '2876274099085040',
-        'client_secret' => 'c53fd71b37dca5115bb3d94cf89d0f3e',
-        'redirect' => 'https://tutify.com.sg/facebook-callback',
-    ],
-
+  'facebook' => [
+    'client_id' => env('FACEBOOK_CLIENT_ID'),
+    'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+    'redirect' => env('CALLBACK_URL'),
+ ],
+'twitter' => [
+     'client_id' => '5Ksc44Aq3sXL3tL86UNk0CbMc',
+     'client_secret' => 'SEDm9vlhPr8vMy8zLiE1ImfBjvUobQOSc4Q5yCtpAUdbmKm2mR',
+     'redirect' => 'https://emptytruck100.com/auth/twitter/callback',
+ ],
 ];

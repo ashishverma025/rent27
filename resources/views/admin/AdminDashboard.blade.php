@@ -10,7 +10,7 @@
                     <h1 class="m-0 text-dark">Dashboard</h1>
                 </div>
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark" style="text-align: right;">Welcome to Lottery Admin Dashboard</h1>
+                    <h1 class="m-0 text-dark" style="text-align: right;">Welcome to EmptyTruck100 Admin Dashboard</h1>
                 </div>
                 <div class="col-sm-4">
                     <ol class="breadcrumb float-sm-right">

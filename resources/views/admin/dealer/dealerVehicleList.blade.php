@@ -21,7 +21,7 @@
             <div class="card card-default">
                 <!-- /.card-header -->
                 <div class="card-header " style="background-color: #337ab7; color: white">
-                    Dealer Listing
+                    Vehicle Listing
                 </div>
                 <div class="card-body">
                     <div class="table-toolbar">
@@ -68,6 +68,7 @@
                                             <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Daily Charge (Mon to Sun)</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Status</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Action</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody></tbody>

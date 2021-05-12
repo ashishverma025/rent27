@@ -78,36 +78,74 @@ $segment3 = Request::segment(3);
                         <li class="nav-item">
                             <a href="{{url('admin/companies')}}" class="nav-link {{$segment2=='companies'?'active':""}}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Company List</p>
+                                <p>Truck Company Master</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{url('admin/vehicles')}}" class="nav-link {{$segment2=='vehicles'?'active':""}}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Vehicle List</p>
+                                <p>Truck(Vehicles) Master List</p>
+                            </a>
+                        </li>
+                       
+                        <li class="nav-item">
+                            <a href="{{url('admin/testimonials')}}" class="nav-link {{$segment2=='testimonials'?'active':""}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Testimonial List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('admin/dealers')}}" class="nav-link {{$segment2=='dealers'?'active':""}}">
+                            <a href="{{url('admin/blogs')}}" class="nav-link {{$segment2=='blogs'?'active':""}}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Dealer List</p>
+                                <p>Blog List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('admin/advertisements')}}" class="nav-link {{$segment2=='advertisements'?'active':""}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Advertisement List</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item has-treeview {{$segment2=='betting-result'?'menu-open':""}}">
-                    <a href="#" class="nav-link {{$segment2=='betting-result'?'active':""}}">
+                
+                  <li class="nav-item has-treeview {{$segment2=='business'?'menu-open':""}}">
+                    <a href="#" class="nav-link {{$segment2=='business'?'active':""}}">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
-                            Booking History
+                           Business
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                       <li class="nav-item">
+                            <a href="{{url('admin/dealers')}}" class="nav-link {{$segment2=='dealers'?'active':""}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Company/Driver List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('admin/trucks')}}" class="nav-link {{$segment2=='trucks'?'active':""}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Advertise Truck List</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item has-treeview {{$segment2=='enquiries'?'menu-open':""}}">
+                    <a href="#" class="nav-link {{$segment2=='enquiries'?'active':""}}">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Enquiry History
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{url('admin/booking')}}" class="nav-link {{$segment2=='booking'?'active':""}}">
+                            <a href="{{url('admin/enquiries')}}" class="nav-link {{$segment2=='enquiries'?'active':""}}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Booking List</p>
+                                <p>Enquiry List</p>
                             </a>
                         </li>
                     </ul>

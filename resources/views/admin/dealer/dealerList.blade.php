@@ -21,7 +21,7 @@
             <div class="card card-default">
                 <!-- /.card-header -->
                 <div class="card-header " style="background-color: #337ab7; color: white">
-                    Dealer Listing
+                    Company/Driver Listing
                 </div>
                 <div class="card-body">
                     <div class="table-toolbar">

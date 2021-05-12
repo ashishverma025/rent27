@@ -238,6 +238,7 @@ class DealerController extends Controller {
         $sortType = $request->get('sSortDir_0');         // Sort type
         $dealerType = $request->get('dealer_type');        // Dealer Type
         // Datatable column number to table column name mapping
+       
         $arr = array(
             0 => 't1.id',
             1 => 't2.name',
@@ -246,6 +247,7 @@ class DealerController extends Controller {
 
         // Map the sorting column index to the column name
         $sortBy = $arr[$col];
+       
 
         // Get the records after applying the datatable filters
         DB::connection()->enableQueryLog();
@@ -258,7 +260,7 @@ class DealerController extends Controller {
 //                })
                 ->where('t1.dealer_id', $dealerId)
                 // ->orWhere('name', 'like', '%' . $sSearch . '%')
-                ->select('t1.id', 't2.name', 't3.vehicle_name', 't1.status', 't1.hourly_charge', 't1.day1_charge', 't1.day2_charge', 't1.day3_charge', 't1.day4_charge', 't1.day5_charge', 't1.day6_charge', 't1.day7_charge', 't1.is_paused')
+                ->select('t1.*', 't2.name', 't3.vehicle_name')
                 ->get();
 
 //        prd($vehicles);
@@ -280,7 +282,7 @@ class DealerController extends Controller {
             'iTotalDisplayRecords' => $iTotal,
             'aaData' => array()
         );
-//prd($vehicles);
+
         $k = 0;
         if (count($vehicles) > 0) {
             foreach ($vehicles as $vehicle) {
@@ -365,6 +367,12 @@ class DealerController extends Controller {
             $DealerDetails->fuel_type_id = !empty($postData['vehicle_fuel_type']) ? $postData['vehicle_fuel_type'] : $DealerDetails->fuel_type_id;
             $DealerDetails->vehicle_id = !empty($postData['vehicle_name']) ? $postData['vehicle_name'] : $DealerDetails->vehicle_name;
             $DealerDetails->registration_number = !empty($postData['vehicle_reg_no']) ? $postData['vehicle_reg_no'] : $DealerDetails->registration_number;
+              $DealerDetails->source_address = !empty($postData['source_address']) ? $postData['source_address'] : $DealerDetails->source_address;
+               $DealerDetails->destination_address = !empty($postData['destination_address']) ? $postData['destination_address'] : $DealerDetails->destination_address;
+                $DealerDetails->year = !empty($postData['year']) ? $postData['year'] : $DealerDetails->year;
+                $DealerDetails->weight = !empty($postData['weight']) ? $postData['weight'] : $DealerDetails->weight;
+                 $DealerDetails->leaving = !empty($postData['leaving']) ? $postData['leaving'] : $DealerDetails->leaving;
+                  $DealerDetails->to_comming = !empty($postData['to_comming']) ? $postData['to_comming'] : $DealerDetails->to_comming;
             $DealerDetails->distance_covered = !empty($postData['vehicle_distance_covered']) ? $postData['vehicle_distance_covered'] : $DealerDetails->distance_covered;
             $DealerDetails->color = !empty($postData['vehicle_color']) ? $postData['vehicle_color'] : $DealerDetails->vehicle_color;
             $DealerDetails->air_condition = !empty($postData['vehicle_air_condition']) ? $postData['vehicle_air_condition'] : $DealerDetails->air_condition;
@@ -438,6 +446,12 @@ class DealerController extends Controller {
             $DealerDetails->fuel_type_id = !empty($postData['vehicle_fuel_type']) ? $postData['vehicle_fuel_type'] : $DealerDetails->fuel_type_id;
             $DealerDetails->vehicle_id = !empty($postData['vehicle_name']) ? $postData['vehicle_name'] : $DealerDetails->vehicle_id;
             $DealerDetails->registration_number = !empty($postData['vehicle_reg_no']) ? $postData['vehicle_reg_no'] : $DealerDetails->registration_number;
+                   $DealerDetails->source_address = !empty($postData['source_address']) ? $postData['source_address'] : $DealerDetails->source_address;
+               $DealerDetails->destination_address = !empty($postData['destination_address']) ? $postData['destination_address'] : $DealerDetails->destination_address;
+                $DealerDetails->year = !empty($postData['year']) ? $postData['year'] : $DealerDetails->year;
+                $DealerDetails->weight = !empty($postData['weight']) ? $postData['weight'] : $DealerDetails->weight;
+                 $DealerDetails->leaving = !empty($postData['leaving']) ? $postData['leaving'] : $DealerDetails->leaving;
+                  $DealerDetails->to_comming = !empty($postData['to_comming']) ? $postData['to_comming'] : $DealerDetails->to_comming;
             $DealerDetails->distance_covered = !empty($postData['vehicle_distance_covered']) ? $postData['vehicle_distance_covered'] : $DealerDetails->distance_covered;
             $DealerDetails->color = !empty($postData['vehicle_color']) ? $postData['vehicle_color'] : $DealerDetails->color;
             $DealerDetails->air_condition = !empty($postData['vehicle_air_condition']) ? $postData['vehicle_air_condition'] : $DealerDetails->air_condition;

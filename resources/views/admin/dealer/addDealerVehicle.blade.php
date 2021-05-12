@@ -20,7 +20,7 @@
             <!-- SELECT2 EXAMPLE -->
             <div class="card card-default">
                 <div class="card-header">
-                    <h3 class="card-title">{{'Add '}} Dealer </h3>
+                    <h3 class="card-title">{{'Add '}} Vehicle </h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -91,6 +91,36 @@
                         <div class="form-group">
                             <label for="vehicle_reg_no">Registration No:</label>
                             <input type="text" class="form-control" name="vehicle_reg_no" id="vehicle_reg_no" value="{{ @$vehicleDetails->registration_number }}">
+                        </div>
+                        
+                            <div class="form-group">
+                            <label for="source_address">Source Address:</label>
+                            <input type="text" class="form-control" name="source_address" id="source_address" value="{{ @$vehicleDetails->source_address }}">
+                        </div>
+                        
+                           <div class="form-group">
+                            <label for="source_address">Destination Address:</label>
+                            <input type="text" class="form-control" name="destination_address" id="destination_address" value="{{ @$vehicleDetails->destination_address }}">
+                        </div>
+                           <div class="form-group">
+                            <label for="year">Year:</label>
+                            <input type="text" class="form-control" name="year" id="year" value="{{ @$vehicleDetails->year }}">
+                        </div>
+                           <div class="form-group">
+                            <label for="weight">Weight:</label>
+                            <input type="text" class="form-control" name="weight" id="weight" value="{{ @$vehicleDetails->weight }}">
+                        </div>
+                           <div class="form-group">
+                            <label for="leaving">Leaving:</label>
+                            <input type="text" class="form-control" name="leaving" id="leaving" value="{{ @$vehicleDetails->leaving }}">
+                        </div>
+                           <div class="form-group">
+                            <label for="to_comming">To Comming:</label>
+                            <input type="text" class="form-control" name="to_comming" id="to_comming" value="{{ @$vehicleDetails->to_comming }}">
+                        </div>
+                           <div class="form-group">
+                            <label for="size">size:</label>
+                            <input type="text" class="form-control" name="size" id="size" value="{{ @$vehicleDetails->size }}">
                         </div>
                         <div class="form-group">
                             <label for="vehicle_purchase_year">Year of Purchase:</label>
