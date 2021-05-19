@@ -17,8 +17,10 @@ use App\Role;
 use App\Truck;
 use App\VehicleType;
 use App\Review;
+use App\Plan;
 use App\Complaint;
 use App\DealerVehicle;
+use App\Getquote;
 use App\TrustswiftlyDocverification;
 use Redirect;
 class WelcomeController extends Controller {
@@ -39,7 +41,7 @@ class WelcomeController extends Controller {
         $faqDetails = Faq::where('status', 'Active')->orderBy('id', 'DESC')->get();
 
         if (Auth::check()) {
-            $this->swiftDocValidation();
+            // $this->swiftDocValidation();
         }
         return view('sites.index', [
             'testimonialDetails' => $testimonialDetails,
@@ -53,13 +55,13 @@ class WelcomeController extends Controller {
         $postData = $request->all();
         if (Auth::check()) {
             if (Auth::check()) {
-                $this->swiftDocValidation();
+                // $this->swiftDocValidation();
             }
         }
         if(isset($postData['from'])){
             if($postData['from'] == 'login'){
                 return redirect('/listing/truck');	
-            }	
+            }
         }
         $truckList = $filterData = applyFilterTrucks($postData);
         $truckSizeList = DealerVehicle::select('size')->where('status', '1')->groupBy('size')->get();
@@ -72,38 +74,6 @@ class WelcomeController extends Controller {
             'queryString' => $postData,
             'truckSizeList' => $truckSizeList
         ]);
-    }
-
-    public function swiftDocValidation()
-    {
-        $userDetails = getUserDetails();
-        $tsDoc = TrustswiftlyDocverification::where('user_id',$userDetails->id)->first();
-        if (empty($tsDoc)) {
-                    // $suId = "";
-                    $createTrustSwiftlyUser = createTrustSwiftlyUser($userDetails->email, $userDetails->fname, $userDetails->lname);
-                    // prd($createTrustSwiftlyUser);
-                    $swiftUser = json_decode($createTrustSwiftlyUser);
-                    if (!isset($swiftUser->errors)) {
-                        // $suId = isset($swiftUser->id)?$swiftUser->id:"";
-                        // $userSwiftlyToken = createTrustSwiftlyUserToken($suId);
-                        $trustUser = TrustswiftlyDocverification::where('user_id', $userDetails->id)->first();
-            
-                        $TrustUser = !empty($trustUser) ? TrustswiftlyDocverification::where('user_id', $userDetails->id)->first() : new TrustswiftlyDocverification();
-                        if (empty($trustUser)) {
-                            $TrustUser->createuser_data = $createTrustSwiftlyUser;
-                            // $TrustUser->createusertoken_data = $userSwiftlyToken;
-                            $TrustUser->user_id = $userDetails->id;
-                            $TrustUser->email = $userDetails->email;
-                            $TrustUser->created_at = date('Y-m-d H:i:s');
-                            $TrustUser->save();
-                        } else {
-                            $TrustUser->createuser_data = $createTrustSwiftlyUser;
-                            // $TrustUser->createusertoken_data = $userSwiftlyToken;
-                            $TrustUser->updated_at = date('Y-m-d H:i:s');
-                            $TrustUser->update();
-                        }
-                    }
-        }
     }
 
     public function truckForSale(Request $request) {
@@ -192,48 +162,12 @@ class WelcomeController extends Controller {
         ]);
     }
 
-      
-	 /* $request->validate([ 
-            'name' => 'required', 
-			 'email' => 'required',
-             'mobile_no' => 'required',
-			  'message' => 'required',
-			   'pickup_location' => 'required',
-			  'dropping_location' => 'required',
-        ]);
-       $name = $request->input('name');
-$email = $request->input('email');
-$Mobile = $request->input('mobile_no');
-$message = $request->input('message');
-$pickup_location = $request->input('pickup_location');
-$dropping_location = $request->input('dropping_location');
-
-$pickup_date= $request->input('pickup_date');
-$dropdate = $request->input('drop_date');
-
-$data=array('Name'=>$name,"Email"=>$email ,"Mobile"=>$Mobile,"Message"=>$message,"PickingUpLocation"=>$pickup_location,"Dropping_Off_Location"=>$dropping_location,"PickingUpDate"=>$pickup_date,"DroppingOffDate"=>$dropdate);
-DB::table('getquotes')->insert($data);
- $this->validate($request, [
-      'name'     =>  'required',
-      'email'  =>  'required|email',
-      'message' =>  'required'
-     ]);
-
-        $data = array(
-            'name'      =>  $request->Name,
-            'message'   =>   $request->Message
-        );
-
-     Mail::to('enquiry@emptytruck100.com')->send(new SendMail($data));
-
-return redirect()->back()->with('message', 'Quote added succesfully!');
-    }*/
     public function buy_truck(Request $request) {
         $postData = $request->all();
 
         $queryString = $request->query();
 
-        $truckList = DealerVehicle::where('status', '1')->where('type', '1');
+        $truckList = DealerVehicle::where(['status'=>'1','type'=>1]);
         if (isset($queryString['type_of_truck'])) {
             $truckList = $truckList->where('vehicle_type_id', $queryString['type_of_truck']);
         }
@@ -252,7 +186,7 @@ return redirect()->back()->with('message', 'Quote added succesfully!');
         if (isset($queryString['size'])) {
             $truckList = $truckList->orWhere('size', 'like', $queryString['size']);
         }
-        $truckList = $truckList->get();
+        $truckList = $truckList->orderBy('id','DESC')->get();
 
         $truckSizeList = DealerVehicle::select('size')->where('status', '1')->where('type', '1')->groupBy('size')->get();
        //pr($truckList);
@@ -266,52 +200,18 @@ return redirect()->back()->with('message', 'Quote added succesfully!');
         ]);
     }
 
-
-
-  public function quotes(Request $request) {
-	   $postData = $request->all();
-	    $request->validate([ 
-            'name' => 'required', 
-			 'email' => 'required',
-             'mobile_no' => 'required',
-			  'message' => 'required',
-			   'pickup_location' => 'required',
-			  'dropping_location' => 'required',
-        ]);
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $Mobile = $request->input('mobile_no');
-        $message = $request->input('message');
-        $pickup_location = $request->input('pickup_location');
-        $dropping_location = $request->input('dropping_location');
-
-        $pickup_date= $request->input('pickup_date');
-        $dropdate = $request->input('drop_date');
-
-        $data=array('Name'=>$name,"Email"=>$email ,"Mobile"=>$Mobile,"Message"=>$message,"PickingUpLocation"=>$pickup_location,"Dropping_Off_Location"=>$dropping_location,"PickingUpDate"=>$pickup_date,"DroppingOffDate"=>$dropdate);
-        DB::table('getquotes')->insert($data);
-        $this->validate($request, [
-            'name'     =>  'required',
-            'email'  =>  'required|email',
-            'message' =>  'required'
-            ]);
-
-                $data = array(
-                    'name'      =>  $request->Name,
-                    'message'   =>   $request->Message
-                );
-
-            Mail::to('enquiry@emptytruck100.com')->send(new SendMail($data));
-
-        return redirect()->back()->with('message', 'Quote added succesfully!');
-}
-    
-public function rent_truck(Request $request) {
+    public function rent_truck(Request $request) {
+        // $id = Auth::User()->id;
+        // Get User checkIfUserSubscribed
+        // if(checkIfUserSubscribed($id) == false)
+        // {
+        //     $plans = Plan::where('id',7)->get();
+        //     return view('sites.rentSubscription',['plans'=>$plans]);
+        // }
         $postData = $request->all();
-
         $queryString = $request->query();
 
-        $truckList = DealerVehicle::where('status', '1');
+        $truckList = DealerVehicle::where(['status'=>'1','type'=>0]);
         if (isset($queryString['type_of_truck'])) {
             $truckList = $truckList->where('vehicle_type_id', $queryString['type_of_truck']);
         }
@@ -330,10 +230,10 @@ public function rent_truck(Request $request) {
         if (isset($queryString['size'])) {
             $truckList = $truckList->orWhere('size', 'like', $queryString['size']);
         }
-        $truckList = $truckList->get();
+        $truckList = $truckList->orderBy('id','DESC')->get();
 
         $truckSizeList = DealerVehicle::select('size')->where('status', '1')->groupBy('size')->get();
-//        pr($truckList);
+
         $vehicleType = VehicleType::get();
         return view('sites.rent_truck', [
             'postData' => $postData,
@@ -345,7 +245,7 @@ public function rent_truck(Request $request) {
     }
 
 
-public function sell_truck(Request $request) {
+    public function sell_truck(Request $request) {
         $postData = $request->all();
 
         $queryString = $request->query();
@@ -372,7 +272,7 @@ public function sell_truck(Request $request) {
         $truckList = $truckList->get();
 
         $truckSizeList = DealerVehicle::select('size')->where('status', '1')->groupBy('size')->get();
-//        pr($truckList);
+
         $vehicleType = VehicleType::get();
         return view('sites.sell_truck', [
             'postData' => $postData,
@@ -382,9 +282,7 @@ public function sell_truck(Request $request) {
             'truckSizeList' => $truckSizeList
         ]);
     }
-    
-   
-public function advertise_truck(Request $request) {
+    public function advertise_truck(Request $request) {
         $postData = $request->all();
 
         $queryString = $request->query();
@@ -411,7 +309,6 @@ public function advertise_truck(Request $request) {
         $truckList = $truckList->get();
 
         $truckSizeList = DealerVehicle::select('size')->where('status', '1')->groupBy('size')->get();
-//        pr($truckList);
         $vehicleType = VehicleType::get();
         return view('sites.advertise_truck', [
             'postData' => $postData,
@@ -426,22 +323,19 @@ public function advertise_truck(Request $request) {
             return redirect('listing/truck');
         }
         $truckList = DealerVehicle::where('status', '1')->limit(5)->get();
-        $truckDetails = DealerVehicle::select('v.vehicle_name', 'dealer_vehicles.*')
+        $truckDetails = DealerVehicle::select('u.id as user_id','u.fname','u.lname','u.name','u.avatar','u.mobile_no','v.vehicle_name', 'dealer_vehicles.*')
+                ->leftJoin('users as u', 'u.id', 'dealer_vehicles.dealer_id')
                 ->leftJoin('vehicles as v', 'v.id', 'dealer_vehicles.id')
                 ->where('dealer_vehicles.id', $dv_id)
                 ->first();
         $reviewList = Review::select('reviews.*', 'u.name', 'u.avatar')
                 ->leftJoin('users as u', 'u.id', 'reviews.user_id')
-//                ->where('user_id', $user_id)
                 ->where('truck_id', $dv_id)
                 ->get();
         $complaintList = Complaint::select('complaints.*', 'u.name', 'u.avatar')
                 ->leftJoin('users as u', 'u.id', 'complaints.user_id')
-//                ->where('user_id', $user_id)
                 ->where('truck_id', $dv_id)
                 ->get();
-//        pr($reviewList);
-
         return view('sites.detail_truck', [
             'truckDetails' => $truckDetails,
             'reviewList' => $reviewList,
@@ -450,6 +344,52 @@ public function advertise_truck(Request $request) {
             'truckList' => $truckList
         ]);
     }
+    public function quotes(Request $request) {
+        $messages = [
+            'name.required'=>'This field is required',
+            'email.required'=>'This field is required',
+            'mobile_no.required'=>'This field is required',
+            'message.required'=>'This field is required',
+            'pickup_location.required'=>'This field is required',
+            'dropping_location.required'=>'This field is required',
+            'quote_image.image'=>'Please select only jpeg,png,jpg image',
+          ];
+         $request->validate([ 
+            'name' => 'required', 
+            'email' => 'required',
+            'mobile_no' => 'required',
+            'message' => 'required',
+            'pickup_location' => 'required',
+            'dropping_location' => 'required',
+            'quote_image' => 'image|mimes:jpeg,png,jpg|max:2048',
+         ],$messages);
+
+         $getQuotes = new Getquote();
+         $getQuotes->Name = $request->input('name');
+         $getQuotes->Email = $request->input('email');
+         $getQuotes->Mobile = $request->input('mobile_no');
+         $getQuotes->Message = $request->input('message');
+         $getQuotes->PickingUpLocation = $request->input('pickup_location');
+         $getQuotes->Dropping_Off_Location = $request->input('dropping_location');
+         $getQuotes->PickingUpDate= $request->input('pickup_date');
+         $getQuotes->DroppingOffDate = $request->input('drop_date');
+         
+         $quoteImage = $request->file('quote_image');
+         if (!empty($quoteImage)) {
+             $logoFileName = upload_admin_images($quoteImage, 'quotesImage');
+             if (!empty($logoFileName)) {
+                 $getQuotes->quote_image = $logoFileName;
+             }
+         }
+        //  prd($getQuotes);
+         if($getQuotes->save()){
+            $QuotemailData = ['name'=>$request->Name,'message'=>$request->Message,'image'=>$getQuotes->quote_image];
+            Mail::to('ashishkumar2@virtualemployee.com')->send(new SendMail($QuotemailData));
+         }
+
+        return redirect()->back()->with('message', 'Quote added succesfully!');
+     }
+
 
     public function customerDashboard() {
         if (Auth::check()) {
@@ -476,7 +416,6 @@ public function advertise_truck(Request $request) {
     public function editProfile(Request $request, $id = null) {
         if (Auth::check()) {
             $user_type = getUser_Detail_ByParam('user_type');
-//            prd($user_type);
 
             if ($user_type != 'Gold') {
                 return redirect('/subscription');
@@ -491,7 +430,6 @@ public function advertise_truck(Request $request) {
                 //prd($postData);
                 $User = !empty($id) ? User::where(['id' => $id])->first() : '';
                 $User->name = $postData['name'] ? $postData['name'] : $User->name;
-//              $User->email = $postData['email'] ? $postData['email'] : $User->email;
                 $User->dob = $postData['dob'] ? $postData['dob'] : $User->dob;
                 $User->gender = $postData['gender'] ? $postData['gender'] : $User->gender;
                 $User->address = $postData['address'] ? $postData['address'] : $User->address;
@@ -505,7 +443,6 @@ public function advertise_truck(Request $request) {
 
     public function thankyou(Request $request) {
         $sessionData = $request->session()->get('quotesData');
-//        pr($sessionData);
         return view('sites.thankyou');
     }
 
@@ -522,7 +459,7 @@ public function advertise_truck(Request $request) {
         }
         return redirect('/');
     }
-     public function create(Request $request){
+    public function create(Request $request){
         $name = $request->input('name');
         $email = $request->input('email');
         $sub = $request->input('sub');
@@ -584,8 +521,11 @@ public function advertise_truck(Request $request) {
      public function pay_after_loading() {
         return view('sites.pay_after_loading');
     }
-     public function get_verified() {
+    public function get_verified() {
         return view('sites.get_verified');
+    } 
+    public function saleSubscription() {
+                    $plans = Plan::where('id',7)->get();
+            return view('sites.rentSubscription',['plans'=>$plans]);
     }
-
 }

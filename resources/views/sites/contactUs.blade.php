@@ -21,7 +21,7 @@
                         <p><b>Company name:</b> EMPTYTRUCK100 Ltd</p>
 <!-- <p> <b>Phone:</b> +44 771 638 1938</p> -->
    <p>           <b>Email:</b> admin@emptytruck100.com</p>
-      <p>        <b>Address:</b> 107 Lawrence Road, Liverpool, UK, L15 0EF </p>
+      <p>        <b>Address:</b> 107 Lawrence Road, Liverpool, L15 OEF,UK </p>
 <p>              <b>Inquiry email:</b> inquiry@emptytruck.com</p>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                     <div class="contact-form p-5">
                     <div class="leave-comment">
                         <h4 class="text-center">Leave A Comment</h4>
-                        <p class="text-center pb-4">Our staff will call back later and answer your questions.</p>
+                        <p class="text-center pb-4">Our staff will get back to you</p>
                     
 						
 						<form action="{{url('create')}}" method="post">

@@ -244,7 +244,7 @@ if (!function_exists('upload_admin_images')) {
             $fileExt = $file->getClientOriginalExtension();
             $fileType = $file->getMimeType();
             $fileSize = $file->getSize();
-            if (( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 2000000) { // 2 MB
+            if (( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 2000000) {
                 $destinationPath = get_admin_image_dir($folder);
                 $file->move($destinationPath, $fileName);
                 return $fileName;
@@ -678,24 +678,7 @@ if (!function_exists('getStudentClases')) {
     }
 
 }
-if (!function_exists('getStudentClasesNames')) {
 
-    function getStudentClasesNames($studentIid, $teacherId) {
-        $response = [];
-        if (!empty($studentIid) && !empty($teacherId)) {
-            $classes = DB::table('class_students as cs')->select(DB::raw('group_concat(tc.class_name) as class_names'))
-                    ->leftJoin('tutorclasses as tc', 'tc.id', 'cs.class_id')
-                    ->where(['cs.lc_id' => $teacherId, 'cs.student_id' => $studentIid])
-                    ->get();
-            if (isset($classes[0]) && !empty($classes)) {
-                return explode(',', $classes[0]->class_names);
-            }
-        }
-
-        return $response;
-    }
-
-}
 
 if (!function_exists('QueryString')) {
 
@@ -734,7 +717,7 @@ if (!function_exists('sendMail')) {
 
     function sendMail($bodyData, $message, $email, $subject, $fromName, $templateName) {
         Mail::send("Email-Templates.$templateName", ['data' => $bodyData], function ($message) use ($email, $fromName, $subject) {
-            $message->from('wippli@mail.com', $fromName);
+            $message->from('quote@emptytruck.com', $fromName);
             $message->to($email)->subject($subject);
         });
     }
@@ -929,7 +912,7 @@ if(!function_exists('sendMail')) {
 
     function sendMail($bodyData, $message, $email, $subject, $fromName, $templateName) {
         Mail::send("Email-Templates.$templateName", ['data' => $bodyData], function ($message) use ($email, $fromName, $subject) {
-            $message->from('emptytruck100@gmail.com', $fromName);
+            $message->from('enquiry@emptytruck100.com', $fromName);
             $message->to($email)->subject($subject);
         });
     }

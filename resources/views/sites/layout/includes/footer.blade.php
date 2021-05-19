@@ -1,7 +1,14 @@
 @if(Session::has('role_id_click'))
-Role Id : {{ Session::get('role_id_click') }}
+{{-- Role Id : {{ Session::get('role_id_click') }} --}}
 @endif
-
+<style>
+.errMSG{
+    color: red !important;
+}
+.select-items {
+    background-color: #eee !important;
+}
+</style>
 <footer id="footer">
     <div class="container">
         <div class="footer-menu">
@@ -9,7 +16,7 @@ Role Id : {{ Session::get('role_id_click') }}
 
                 <div class="col-xl-3 col-md-6 col-sm-6"> 
                     <div class="footer-col footer-logo">
-                        <img src="{{asset('assets/sites/images/footer-logo.png')}}" alt="footer">
+                        <img src="{{asset('assets/sites/images/logo.png')}}" height="100" width="250" alt="footer">
                         <p>
                             Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
                         </p>
@@ -30,13 +37,17 @@ Role Id : {{ Session::get('role_id_click') }}
                         <ul>
                             <li><a href="{{url('/')}}">Home</a> </li>
                             <li><a href="{{url('/aboutus')}}">About Us</a> </li>
-                            <li><a href="{{url('/')}}">Services</a> </li>
-                            <li><a href="{{url('/contactus')}}">Contct Us</a> </li>
-                                <li><a href="{{url('/privacy-procedure')}}">Privacy Procedure</a> </li>
-                            <!--
-                            <li><a href="{{url('/buy_truck')}}">Buy Truck</a> </li>
-                            
-                            <li><a href="#">Blog</a> </li>
+                            <li><a class="ser_but">Services</a>
+                                <ul class="ser_menu">
+                                    <ol><a href="{{url('/rent-truck')}}">Rent A Truck</a></ol>
+                                    <ol><a href="{{url('/buy-truck')}}">Buy A Truck</a></ol>
+                                    <ol><a href="{{url('/advertise-truck')}}">Advertise Your Truck</a></ol>
+                                </ul>
+                            </li>
+                            <li><a href="{{url('/contactus')}}">Contact Us</a> </li>
+                            <li><a href="{{url('/privacy-procedure')}}">Privacy Procedure</a> </li>
+                            <li><a href="{{url('/document-verification')}}">Document Verification</a> </li>
+                            <!--   <li><a href="#">Blog</a> </li>
                             <li><a href="#">FAQ</a> </li>
                             <li><a href="#">Locations</a> </li>
                             <li><a href="#testimonial">Testimonials</a> </li>
@@ -49,12 +60,12 @@ Role Id : {{ Session::get('role_id_click') }}
 
                 <div class="col-xl-3 col-md-6 col-sm-6"> 
                     <div class="footer-col footer-add">
-                        <h3> Categary </h3>
                         <ul>
-                            <li><span> <i class="fa fa-map-marker" aria-hidden="true"></i> </span>  5399 72 Ave SE, Calgary AB, 1999999 St, Edmonton AB </li>
-                            <li><span> <i class="fa fa-mobile" aria-hidden="true"></i> </span> +1234-546-789 </li>
-                            <li><span> <i class="fa fa-envelope-o" aria-hidden="true"></i> </span> Info@emptytruck100.com </li>
-                            <li><span> <img src="{{asset('assets/sites/images/time-icon.png')}}" alt="time-icon"> </span> 24/7 </li>
+                            <li><span> <i class="fa fa-map-marker" aria-hidden="true"></i> </span>  107 Lawrence Road, Liverpool, L15 OEF ,UK </li>
+                            <!-- <li><span> <i class="fa fa-mobile" aria-hidden="true"></i> </span> +1234-546-789 </li> -->
+                            <li><span> <i class="fa fa-envelope-o" aria-hidden="true"></i> </span> enquiry@emptytruck100.com </li>
+                            <li><span> <i class="fa fa-envelope-o" aria-hidden="true"></i> </span> info@emptytruck100.com </li>
+                            <!-- <li><span> <img src="{{asset('assets/sites/images/time-icon.png')}}" alt="time-icon"> </span> 24/7 </li> -->
                         </ul> 
                     </div>
                 </div>
@@ -74,21 +85,19 @@ Role Id : {{ Session::get('role_id_click') }}
 <!--footer ends-->
 
 <!-- popup form-->
-@if (Session::has('message'))
-   <div class="alert alert-info">{{ Session::get('message') }}</div>
-@endif
-<div class="cd-user-modal  @if(Auth::user()) hide-model-login @else @endif"> <!-- this is the entire modal form, including the background -->
+@guest
+<div class="cd-user-modal"> <!-- this is the entire modal form, including the background -->
     <div class="cd-user-modal-container"> <!-- this is the container wrapper -->
         <ul class="cd-switcher">
             <li><a href="#0">Sign in</a></li>
-            <li><a href="#0">New account</a></li>
+            <li><a href="#0">Sign up</a></li>
         </ul>
         <input type="hidden" id="role_type" name="role_type" value="">
         <input type="hidden" id="signin_url" value="{{url('signin')}}">
         <input type="hidden" id="signup_url"  value="{{url('registration')}}">
         <div id="cd-login"> 
             <!-- log in form -->
-        
+		
             <form class="cd-form" action="{{url('login')}}" id="login_form" method="post">
                 @csrf
                 <p class="fieldset">
@@ -96,28 +105,28 @@ Role Id : {{ Session::get('role_id_click') }}
                 </p>
                 <p class="fieldset">
                     <label class="image-replace cd-email" for="username">E-mail</label>
-                    <input class="full-width has-padding has-border" name="username" id="username" type="email" placeholder="E-mail">
-                    <span class="cd-error-message" id="loginErrMsg"></span>
+                    <input class="full-width has-padding has-border" name="username" id="username" type="email" autocomplete="off"  placeholder="E-mail">
+                    <span class="errMSG email_err" id="loginErrMsg"></span>
                 </p>
                 <p class="fieldset">
                     <label class="image-replace cd-password" for="pwd">Password</label>
-                    <input class="full-width has-padding has-border" name="password" id="pwd" type="password"  placeholder="Password">
+                    <input class="full-width has-padding has-border" name="password" id="pwd" type="password" autocomplete="off"  placeholder="Password">
                     <a href="#0" class="hide-password">Show</a>
-                    <span class="cd-error-message" id="pwdErrMsg">Error message here!</span>
                 </p>
+                <span class="errMSG password_err" id="pwdErrMsg"></span>
+
 
                 <p class="fieldset">
-                    <input type="checkbox" id="remember-me" checked>
+                    <input type="checkbox" id="remember-me" name="remember">
                     <label for="remember-me">Remember me</label>
-                    <span class="cd-form-bottom-message"><a href="{{url('password/reset')}}">Forgot your password?</a></span>
+                    <span class="cd-form-bottom-message"><a href="{{url('password/reset')}}">Forgot Password</a></span>
                 </p>
                 <p class="signin-socialmedia">
-         <a href="{{ url('/auth/facebook') }}"><img src="{{asset('assets/sites/images/f-signin.jpg')}}"></a>
-                <a href="{{ url('/auth/twitter') }}" ><img src="{{asset('assets/sites/images/twitterlink.jpg')}}" ></a>
-                    <a href="{{ url('/auth/google') }}"><img src="{{asset('assets/sites/images/g-signin.jpg')}}" ></a>
+                <a href="{{ url('/auth/facebook') }}"><img src="{{asset('assets/sites/images/f-signin.jpg')}}"></a>
+			    <a href="{{ url('/auth/twitter') }}" ><img src="{{asset('assets/sites/images/twitterlink.jpg')}}" ></a>
+				    <a href="{{ url('/auth/google') }}"><img src="{{asset('assets/sites/images/g-signin.jpg')}}" ></a>
                 </p>
-
-
+                <span class="errMSG email_err" id="loginErrMesg"></span>
                 <p class="fieldset">
                     <input class="full-width" type="submit" value="Login" id="user-login-btn">
                 </p>
@@ -127,11 +136,11 @@ Role Id : {{ Session::get('role_id_click') }}
         </div> <!-- cd-login -->
 
         <div id="cd-signup"> <!-- sign up form -->
-            <span class='err' id="signuperr"></span>
+			<span class='err' id="signuperr"></span>
             <form class="cd-form" id="signUpForm" action="{{url('register')}}" method="post">
                 @csrf
                 <p class="fieldset">
-                    <span class="cd-error-message" id="signUpErr">Error message here!</span>
+                    <span class="cd-error-message" id="signUpErr"></span>
                 </p>
 
                 <p class="fieldset">
@@ -140,27 +149,25 @@ Role Id : {{ Session::get('role_id_click') }}
                         <option value="" >Select Role</option>
                         <option value="1" >Company</option>
                         <option value="2" >Driver</option>
-                        <option value="3" >Customer</option>
+						<option value="3" >Customer</option>
                     </select>
-                    <span class="cd-error-message">Error message here!</span>
+                    <span class="errMSG role_id_err"></span>
                 </p>
-                
                 <span id="company_fields" style="display: none;">
                     <p class="fieldset">
                         <label class="image-replace cd-username" for="company_name">Company Name</label>
                         <input class="full-width has-padding has-border" id="company_name" name="company_name" type="text" placeholder="Company Name">
-                        <span class="cd-error-message">Error message here!</span>
+                        <span class="errMSG company_name_err">This field is required</span>
                     </p>
 
                     <p class="fieldset">
                         <label class="image-replace cd-username" for="company_registration_number">Registration Number</label>
                         <input class="full-width has-padding has-border" id="company_registration_number" name="company_registration_number" type="text" placeholder="Company Registration Number">
-                        <span class="cd-error-message">Error message here!</span>
+                        <span class="errMSG company_registration_number_err">This field is required</span>
                     </p>
                 </span>
-
-               <!--<p class="fieldset">
-                    <label class="image-replace"  >User Type</label>
+               <p class="fieldset">
+                    <!--<label class="image-replace"  >User Type</label>
                <select class="full-width has-padding has-border form-control" id="signupUserType">
                         <option value="" >Select User Type</option>
                         <option value="Silver" >Silver</option>
@@ -170,46 +177,64 @@ Role Id : {{ Session::get('role_id_click') }}
                 </p> -->
 
                 <p class="fieldset">
-                    <label class="image-replace cd-username" for="fname">First Name</label>
-                    <input class="full-width has-padding has-border" id="fname" name="fname" type="text" placeholder="First Name">
-                    <span class="cd-error-message">Error message here!</span>
+                    <label class="image-replace cd-username" for="signup-fname">First Name</label>
+                    <input class="full-width has-padding has-border" id="signup-fname" name="fname" type="text" placeholder="First Name">
                 </p>
-                <p class="fieldset">
-                    <label class="image-replace cd-username" for="lname">Last Name</label>
-                    <input class="full-width has-padding has-border" id="lname" name="lname" type="text" placeholder="Last Name">
-                    <span class="cd-error-message">Error message here!</span>
-                </p>
+                <span class="errMSG fname_err"></span>
 
                 <p class="fieldset">
-                    <label class="image-replace cd-email" for="email">E-mail</label>
-                    <input class="full-width has-padding has-border" id="email" name="email" type="email" placeholder="E-mail">
-                    <span class="cd-error-message">Error message here!</span>
+                    <label class="image-replace cd-username" for="signup-lname">Last Name</label>
+                    <input class="full-width has-padding has-border" id="signup-lname" name="lname" type="text" placeholder="Last Name">
                 </p>
+                <span class="errMSG lname_err"></span>
+
+                <span id="truck_number_fields" style="display: none;">
+                    <p class="fieldset">
+                        <label class="image-replace cd-username" for="truck_number">Number of Truck</label>
+                        <input class="full-width has-padding has-border" id="truck_number" name="truck_number" type="text" placeholder="Number of Truck">
+                    </p>
+                </span>
 
                 <p class="fieldset">
-                    <label class="image-replace cd-password" for="password">Password</label>
-                    <input class="full-width has-padding has-border" id="password" type="password" name="password" placeholder="Password">
+                    <label class="image-replace cd-email" for="signup-email">E-mail</label>
+                    <input class="full-width has-padding has-border" id="signup-email" name="email" type="text" placeholder="E-mail">
+                </p>
+                <span class="errMSG email_err"></span>
+                
+                <p class="fieldset">
+                    <label class="image-replace cd-email" for="mobile_no">Phone</label>
+                    <input class="full-width has-padding has-border" id="mobile_no" name="mobile_no" type="number" placeholder="Phone">
+                </p>
+                <span class="errMSG mobile_no_err"></span>
+
+                <p class="fieldset">
+                    <label class="image-replace cd-password" for="signup-password">Password</label>
+                    <input class="full-width has-padding has-border" id="signup-password" type="password" name="password" placeholder="Password">
                     <a href="#0" class="hide-password">Show</a>
-                    <span class="cd-error-message">Error message here!</span>
                 </p>
+                <span class="errMSG password_err"></span>
+
                 <p class="fieldset">
-                    <label class="image-replace cd-password" for="password_confirmation">Confirm Password</label>
-                    <input class="full-width has-padding has-border" id="password_confirmation" type="password" name="password_confirmation" placeholder="Confirm Password">
-                    <span class="cd-error-message">Error message here!</span>
+                    <label class="image-replace cd-password" for="signup-cpassword">Confirm Password</label>
+                    <input class="full-width has-padding has-border" id="signup-cpassword" type="password" name="password_confirmation" placeholder="Confirm Password">
                 </p>
+                <span class="errMSG password_confirmation_err"></span>
+
                 <!--<p class="fieldset">
                     <label class="image-replace " for="signup-dob">Date of birth</label>
                     <input class="full-width has-padding has-border" id="signup-dob" type="text" name="dob" placeholder="DOB">
                 </p>-->
                 <p class="fieldset">
-                    <input type="checkbox" id="accept-terms" name="accept-terms">
-                    <label for="accept-terms">I agree to the <a href="#0">Terms</a></label>
+                    <input type="checkbox" id="accept-terms" name="termscond">
+                    <label for="accept-terms">I agree to the <a href="{{url('/terms-and-conditions')}}">Terms and conditions</a></label>
+                    <span class="errMSG termscond_err"></span>
+
                 </p>
 
-                <span id="responseMessage" style="color: red;"></span>
 
                 <input type="submit" class="full-width has-padding" id="" value="Create account">
-                
+                <span id="responseMessage" style="color:green;"></span>
+
                 <p class="fieldset">
 <!--                    <input type="submit" class="full-width has-padding" id="signupBtn" value="Create account">-->
                 </p>
@@ -218,65 +243,66 @@ Role Id : {{ Session::get('role_id_click') }}
             <!------ Nishant Code Start ------->
 
             <script type="text/javascript">
+                $("#signUpForm").on('submit', function(e){
+                var terms = $("#accept-terms").val();
 
-                $('#signUpForm').validate({
-                    rules: {
-                        role_id: {
-                            required: true,
-                        },
-                        fname: {
-                            required: true,
-                        },
-                        lname: {
-                            required: true,
-                        },
-                        email: {
-                            required: true,
-                            email: true
-                        },
-                        password: {
-                            required: true,
-                        },
-                        password_confirmation: {
-                            equalTo: "#password"
-                        },
-                        company_name: {
-                            required: true,
-                        },
-                        company_registration_number: {
-                            required: true,
-                        },
-                        "accept-terms": {
-                            required: true,
-                            minlength: 1
-                        },
-                    },
-                    submitHandler: function(form) {
-                        var formdata = $('#signUpForm').serialize(); // here $(this) refere to the form its submitting
-                        $.ajax({
-                            type: 'POST',
-                            url: "{{ url('/register') }}",
-                            data: formdata, // here $(this) refers to the ajax object not form
-                            success: function (data) {
-                                if(data.error)
-                                {
-                                    $("#responseMessage").html('');
-                                    jQuery.each(data.error, function(i, val) {
-                                        $("#responseMessage").append('<li>'+ val +'</li>');
-                                    });
-                                }
-                                if(data.resCode == 0)
-                                {
-
-                                    location.reload();
-                                }
-                            },
-                            error: function(error) {
-                                console.log(error);
-                            }
-                        });
-                        return false;
+                    $(".role_id_err,.email_err,.fname_err,.lname_err,.password_err,.password_confirmation_err,.company_name_err,.company_registration_number_err,.termscond_err").text('');
+                    var formdata = $(this).serialize(); // here $(this) refere to the form its submitting
+                    if($("#company_name").val() == ''){
+                        $(".company_name_err").text('This field is required')
                     }
+                    if($("#company_registration_number").val() == ''){
+                        $(".company_registration_number_err").text('This field is required')
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url('/register') }}",
+                        dataType:"json",
+                        data: formdata, // here $(this) refers to the ajax object not form
+                        success: function (data) {
+                            if(data.errors)
+                            {
+                                $.each(data.errors, function(key, value) {
+                                    console.log(key, value);
+                                    if(key == 'password'){
+                                        $("."+key+"_err").text(value[0]);
+                                    }else if(key == 'password_confirmation'){
+                                        $.each(value, function(k, v) {
+                                            if(k==0){
+                                                $("."+key+"_err").text(v);
+                                            }
+                                        });
+                                    }
+                                    else if(key == 'mobile_no'){
+                                        $.each(value, function(k, v) {
+                                            $("."+key+"_err").text(v);
+                                        });
+                                    }
+                                    else if(key == 'email'){
+                                        $("."+key+"_err").text(value);
+                                    }else if(key == 'termscond'){
+                                        $("."+key+"_err").text(value);
+                                    }else{
+                                        $("."+key+"_err").text('This field is required');
+                                    }
+                                });
+                            }
+                            if(terms == ''){
+                                $("#terms_err").text('Please select Terms & conditions');
+                            }else{
+                                $("#terms_err").text('');
+                            }
+                            if(data.resCode == 0)
+                            {
+                                $("#responseMessage").append('You have been successfully registered, Kindly active it by clicking on the link sent into your email');
+                                setTimeout(function(){ location.reload(); }, 2000);
+                            }
+                        },
+                        error: function(error) {
+                            // console.log(error);
+                        }
+                    });
+                    e.preventDefault();
                 });
             </script>
 
@@ -291,35 +317,35 @@ Role Id : {{ Session::get('role_id_click') }}
         <div id="cd-reset-password"> <!-- reset password form -->
             <p class="cd-form-message">Lost your password? Please enter your email address. You will receive a link to create a new password.</p>
 
-            <form id="forgetPass" class="cd-form" method="POST" action="{{ url('/forget-password') }}">
+            <form id="forgetPass" class="cd-form" method="POST" action="{{ url('#') }}">
                 @csrf
+                <span style="color: #2c8422" id="forget-pass-success-msg"></span>
+
                 <p class="fieldset">
                     <label class="image-replace cd-email" for="reset-email">E-mail</label>
                     <!--<input class="full-width has-padding has-border" id="reset-email" type="email" placeholder="E-mail">-->
                     <!--<span class="cd-error-message">Error message here!</span>-->
-                    <input id="email" type="email" required class="full-width has-padding has-border @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
+                    <input id="forgot-email" type="email" required class="full-width has-padding has-border @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
                     @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
+                    <span style="color: #c80c0c" id="forget-pass-msg"></span>
                 </p>
 
                 <p class="fieldset">
-                    <input id="reset-password-button" class="full-width has-padding" type="submit" value="Reset password">
+                    <input id="reset-password-button" class="full-width has-padding" type="button" value="Reset password">
                 </p>
-                <span style="color: #c80c0c" id="forget-pass-msg"></span>
             </form>
             
             <script>
-                $('#forgetPass').validate({
-                    rules: {
-                        email: {
-                            required: true,
-                            email: true
+                $('#reset-password-button').on('click',function(){
+                            var email = $("#forgot-email").val();
+                        if(email == ''){
+                            $("#forget-pass-msg").html('<li>Email field is required.</li>');
+                            return false;
                         }
-                    },
-                    submitHandler: function(form) {
                         var formdata = $('#forgetPass').serialize(); // here $(this) refere to the form its submitting
                         $("#reset-password-button").prop('disabled', true);
                         $.ajax({
@@ -331,7 +357,7 @@ Role Id : {{ Session::get('role_id_click') }}
                                 {
                                     $("#forget-pass-msg").html('');
                                     jQuery.each(data.error, function(i, val) {
-                                        $("#forget-pass-msg").append('<li>'+ val +'</li>');
+                                        $("#forget-pass-msg").html('<li>The email address is not recognized.</li>');
                                     });
                                     $("#reset-password-button").prop('disabled', false);
                                 }
@@ -342,7 +368,8 @@ Role Id : {{ Session::get('role_id_click') }}
                                 }
                                 if(data.status == 'success')
                                 {
-                                    $("#forget-pass-msg").html(data.message);
+                                    $("#forget-pass-msg").html('');
+                                    $("#forget-pass-success-msg").html(data.message);
                                     $("#reset-password-button").prop('disabled', false);
                                 }
                             },
@@ -351,7 +378,7 @@ Role Id : {{ Session::get('role_id_click') }}
                             }
                         });
                         return false;
-                    }
+                    
                 });
             </script>
             
@@ -362,7 +389,7 @@ Role Id : {{ Session::get('role_id_click') }}
     </div> <!-- cd-user-modal-container -->
 </div> <!-- cd-user-modal -->
 <!-- popup forms end-->
-
+@endguest
 <script>
     function setType(rId, name) {
         var role_id = rId;
@@ -391,6 +418,9 @@ Role Id : {{ Session::get('role_id_click') }}
         var rId = this.value;
         $("#role_type").val(rId)
     })
+    jQuery(".ser_but").click(function(){
+      jQuery(".ser_menu").slideToggle();
+    });
 </script>
 <script>
     $(document).ready(function () {
@@ -417,13 +447,18 @@ Role Id : {{ Session::get('role_id_click') }}
     // Nishant Code
     $("#role_id").on("change", function(){
         var role_id = this.value;
+        console.log(role_id)
         if(role_id == 1){
             $("#company_fields").css('display', 'block');
+            $("#truck_number_fields").css('display', 'block');
+            $("#truck_number").prop('disabled', false);
             $("#company_name").prop('disabled', false);
             $("#company_registration_number").prop('disabled', false);
         }
         else{
             $("#company_fields").css('display', 'none');
+            $("#truck_number_fields").css('display', 'none');
+            $("#truck_number").prop('disabled', true);
             $("#company_name").prop('disabled', true);
             $("#company_registration_number").prop('disabled', true);
         }
@@ -438,11 +473,13 @@ Role Id : {{ Session::get('role_id_click') }}
 <script src="{{ asset('assets/sites/js/popper.min.js') }}"></script> 
 <script src="{{ asset('assets/sites/js/bootstrap-select.min.js') }}"></script> 
 <script src="{{ asset('assets/sites/js/bootstrap.min.js') }}"></script> 
+<script src="{{ asset('assets/sites/js/geo-address.js') }}"></script> 
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
 <script src="{{ asset('assets/sites/js/owl.carousel.min.js') }}"></script> 
 <!--<script type="text/javascript" src="{{ asset('assets/sites/js/main.js') }}"></script>-->
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb4KG02YNFocJ6FrUKrlfwe65nyGlUEo4&callback=initAutocomplete&libraries=places&v=weekly"
+      async></script>
 
 <script>
 $('#signupRole').on('change', function() {

@@ -24,32 +24,35 @@ class TrustSwiftlyController extends Controller {
         if (Auth::check()) {
             $userDetails = getUserDetails();
             $tsDoc = TrustswiftlyDocverification::select('createuser_data')->where('user_id',$userDetails->id)->first();
-            $createUserData = !empty($tsDoc) ? json_decode($tsDoc->createuser_data) : '';
+            if(!empty($tsDoc)){
+                $createUserData = !empty($tsDoc) ? json_decode($tsDoc->createuser_data) : '';
+                $swiftUserClientToken = isset($createUserData->token)?$createUserData->token:"";
+            }else{
+                $this->createTrustSwiftlyUser($userDetails);
+            }
 
-            $swiftUserClientToken = isset($createUserData->token)?$createUserData->token:"";
             // $this->authenticateTrustSwiftly();
-            // $this->createTrustSwiftlyUser('driver@yopmail.com');
             // $this->updateTrustSwiftlyUser(4);
             // $this->deleteTrustSwiftlyUser(4);
             // $this->createTrustSwiftlyUserToken(5);
         }
-        return view('sites.documentVerification',['clientToken'=>$swiftUserClientToken,'baseUrl'=>$baseUrl]);
-    }
-
-    public function documentVerified(Request $request) {
-        $TrustUser = TrustswiftlyDocverification::where('user_id', $userDetails->id)->first();
-        $TrustUser->phoneverifyresponse_data = $request->all();
-        $TrustUser->emailverifyresponse_data = $request->all();
-        $TrustUser->updated_at = date('Y-m-d H:i:s');
-        $TrustUser->update();
-        prd($request->all('verifications'));
+        return view('sites.documentVerification',['clientToken'=>$swiftUserClientToken,'baseUrl'=>$baseUrl,'userDetails'=>@$userDetails]);
     }
 
 
     public function trustWebhook(Request $request) {
-        Log::info('webhook :'.json_encode($request->all()));
-        prd($request->all());
+        $resData = $request->all();
+        $trustId = isset($resData->trust_id)?$resData->trust_id:$resData['trust_id'];
+        Log::info('webhook :'.json_encode($resData));
 
+        $TrustUser = TrustswiftlyDocverification::where('trust_id',$trustId)->first();
+        if (!empty($TrustUser)) {
+            $TrustUser->docverifyresponse_data = $request->all();
+            $TrustUser->updated_at = date('Y-m-d H:i:s');
+            $TrustUser->update();
+        }else{
+            return redirect('logout');
+        }
     }
     
     public function authenticateTrustSwiftly(){
@@ -73,7 +76,7 @@ class TrustSwiftlyController extends Controller {
     }
 
 
-    public function createTrustSwiftlyUser($email){
+    public function createTrustSwiftlyUser($userDetails){
         $url = 'https://emptytruck100.trustswiftly.com/account/api/users';
         
         $headers = array(
@@ -82,7 +85,7 @@ class TrustSwiftlyController extends Controller {
             "Content-Type: application/json",
             "Authorization: Bearer 3|anLxGRylpRNL92hlJo5QNVznVrxjvCmIGoabAXQC",
          );
-           $data =  json_encode(['email' => $email]);
+            $data =  json_encode(['email' => $userDetails->email,"first_name"=> $userDetails->fname,"last_name"=> $userDetails->lname,"template_id"=> 1]);
            $ch = curl_init();
            curl_setopt($ch, CURLOPT_URL, $url);
            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);

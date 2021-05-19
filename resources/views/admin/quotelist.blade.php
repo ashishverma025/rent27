@@ -1,5 +1,5 @@
-@include('dashboard/includes.admin-head')
-@include('dashboard/includes.admin-sidebar')
+@include('admin/includes.admin-head')
+@include('admin/includes.admin-sidebar')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     @if(Session::has('message'))
@@ -13,7 +13,7 @@
             </div>
         </div>
     </section>
-    <?php // pr($_POST); ?>
+    <?php //prd('quotes index');?>
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
@@ -21,24 +21,14 @@
             <div class="card card-default">
                 <!-- /.card-header -->
                 <div class="card-header " style="background-color: #337ab7; color: white">
-                     Vehicle Listing
+                    Quote Listing
                 </div>
                 <div class="card-body">
-                    <div class="table-toolbar">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <div class="btn-group">
-                                    <a href="{{url('addDealerVehicle')}}" id="update_attendance_table" class=" btn btn-primary"> Add New</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <!--EXIST STUDENTS LIST-->
                     <span id="csv_err" class="errMsg"></span>
                     <div class="alert alert-danger" id="res_err" style="display: none"> <strong>Warning!</strong></div>
 
-                    <input type="hidden" id="user_type" value="{{@$type}}" />
-                    <form action="{{url('updateattendence')}}" class="tuti-form profile-form" id="update_attendance" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+                    <form action="{{url('#')}}" class="tuti-form profile-form" id="" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                         {{ csrf_field() }}
                         <div>
                             <div>
@@ -46,15 +36,16 @@
                                     <thead>
                                         <tr role="row">
                                             <th class="wid-20" tabindex="0" rowspan="1" colspan="1">Sl</th>
-                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Dealer Name</th>
-                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Vehicle</th>
-                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Distance Covered</th>
-                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Truck Image</th>
-                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Truck Name</th>
-                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Source Address</th>
-                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Destination Address</th>
+                                            <th class="sorting_asc wid-20" tabindex="0" rowspan="1" colspan="1">Name</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Email</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Image</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Mobile</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Message</th>
+                                            <th class="sorting wid-10 bold" tabindex="0" rowspan="1" colspan="1">Pickup Location</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Drop Location</th>
+                                            <th class="sorting wid-10 bold" tabindex="0" rowspan="1" colspan="1">Pickup Date</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Drop Date</th>
                                             <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Status</th>
-                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -69,24 +60,13 @@
     </section>
     <!-- /.content -->
 </div>
-@include('dashboard/includes.admin-footer')
+@include('admin/includes.admin-footer')
 
 
 <script>
-//Bootstrap Duallistbox
-    $('.duallistbox').bootstrapDualListbox()
-    $("#classList, #dateFilter").change(function () {
-        $("#filterForm").submit()
-    });
-
-    $(document).on('click', '#update_attendance_table', function () {
-        $("#update_attendance").submit();
-    });
-
     $(document).ready(function () {
-        var base_url = "{{url('/')}}";
-        var url = base_url + '/fetchvehicles'
-        //alert(base_url + '/admin/fetchUsers');
+        var base_url = "{{asset('/admin')}}";
+        var url = base_url + '/fetchQuotes'
 
         var table = $('#editable_table');
 
@@ -100,7 +80,7 @@
             "bServerSide": true,
             "sAjaxSource": url,
             "columnDefs": [
-                {"className": "dt-center", "targets": [0, 2, 2]}
+                {"className": "dt-center", "targets": [0, 3, 2]}
             ],
             "aoColumns": [
                 {'bSortable': true},
@@ -112,7 +92,9 @@
                 {'bSortable': true},
                 {'bSortable': true},
                 {'bSortable': true},
-                {'bSortable': false, "width": "10%"}
+                {'bSortable': true},
+                {'bSortable': true},
+                // {'bSortable': false, "width": "10%"}
             ]
         });
         var tableWrapper = $("#editable_table_wrapper");

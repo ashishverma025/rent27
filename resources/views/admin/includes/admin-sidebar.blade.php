@@ -148,6 +148,12 @@ $segment3 = Request::segment(3);
                                 <p>Enquiry List</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{url('admin/quotes')}}" class="nav-link {{$segment2=='quotes'?'active':""}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Quotes List</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

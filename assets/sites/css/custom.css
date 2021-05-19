@@ -260,7 +260,7 @@ header {
 }
 
 .main-nav li.nav-item a.nav-link {
-    padding: 0;
+    padding: .375rem .75rem;
 }
 
 .main-nav a.nav-link:hover:before {
@@ -3327,8 +3327,20 @@ section#truck-detail form {
     float: left;
     width: 100%;
 }
-
-
+.ser_but {
+    color: #fff !important;
+    position: relative;
+    cursor: pointer;
+}
+.ser_menu { display: none;}
+.ser_but::before {
+    position: absolute;
+    content: "\f107";
+    right: -22px;
+    top: -2px;
+    transform: ;
+    font-family: FontAwesome;
+}
 
 /**changes ends**/
 

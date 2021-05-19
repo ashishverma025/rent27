@@ -5,6 +5,9 @@
 .errMSG{
     color: red !important;
 }
+.select-items {
+    background-color: #eee !important;
+}
 </style>
 <footer id="footer">
     <div class="container">
@@ -34,13 +37,17 @@
                         <ul>
                             <li><a href="{{url('/')}}">Home</a> </li>
                             <li><a href="{{url('/aboutus')}}">About Us</a> </li>
-                            <li><a href="{{url('/')}}">Services</a> </li>
-                            <li><a href="{{url('/contactus')}}">Contct Us</a> </li>
-                                <li><a href="{{url('/privacy-procedure')}}">Privacy Procedure</a> </li>
-                            <!--
-                            <li><a href="{{url('/buy_truck')}}">Buy Truck</a> </li>
-                            
-                            <li><a href="#">Blog</a> </li>
+                            <li><a class="ser_but">Services</a>
+                                <ul class="ser_menu">
+                                    <ol><a href="{{url('/rent-truck')}}">Rent A Truck</a></ol>
+                                    <ol><a href="{{url('/buy-truck')}}">Buy A Truck</a></ol>
+                                    <ol><a href="{{url('/advertise-truck')}}">Advertise Your Truck</a></ol>
+                                </ul>
+                            </li>
+                            <li><a href="{{url('/contactus')}}">Contact Us</a> </li>
+                            <li><a href="{{url('/privacy-procedure')}}">Privacy Procedure</a> </li>
+                            <li><a href="{{url('/document-verification')}}">Document Verification</a> </li>
+                            <!--   <li><a href="#">Blog</a> </li>
                             <li><a href="#">FAQ</a> </li>
                             <li><a href="#">Locations</a> </li>
                             <li><a href="#testimonial">Testimonials</a> </li>
@@ -54,9 +61,10 @@
                 <div class="col-xl-3 col-md-6 col-sm-6"> 
                     <div class="footer-col footer-add">
                         <ul>
-                            <li><span> <i class="fa fa-map-marker" aria-hidden="true"></i> </span>  107 Lawrence Road, Liverpool, UK, L15 0EF </li>
+                            <li><span> <i class="fa fa-map-marker" aria-hidden="true"></i> </span>  107 Lawrence Road, Liverpool, L15 OEF ,UK </li>
                             <!-- <li><span> <i class="fa fa-mobile" aria-hidden="true"></i> </span> +1234-546-789 </li> -->
                             <li><span> <i class="fa fa-envelope-o" aria-hidden="true"></i> </span> enquiry@emptytruck100.com </li>
+                            <li><span> <i class="fa fa-envelope-o" aria-hidden="true"></i> </span> info@emptytruck100.com </li>
                             <!-- <li><span> <img src="{{asset('assets/sites/images/time-icon.png')}}" alt="time-icon"> </span> 24/7 </li> -->
                         </ul> 
                     </div>
@@ -77,12 +85,12 @@
 <!--footer ends-->
 
 <!-- popup form-->
-
+@guest
 <div class="cd-user-modal"> <!-- this is the entire modal form, including the background -->
     <div class="cd-user-modal-container"> <!-- this is the container wrapper -->
         <ul class="cd-switcher">
-            <li><a href="#0">Sign in</a></li>
-            <li><a href="#0">Sign up</a></li>
+            <li><a href="#0" class="signin">Sign in</a></li>
+            <li><a href="#0" class="signup">Sign up</a></li>
         </ul>
         <input type="hidden" id="role_type" name="role_type" value="">
         <input type="hidden" id="signin_url" value="{{url('signin')}}">
@@ -93,7 +101,10 @@
             <form class="cd-form" action="{{url('login')}}" id="login_form" method="post">
                 @csrf
                 <p class="fieldset">
-                <div class="full-width" ><span id="userType"></span> Login</div>
+                    <div class="full-width" >
+                        <span id="userType"></span> Login 
+                        <span class="errMSG email_err" id="loginErrMesg"></span>
+                    </div>
                 </p>
                 <p class="fieldset">
                     <label class="image-replace cd-email" for="username">E-mail</label>
@@ -118,7 +129,6 @@
 			    <a href="{{ url('/auth/twitter') }}" ><img src="{{asset('assets/sites/images/twitterlink.jpg')}}" ></a>
 				    <a href="{{ url('/auth/google') }}"><img src="{{asset('assets/sites/images/g-signin.jpg')}}" ></a>
                 </p>
-                <span class="errMSG email_err" id="loginErrMesg"></span>
                 <p class="fieldset">
                     <input class="full-width" type="submit" value="Login" id="user-login-btn">
                 </p>
@@ -228,7 +238,7 @@
                 <span id="responseMessage" style="color:green;"></span>
 
                 <p class="fieldset">
-<!--                    <input type="submit" class="full-width has-padding" id="signupBtn" value="Create account">-->
+                <!--  <input type="submit" class="full-width has-padding" id="signupBtn" value="Create account">-->
                 </p>
             </form>
 
@@ -287,7 +297,7 @@
                             if(data.resCode == 0)
                             {
                                 $("#responseMessage").append('You have been successfully registered, Kindly active it by clicking on the link sent into your email');
-                                // location.reload();
+                                setTimeout(function(){ location.reload(); }, 2000);
                             }
                         },
                         error: function(error) {
@@ -333,7 +343,7 @@
             
             <script>
                 $('#reset-password-button').on('click',function(){
-                            var email = $("#forgot-email").val();
+                        var email = $("#forgot-email").val();
                         if(email == ''){
                             $("#forget-pass-msg").html('<li>Email field is required.</li>');
                             return false;
@@ -360,6 +370,7 @@
                                 }
                                 if(data.status == 'success')
                                 {
+                                    $("#forgot-email").val('');
                                     $("#forget-pass-msg").html('');
                                     $("#forget-pass-success-msg").html(data.message);
                                     $("#reset-password-button").prop('disabled', false);
@@ -372,6 +383,16 @@
                         return false;
                     
                 });
+
+                $(document).ready(function() {
+                    $('#forgot-email').keyup(function(event) {
+                        var email = $("#forgot-email").val();
+                        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                        if (emailReg.test(email)) {
+                            $("#forget-pass-msg").html('');
+                        } 
+                    });
+                });
             </script>
             
             <p class="cd-form-bottom-message"><a href="#0">Back to log-in</a></p>
@@ -381,7 +402,7 @@
     </div> <!-- cd-user-modal-container -->
 </div> <!-- cd-user-modal -->
 <!-- popup forms end-->
-
+@endguest
 <script>
     function setType(rId, name) {
         var role_id = rId;
@@ -410,6 +431,15 @@
         var rId = this.value;
         $("#role_type").val(rId)
     })
+    jQuery(".ser_but").click(function(){
+      jQuery(".ser_menu").slideToggle();
+    });
+    jQuery("#customerBtn").click(function(){
+        jQuery('body').addClass('overflow-hidden');
+    });
+    jQuery(".cd-user-modal").click(function(){
+        jQuery('body').removeClass('overflow-hidden');
+    });
 </script>
 <script>
     $(document).ready(function () {

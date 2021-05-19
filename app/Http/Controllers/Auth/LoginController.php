@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\Mail\VerifyMail;
 use Illuminate\Support\Facades\Session;
+use App\TrustswiftlyDocverification;
 
 class LoginController extends Controller {
     /*
@@ -81,11 +82,8 @@ use AuthenticatesUsers;
         return Socialite::driver('facebook')->redirect();
     }
     public function showLoginForm() {
-        return view('auth.login', [
-            'title' => 'User Login',
-            'loginRoute' => 'login',
-            'forgotPasswordRoute' => 'password.request',
-        ]);
+        set_flash_message('Only logged in user can access this page!', 'alert-danger');
+        return redirect('/');
     }
 
     protected function username() {
@@ -109,23 +107,24 @@ use AuthenticatesUsers;
             ), 200);
         }
         $postData = $request->all();
-        $userData = User::select('id', 'name', 'user_type','email_verified_at')->where(['email' => $postData['email']])->first();
-
-        if(empty(@$userData->email_verified_at)){
-            // prd($userData);
+        $userData = User::select('id', 'name','role_id','user_type','email_verified_at')->where(['email' => $postData['email']])->first();
+                
+        if(empty($userData->email_verified_at)){
             return Response::json(array(
                 'success' => false,
                 'goldUser' => '',
-                'message' => 'Please first verified your email',
+                'message' => 'Please verify your email address.',
             ), 200);
         }
 
         $authSuccess = Auth::attempt($credentials, $request->has('remember'));
         if ($authSuccess) {
             $request->session()->regenerate();
+            // $this->swiftDocValidation($userData);
+
             $goldUser = $userData->user_type == 'Gold' ? TRUE : FALSE;
             set_flash_message('You have login successfully', 'alert-success');
-            return response(['success' => true, 'goldUser' => $goldUser, 'message' => 'You have login successfully.']);
+            return response(['success' => true, 'goldUser' => $goldUser,'roleId'=>$userData->role_id, 'message' => 'You have login successfully.']);
         }
 
         return response([
@@ -133,6 +132,36 @@ use AuthenticatesUsers;
             'message' => 'These credentials do not match our records.'
         ]);
     }
+
+    public function swiftDocValidation()
+    {
+        $userDetails = getUserDetails();
+        $tsDoc = TrustswiftlyDocverification::where('user_id',$userDetails->id)->first();
+        if (empty($tsDoc)) {
+                    $createTrustSwiftlyUser = createTrustSwiftlyUser($userDetails->email, $userDetails->fname, $userDetails->lname);
+                    $swiftUser = json_decode($createTrustSwiftlyUser);
+                    if (!isset($swiftUser->errors)) {
+                        $trustUser = TrustswiftlyDocverification::where('user_id', $userDetails->id)->first();
+                        $TrustUser = !empty($trustUser) ? TrustswiftlyDocverification::where('user_id', $userDetails->id)->first() : new TrustswiftlyDocverification();
+                        $createUserData = !empty($tsDoc) ? json_decode($tsDoc->createuser_data) : '';
+
+                        if (empty($trustUser)) {
+                            $TrustUser->createuser_data = $createTrustSwiftlyUser;
+                            $TrustUser->trust_id = $swiftUser->id;
+                            $TrustUser->user_id = $userDetails->id;
+                            $TrustUser->email = $userDetails->email;
+                            $TrustUser->created_at = date('Y-m-d H:i:s');
+                            $TrustUser->save();
+                        } else {
+                            $TrustUser->createuser_data = $createTrustSwiftlyUser;
+                            $TrustUser->updated_at = date('Y-m-d H:i:s');
+                            $TrustUser->update();
+                        }
+                    }
+        }
+    }
+
+
 
     //////////////////////////////////////////// SEMO LOGIN API //////////////////////////////////////////////////////////
   public function handleTwitterCallback() {
@@ -152,7 +181,7 @@ use AuthenticatesUsers;
             return redirect('auth/twitter');
         }
     }
-    	 public function handleGoogleCallback()
+public function handleGoogleCallback()
     {
         try {
   
@@ -182,48 +211,7 @@ use AuthenticatesUsers;
             return redirect('auth/google');
         }
     }
-    public function seomoUserLogin(Request $request) {
-        if (!empty($request->all())) {
-            $data = $request->all();
 
-            if (isset($data['pId']) && isset($data['email']) && !empty($data['pId'])) {
-                if (empty(@$data['password'])) {
-                    $data['password'] = 12345678;
-                }
-                // prd($data);
-                $paperId = $data['pId'];
-                $isUserExist = is_email_exist($data['email']);
-                if ($isUserExist['status'] == 'exist') {
-                    // prd($isUserExist);
-
-                    $credentials = ['email' => $data['email'], 'password' => $data['password']];
-                    $authSuccess = Auth::attempt($credentials, $request->has('remember'));
-                    if ($authSuccess) {
-                        $request->session()->regenerate();
-                        if (!empty($paperId)) {
-                            return redirect("/onlinePractice/$paperId");
-                        } else {
-                            return redirect("/onlinePractice");
-                        }
-                    }
-                } else {
-                    $user = new User;
-                    $user->email = $email = $data['email'];
-                    $user->password = Hash::make($data['password']);
-                    $user->email_verified_at = date('Y-m-d h:i:s');
-                    $user->save();
-                    $pwd = $data['password'];
-                    // prd($data);
-                    return redirect("/seomoUserLogin?email=$email&password=$pwd&remember=no&pId=$paperId");
-                }
-            } else {
-                return response([
-                    'success' => false,
-                    'message' => 'These credentials do not match our records.'
-                ]);
-            }
-        }
-    }
  private function findOrCreateUser($facebookUser)
     {
         $authUser = User::where('email', $facebookUser->email)->first();

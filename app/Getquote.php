@@ -14,7 +14,7 @@ class Getquote extends Model {
      * @var array
      */
     protected $fillable = [
-        'id','name', 'email', 'mobile','message','PickingUpLocation','Dropping_Off_Location','PickingUpDate','DroppingOffDate'
+        'id','name', 'email', 'mobile','message','PickingUpLocation','Dropping_Off_Location','PickingUpDate','DroppingOffDate','quote_image'
     ];
 
 

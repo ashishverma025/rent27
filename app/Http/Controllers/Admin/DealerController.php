@@ -18,7 +18,11 @@ use App\VehicleSubType;
 use App\Dealer;
 use App\Company;
 use Validator;
-use Mail;
+// use Mail;
+use App\Mail\VerifyMail;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserMail;
+
 
 class DealerController extends Controller {
 
@@ -47,9 +51,11 @@ class DealerController extends Controller {
         // Datatable column number to table column name mapping
         $arr = array(
             0 => 'id',
-            1 => 'dealer_name',
-            2 => 'dealer_type',
-            3 => 'created_at'
+            1 => 'name',
+            2 => 'role_id',
+            3 => 'email',
+            4 => 'status',
+            5 => 'created_at',
         );
 
         // Map the sorting column index to the column name
@@ -64,15 +70,24 @@ class DealerController extends Controller {
         }
 
         // Get the records after applying the datatable filters
-        $dealers = Dealer::whereIn('dealer_type', $dealerTypeCondition)
-                ->where('dealer_name', 'like', '%' . $sSearch . '%')
+        // $dealers = Dealer::select('u.name','u.role_id','dealers.*')
+        //         ->leftJoin('users as u','dealers.user_id','u.id')
+        //         ->whereIn('users.role_id', $dealerTypeCondition)
+        //         ->where('dealer_name', 'like', '%' . $sSearch . '%')
+        //         ->orderBy($sortBy, 'DESC')
+        //         ->limit($length)
+        //         ->offset($start)
+        //         ->get();
+
+        $dealers = User::whereIn('role_id', $dealerTypeCondition)
+                ->where('name', 'like', '%' . $sSearch . '%')
                 ->orderBy($sortBy, 'DESC')
                 ->limit($length)
                 ->offset($start)
                 ->get();
 
-        $iTotal = Dealer::whereIn('dealer_type', $dealerTypeCondition)
-                ->where('dealer_name', 'like', '%' . $sSearch . '%')
+        $iTotal = User::whereIn('role_id', $dealerTypeCondition)
+                ->where('name', 'like', '%' . $sSearch . '%')
                 ->count();
 
         // Create the datatable response array
@@ -81,19 +96,20 @@ class DealerController extends Controller {
             'iTotalDisplayRecords' => $iTotal,
             'aaData' => array()
         );
-
         $k = 0;
         if (count($dealers) > 0) {
             foreach ($dealers as $dealer) {
-                if (@$dealer->user->status == 0) {
+                // prd($dealer);
+
+                if (@$dealer->status == 0) {
                     $status = 'Inactive';
-                } else if (@$dealer->user->status == 1) {
+                } else if (@$dealer->status == 1) {
                     $status = 'Active';
-                } else if (@$dealer->user->status == 2) {
+                } else if (@$dealer->status == 2) {
                     $status = 'On Hold';
                 }
-
-                $button = ( @$dealer->user->status ) ? '<a class="dealer_approval" data-val="2" id="' . $dealer->id . '" title="Hold"><i class="fa fa-ban"></i></a>' : '<a class="dealer_approval" data-val="1" id="' . $dealer->id . '" title="Approve"><i class="fa fa-check"></i></a>';
+                $uname = $dealer->fname?ucwords(strtolower($dealer->fname.' '.$dealer->lname)):ucwords(strtolower($dealer->name));
+                $button = ( @$dealer->status ) ? '<a class="dealer_approval" data-val="2" id="' . $dealer->id . '" title="Hold"><i class="fa fa-ban"></i></a>' : '<a class="dealer_approval" data-val="1" id="' . $dealer->id . '" title="Approve"><i class="fa fa-check"></i></a>';
                 $action = '<a href="addDealer/' . $dealer->id . '" '
                         . 'class="delete hidden-xs hidden-sm" title="Edit">'
                         . '<i class="fa fa-edit text-warning"></i></a> &nbsp;'
@@ -101,16 +117,17 @@ class DealerController extends Controller {
                         . ' class="delete hidden-xs hidden-sm" title="Delete"'
                         . 'onclick=\'return confirm( "Are you sure you want to delete this company?" )\'>'
                         . '<i class="fa fa-trash text-danger"></i></a>';
-                $response['aaData'][$k] = array(
-                    0 => $dealer->id,
-                    1 => '<a href="' . url('/admin/dealervehicles?id=') . $dealer->user_id . '">' . ucwords(strtolower($dealer->dealer_name)) . '</a>',
-                    2 => ( $dealer->dealer_type == 1 ) ? 'Individual' : 'Company',
-                    3 => $dealer->created_at->format('d-M-Y'),
-                    4 => ( $dealer->agreement_completed ) ? '<a target="_blank" href="' . asset('storage/' . str_replace('public/', '', $dealer->agreement_file_path)) . '">View</a>' : 'NA',
-                    5 => $status,
-                    6 => $button,
-                    7 => $action
-                );
+                $response['aaData'][$k] = [
+                    $k,
+                    '<a href="' . url('/admin/dealervehicles?id=') . $dealer->id . '">' . $uname . '</a>',
+                    ($dealer->role_id == 2 ) ? 'Driver' : 'Company',
+                    $dealer->created_at->format('d-M-Y'),
+                    //( $dealer->agreement_completed ) ? '<a target="_blank" href="' . asset('storage/' . str_replace('public/', '', $dealer->agreement_file_path)) . '">View</a>' : 'NA',
+                    ( $dealer->email ) ?$dealer->email  : 'NA',
+                    $status,
+                    $button,
+                    $action
+                ];
                 $k++;
             }
         }
@@ -142,7 +159,6 @@ class DealerController extends Controller {
         /* ADD/EDIT Dealer */
         if ($request->isMethod('post')) {
             $postData = $request->all();
-            $cId = ($request->input('savebtn') == 'Update') ? $dId : '';
             $DealerDetails = ($request->input('savebtn') == 'Add') ? new Dealer() : Dealer::where(['id' => $dId])->first();
 
             $DealerDetails->dealer_name = !empty($postData['person_name']) ? $postData['person_name'] : $DealerDetails->person_name;
@@ -150,7 +166,7 @@ class DealerController extends Controller {
             $DealerDetails->contact_no = !empty($postData['mobile_no']) ? $postData['mobile_no'] : $DealerDetails->mobile_no;
             $DealerDetails->dealer_type = !empty($postData['company_name']) ? 2 : 1;
 
-//            prd($postData);
+        //    prd($postData);
 
 
             if (($request->input('savebtn') == 'Add')) {
@@ -163,8 +179,19 @@ class DealerController extends Controller {
                 $user->role_id = 2;
                 $user->password = \Hash::make($postData['password']);
                 $user->status = '0';
+                $user->email_verified_at = null;
+                $user->verifyTocken = @$postData['_token'];
+
                 $user->created_at = date('Y-m-d H:i:s');
                 if ($user->save()) {
+
+                    $data = [];
+                    $data['verify_token'] =  @$postData['_token'];
+                    $data['name']         = $postData['person_name'];
+                    $data['email']        = $postData['email_id'];
+                    $data['id']           = $user->id;
+                    Mail::to($postData['email_id'])->send(new VerifyMail($data));
+
                     $DealerDetails->user_id = $user->id;
                     $DealerDetails->save();
                 }
@@ -194,14 +221,22 @@ class DealerController extends Controller {
      * @param void
      * @return array
      */
-    public function deleteDealer(Request $request, $dealerId) {
-        $dealer = Dealer::find($dealerId);
-        if ($dealer->delete()) {
-            $response['resCode'] = 0;
-            $response['resMsg'] = 'dealer deleted successfully';
-        } else {
-            $response['resCode'] = 2;
-            $response['resMsg'] = 'Internal server error';
+    public function deleteDealer(Request $request, $userId) {
+        $user = User::find($userId);
+        if ($user) {
+            if ($user->delete()) {
+                $dealer = Dealer::where('user_id', $userId)->first();
+
+                $dealer?$dealer->delete():'';
+                $dealerVehicle = DealerVehicle::where('dealer_id', $userId)->first();
+                $dealerVehicle->delete();
+
+                $response['resCode'] = 0;
+                $response['resMsg'] = 'dealer deleted successfully';
+            } else {
+                $response['resCode'] = 2;
+                $response['resMsg'] = 'Internal server error';
+            }
         }
         return redirect('/admin/dealers');
     }
@@ -239,11 +274,7 @@ class DealerController extends Controller {
         $dealerType = $request->get('dealer_type');        // Dealer Type
         // Datatable column number to table column name mapping
        
-        $arr = array(
-            0 => 't1.id',
-            1 => 't2.name',
-            2 => 't3.vehicle_name'
-        );
+        $arr = ['t1.id','t2.name', 't3.vehicle_name','t3.truck_name','t3.price_for_sale', ];
 
         // Map the sorting column index to the column name
         $sortBy = $arr[$col];
@@ -260,12 +291,12 @@ class DealerController extends Controller {
 //                })
                 ->where('t1.dealer_id', $dealerId)
                 // ->orWhere('name', 'like', '%' . $sSearch . '%')
-                ->select('t1.*', 't2.name', 't3.vehicle_name')
+                ->select('t1.*', 't2.name','t2.id as uId', 't3.vehicle_name')
                 ->get();
 
-//        prd($vehicles);
+    //    prd($vehicles);
 
-        $iTotal = DB::table('dealer_vehicles as t1')
+        $iTotal = DB::table('dealer_vehicles as t1')->select('t2.id as uId','t1.*')
                 ->join('users as t2', 't1.dealer_id', '=', 't2.id')
                 ->join('vehicles as t3', 't1.vehicle_id', '=', 't3.id')
                 ->when($dealerId, function ($query, $dealerId) {
@@ -301,23 +332,28 @@ class DealerController extends Controller {
                     $pauseBtn = '<a href="javascript:void(0);" title="Resume Vehicle" data-action="0" id="' . $vehicle->id . '" class="vehicle_action"><i class="fa fa-play text-warning" style="font-size:16px;"></i></a> | ';
                 }
 
-                $action = '<a href="editDealerVehicle/' . $vehicle->id . '" '
+                $action = '<a href="editDealerVehicle/' . $vehicle->id . '/'. $vehicle->uId.'" '
                         . 'class="delete hidden-xs hidden-sm" title="Edit">'
                         . '<i class="fa fa-edit text-warning"></i></a> &nbsp;'
                         . ' <a href="deleteDealerVehicle/' . $vehicle->id . '"'
                         . ' class="delete hidden-xs hidden-sm" title="Delete"'
                         . 'onclick=\'return confirm( "Are you sure you want to delete this dealer-vehicle?" )\'>'
                         . '<i class="fa fa-trash text-danger"></i></a>';
-
-                $response['aaData'][$k] = array(
-                    0 => $vehicle->id,
-                    1 => ucwords(strtolower($vehicle->name)),
-                    2 => ucwords(strtolower($vehicle->vehicle_name)),
-                    3 => $vehicle->hourly_charge,
-                    4 => $vehicle->day1_charge . ', ' . $vehicle->day2_charge . ', ' . $vehicle->day3_charge . ', ' . $vehicle->day4_charge . ', ' . $vehicle->day5_charge . ', ' . $vehicle->day6_charge . ', ' . $vehicle->day7_charge,
-                    5 => $status,
-                    6 => $pauseBtn . $action
-                );
+                
+                $type = $vehicle->type == 0 ? 'Truck For Rent': 'Truck For Sale';
+                       
+                $response['aaData'][$k] = [
+                    $vehicle->id,
+                    ucwords(strtolower($vehicle->name)),
+                    $vehicle->truck_name ,
+                    $type,
+                    $vehicle->price_for_sale,
+                    ucwords(strtolower($vehicle->vehicle_name)),
+                    $vehicle->source_address,
+                    $vehicle->destination_address,
+                    @$status,
+                    $pauseBtn . $action
+                ];
                 $k++;
             }
         }
@@ -325,31 +361,34 @@ class DealerController extends Controller {
         return response()->json($response);
     }
 
-    public function addDealerVehicle(Request $request, $did = null) {
+    public function addDealerVehicle(Request $request, $did = null,$uid = null) {
         if ($request->isMethod('get')) {
             $DealerDetails = "";
-            $button = 'Add';
+
             if (!empty($did)) {
                 $vehicleTypes = VehicleType::get();
                 $vehicleFuelTypes = VehicleFuelType::get();
                 $vehicleDetails = DealerVehicle::where('id', $did)->first();
                 $vehicles = \App\Vehicle::get();
 
-                $button = 'Update';
-                $DealerDetails = DB::table('dealer_vehicles as dv')->select('d.dealer_name', 'd.company_name', 'd.user_id', 'dv.*')
+                $DealerDetails = DB::table('dealer_vehicles as dv')
+                                ->select('d.dealer_name', 'd.company_name', 'd.user_id', 'dv.*')
                                 ->leftJoin('dealers as d', 'd.id', 'dv.dealer_id')
                                 ->where('dv.dealer_id', $did)->first();
 //                $DealerDetails = Dealer::where(['id' => $dId])->first();
-//                prd($vehicleDetails);
+            //    prd($vehicleDetails);
             }
             $method = $request->segments(1);
-            return view('admin.dealer.addDealerVehicle', [
+            $button = empty($uid)?'Add Truck For ':'Update Truck For ';
+
+            return view( 'admin.dealer.addDealerVehicle' , [
                 'did' => $did,
+                'uid' => $uid,
                 'dealerDetails' => $DealerDetails,
                 'button' => $button,
                 'vehicleTypes' => $vehicleTypes,
                 'vehicleFuelTypes' => $vehicleFuelTypes,
-                'vehicleDetails' => [],
+                'vehicleDetails' => $vehicleDetails?$vehicleDetails:[],
                 'vehicles' => $vehicles,
                 'method' => $method[1]
             ]);
@@ -359,133 +398,55 @@ class DealerController extends Controller {
 
         if ($request->isMethod('post')) {
             $postData = $request->all();
-
-            $DealerDetails = new DealerVehicle();
-
-            $DealerDetails->dealer_id = !empty($did) ? $did : $DealerDetails->dealer_id;
+            $DealerDetails = empty($uid) ? new DealerVehicle() : DealerVehicle::where(['id' => $did])->first();
+            // prd($DealerDetails);
+            $DealerDetails->price_for_sale = !empty($postData['price_for_sale']) ? $postData['price_for_sale'] : $DealerDetails->price_for_sale;
             $DealerDetails->vehicle_type_id = !empty($postData['vehicle_category']) ? $postData['vehicle_category'] : $DealerDetails->vehicle_type_id;
             $DealerDetails->fuel_type_id = !empty($postData['vehicle_fuel_type']) ? $postData['vehicle_fuel_type'] : $DealerDetails->fuel_type_id;
-            $DealerDetails->vehicle_id = !empty($postData['vehicle_name']) ? $postData['vehicle_name'] : $DealerDetails->vehicle_name;
+            $DealerDetails->vehicle_id = !empty($postData['vehicle_id']) ? $postData['vehicle_id'] : $DealerDetails->vehicle_id;
             $DealerDetails->registration_number = !empty($postData['vehicle_reg_no']) ? $postData['vehicle_reg_no'] : $DealerDetails->registration_number;
-              $DealerDetails->source_address = !empty($postData['source_address']) ? $postData['source_address'] : $DealerDetails->source_address;
-               $DealerDetails->destination_address = !empty($postData['destination_address']) ? $postData['destination_address'] : $DealerDetails->destination_address;
-                $DealerDetails->year = !empty($postData['year']) ? $postData['year'] : $DealerDetails->year;
-                $DealerDetails->weight = !empty($postData['weight']) ? $postData['weight'] : $DealerDetails->weight;
-                 $DealerDetails->leaving = !empty($postData['leaving']) ? $postData['leaving'] : $DealerDetails->leaving;
-                  $DealerDetails->to_comming = !empty($postData['to_comming']) ? $postData['to_comming'] : $DealerDetails->to_comming;
             $DealerDetails->distance_covered = !empty($postData['vehicle_distance_covered']) ? $postData['vehicle_distance_covered'] : $DealerDetails->distance_covered;
             $DealerDetails->color = !empty($postData['vehicle_color']) ? $postData['vehicle_color'] : $DealerDetails->vehicle_color;
-            $DealerDetails->air_condition = !empty($postData['vehicle_air_condition']) ? $postData['vehicle_air_condition'] : $DealerDetails->air_condition;
-            $DealerDetails->hourly_charge = !empty($postData['vehicle_hourly_charge']) ? $postData['vehicle_hourly_charge'] : $DealerDetails->hourly_charge;
-            $DealerDetails->hourly_charge = !empty($postData['vehicle_hourly_charge']) ? $postData['vehicle_hourly_charge'] : $DealerDetails->hourly_charge;
-            $DealerDetails->day1_charge = !empty($postData['vehicle_day1_charge']) ? $postData['vehicle_day1_charge'] : $DealerDetails->day1_charge;
-            $DealerDetails->day2_charge = !empty($postData['vehicle_day2_charge']) ? $postData['vehicle_day2_charge'] : $DealerDetails->day2_charge;
-            $DealerDetails->day3_charge = !empty($postData['vehicle_day3_charge']) ? $postData['vehicle_day3_charge'] : $DealerDetails->day3_charge;
-            $DealerDetails->day4_charge = !empty($postData['vehicle_day4_charge']) ? $postData['vehicle_day4_charge'] : $DealerDetails->day4_charge;
-            $DealerDetails->day5_charge = !empty($postData['vehicle_day5_charge']) ? $postData['vehicle_day5_charge'] : $DealerDetails->day5_charge;
-            $DealerDetails->day6_charge = !empty($postData['vehicle_day6_charge']) ? $postData['vehicle_day6_charge'] : $DealerDetails->day6_charge;
-            $DealerDetails->day7_charge = !empty($postData['vehicle_day7_charge']) ? $postData['vehicle_day7_charge'] : $DealerDetails->day7_charge;
-            $DealerDetails->weekly_charge = !empty($postData['vehicle_weekly_charge']) ? $postData['vehicle_weekly_charge'] : $DealerDetails->weekly_charge;
-            $DealerDetails->monthly_charge = !empty($postData['vehicle_monthly_charge']) ? $postData['vehicle_monthly_charge'] : $DealerDetails->monthly_charge;
             $DealerDetails->renting_policies = !empty($postData['vehicle_renting_policies']) ? $postData['vehicle_renting_policies'] : $DealerDetails->renting_policies;
-            $DealerDetails->status = 1;
-//            $DealerDetails->status = !empty($postData['status']) ? $postData['status'] : $DealerDetails->status;
-            $DealerDetails->year_of_purchase = !empty($postData['vehicle_purchase_year']) ? $postData['vehicle_purchase_year'] : $DealerDetails->year_of_purchase;
+            $DealerDetails->mileage = !empty($postData['mileage']) ? $postData['mileage'] : $DealerDetails->mileage;
+            $DealerDetails->axle_config = !empty($postData['axle_config']) ? $postData['axle_config'] : $DealerDetails->axle_config;
+            $DealerDetails->gross_vehicle_weight = !empty($postData['gross_vehicle_weight']) ? $postData['gross_vehicle_weight'] : $DealerDetails->gross_vehicle_weight;
+            $DealerDetails->weight = !empty($postData['weight']) ? $postData['weight'] : $DealerDetails->weight;
+            $DealerDetails->transmission = !empty($postData['transmission']) ? $postData['transmission'] : $DealerDetails->transmission;
             $DealerDetails->comment = !empty($postData['comment']) ? $postData['comment'] : $DealerDetails->comment;
+            //TRUCK DETAILS
+            $DealerDetails->truck_name = !empty($postData['truck_name']) ? $postData['truck_name'] : $DealerDetails->truck_name;
+            $DealerDetails->source_address = !empty($postData['source_address']) ? $postData['source_address'] : $DealerDetails->source_address;
+            $DealerDetails->destination_address = !empty($postData['destination_address']) ? $postData['destination_address'] : $DealerDetails->destination_address;
+            $DealerDetails->description = !empty($postData['description']) ? $postData['description'] : $DealerDetails->description;
+            $DealerDetails->size = !empty($postData['size']) ? $postData['size'] : $DealerDetails->size;
+            $DealerDetails->pickup_date = !empty($postData['drop_date']) ? $postData['drop_date'] : date('Y-m-d');
+            $duration = '30 days';
+            $DealerDetails->drop_date = !empty($postData['drop_date']) ? $postData['drop_date'] : createDate(date('Y-m-d'), "+" . $duration, 'Y-m-d');
+            $DealerDetails->type = !empty($postData['types']) ? $postData['types'] : $DealerDetails->type;
+            $DealerDetails->status =  !empty($postData['status']) ? $postData['status'] : $DealerDetails->status;
 
-            $vehicleImage = $request->file('vehicle_images');
-            if (!empty($vehicleImage)) {
-                $logoFileName = upload_admin_images($vehicleImage, 'dealervehicle');
+            // prd($postData);
+
+            $truckLogo = $request->file('truck_logo');
+            if (!empty($truckLogo)) {
+                $logoFileName = upload_admin_images($truckLogo, 'truck');
                 if (!empty($logoFileName)) {
-                    $DealerDetails->vehicle_images = $logoFileName;
+                    $DealerDetails->truck_logo = $logoFileName;
                 }
             }
-//            prd($postData);
-            $DealerDetails->created_at = date('Y-m-d H:i:s');
+            if(empty($uid)){
+                $DealerDetails->created_at = date('Y-m-d H:i:s');
+                $DealerDetails->dealer_id = !empty($did) ? $did : $DealerDetails->dealer_id;
+            }else{
+                $DealerDetails->updated_at = date('Y-m-d H:i:s');
+            }
+
+
             $DealerDetails->save();
             set_flash_message('Dealer Vehicle Added Successfully.', 'alert-success');
 
             return redirect('admin/dealers');
-        }
-    }
-
-    public function editDealerVehicle(Request $request, $did = null) {
-//        prd($request->segments(1));
-        if ($request->isMethod('get')) {
-            $DealerDetails = "";
-            $vehicleTypes = VehicleType::get();
-            $vehicleFuelTypes = VehicleFuelType::get();
-            $vehicleDetails = DealerVehicle::where('id', $did)->first();
-            $vehicles = \App\Vehicle::get();
-
-            $button = 'Update';
-            $DealerDetails = DB::table('dealer_vehicles as dv')->select('d.dealer_name', 'd.company_name', 'd.user_id', 'dv.*')
-                            ->leftJoin('dealers as d', 'd.id', 'dv.dealer_id')
-                            ->where('dv.dealer_id', $did)->first();
-            $method = $request->segments(1);
-            return view('admin.dealer.addDealerVehicle', [
-                'did' => $did,
-                'dealerDetails' => $DealerDetails,
-                'button' => $button,
-                'vehicleTypes' => $vehicleTypes,
-                'vehicleFuelTypes' => $vehicleFuelTypes,
-                'vehicleDetails' => $vehicleDetails,
-                'vehicles' => $vehicles,
-                'method' => $method[1]
-            ]);
-        }
-
-
-        if ($request->isMethod('post')) {
-            $postData = $request->all();
-
-            $DealerDetails = DealerVehicle::where(['id' => $did])->first();
-//            prd($DealerDetails);
-
-            $DealerDetails->vehicle_type_id = !empty($postData['vehicle_category']) ? $postData['vehicle_category'] : $DealerDetails->vehicle_type_id;
-            $DealerDetails->fuel_type_id = !empty($postData['vehicle_fuel_type']) ? $postData['vehicle_fuel_type'] : $DealerDetails->fuel_type_id;
-            $DealerDetails->vehicle_id = !empty($postData['vehicle_name']) ? $postData['vehicle_name'] : $DealerDetails->vehicle_id;
-            $DealerDetails->registration_number = !empty($postData['vehicle_reg_no']) ? $postData['vehicle_reg_no'] : $DealerDetails->registration_number;
-                   $DealerDetails->source_address = !empty($postData['source_address']) ? $postData['source_address'] : $DealerDetails->source_address;
-               $DealerDetails->destination_address = !empty($postData['destination_address']) ? $postData['destination_address'] : $DealerDetails->destination_address;
-                $DealerDetails->year = !empty($postData['year']) ? $postData['year'] : $DealerDetails->year;
-                $DealerDetails->weight = !empty($postData['weight']) ? $postData['weight'] : $DealerDetails->weight;
-                 $DealerDetails->leaving = !empty($postData['leaving']) ? $postData['leaving'] : $DealerDetails->leaving;
-                  $DealerDetails->to_comming = !empty($postData['to_comming']) ? $postData['to_comming'] : $DealerDetails->to_comming;
-            $DealerDetails->distance_covered = !empty($postData['vehicle_distance_covered']) ? $postData['vehicle_distance_covered'] : $DealerDetails->distance_covered;
-            $DealerDetails->color = !empty($postData['vehicle_color']) ? $postData['vehicle_color'] : $DealerDetails->color;
-            $DealerDetails->air_condition = !empty($postData['vehicle_air_condition']) ? $postData['vehicle_air_condition'] : $DealerDetails->air_condition;
-            $DealerDetails->hourly_charge = !empty($postData['vehicle_hourly_charge']) ? $postData['vehicle_hourly_charge'] : $DealerDetails->hourly_charge;
-            $DealerDetails->hourly_charge = !empty($postData['vehicle_hourly_charge']) ? $postData['vehicle_hourly_charge'] : $DealerDetails->hourly_charge;
-            $DealerDetails->day1_charge = !empty($postData['vehicle_day1_charge']) ? $postData['vehicle_day1_charge'] : $DealerDetails->day1_charge;
-            $DealerDetails->day2_charge = !empty($postData['vehicle_day2_charge']) ? $postData['vehicle_day2_charge'] : $DealerDetails->day2_charge;
-            $DealerDetails->day3_charge = !empty($postData['vehicle_day3_charge']) ? $postData['vehicle_day3_charge'] : $DealerDetails->day3_charge;
-            $DealerDetails->day4_charge = !empty($postData['vehicle_day4_charge']) ? $postData['vehicle_day4_charge'] : $DealerDetails->day4_charge;
-            $DealerDetails->day5_charge = !empty($postData['vehicle_day5_charge']) ? $postData['vehicle_day5_charge'] : $DealerDetails->day5_charge;
-            $DealerDetails->day6_charge = !empty($postData['vehicle_day6_charge']) ? $postData['vehicle_day6_charge'] : $DealerDetails->day6_charge;
-            $DealerDetails->day7_charge = !empty($postData['vehicle_day7_charge']) ? $postData['vehicle_day7_charge'] : $DealerDetails->day7_charge;
-            $DealerDetails->weekly_charge = !empty($postData['vehicle_weekly_charge']) ? $postData['vehicle_weekly_charge'] : $DealerDetails->weekly_charge;
-            $DealerDetails->monthly_charge = !empty($postData['vehicle_monthly_charge']) ? $postData['vehicle_monthly_charge'] : $DealerDetails->monthly_charge;
-            $DealerDetails->renting_policies = !empty($postData['vehicle_renting_policies']) ? $postData['vehicle_renting_policies'] : $DealerDetails->renting_policies;
-//            $DealerDetails->status = !empty($postData['status']) ? $postData['status'] : $DealerDetails->status;
-            $DealerDetails->status = 1;
-            $DealerDetails->year_of_purchase = !empty($postData['vehicle_purchase_year']) ? $postData['vehicle_purchase_year'] : $DealerDetails->year_of_purchase;
-            $DealerDetails->comment = !empty($postData['comment']) ? $postData['comment'] : $DealerDetails->comment;
-
-            $vehicleImage = $request->file('vehicle_images');
-            if (!empty($vehicleImage)) {
-                $logoFileName = upload_admin_images($vehicleImage, 'dealervehicle');
-                if (!empty($logoFileName)) {
-                    $DealerDetails->vehicle_images = $logoFileName;
-                }
-            }
-//            prd($postData);
-
-            $DealerDetails->updated_at = date('Y-m-d H:i:s');
-            $DealerDetails->update();
-            set_flash_message('Dealer Vehicle Updated successfully', 'alert-success');
-
-            return redirect("admin/dealervehicles?id=$DealerDetails->dealer_id");
         }
     }
 

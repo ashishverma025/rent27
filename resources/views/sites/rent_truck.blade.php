@@ -27,7 +27,7 @@ $type_of_truck = @$queryString['type_of_truck'];
             <h3> We provide the best trucks in the world</h3>
             <div class="custom-select">
                 <select>
-                    <option value="0">Most Recent Ads</option>
+                    <option value="0">Modal</option>
                     <option value="1">Audi</option>
                     <option value="2">BMW</option>
                     <option value="3">Citroen</option>
@@ -67,7 +67,7 @@ $type_of_truck = @$queryString['type_of_truck'];
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="exp-btn"><button >RENT NOW</button></div>
+                    <div class="exp-btn"><a href="{{url('detail/truck').'/'.$trucks->id}}" style="cursor: pointer;"><button >Explore NOW</button></a></div>
                 </div>
             </div>
         </div>

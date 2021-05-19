@@ -48,7 +48,7 @@ class ForgotPasswordController extends Controller
             }
             return response()->json([
                 'status'  => 'success',
-                'message' => 'Email verification link has been successfully sent to your mail address.'
+                'message' => 'Reset Password link has been sent to your mail address.'
             ]);
         }
         return response()->json([

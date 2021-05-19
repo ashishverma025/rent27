@@ -27,7 +27,7 @@ class VerifyMail extends Mailable
      */
     public function build()
     {
-        return $this->from('john@webslesson.info')->subject('Emptytruck100 - Please verify your email to complete the registration.')->view('VerifyEmailRegistration')->with('data', $this->data);
+        return $this->from('support@emptytruck100.com')->subject('Emptytruck100 - Please verify your email to complete the registration.')->view('VerifyEmailRegistration')->with('data', $this->data);
     }
 }
 

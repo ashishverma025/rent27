@@ -63,9 +63,12 @@
                                         <tr role="row">
                                             <th class="wid-20" tabindex="0" rowspan="1" colspan="1">Sl</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Dealer Name</th>
+                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Truck Name</th>
+                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Truck Type</th>
+                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Price For Sale</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Vehicle</th>
-                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Hourly Charge</th>
-                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Daily Charge (Mon to Sun)</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Source Address</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Destination Address</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Status</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Action</th>
                                            
@@ -119,9 +122,12 @@
             "bServerSide": true,
             "sAjaxSource": url,
             "columnDefs": [
-                {"className": "dt-center", "targets": [0, 2, 2]}
+                {"className": "dt-center", "targets": [0, 3, 2]}
             ],
             "aoColumns": [
+                {'bSortable': true},
+                {'bSortable': true},
+                {'bSortable': true},
                 {'bSortable': true},
                 {'bSortable': true},
                 {'bSortable': true},

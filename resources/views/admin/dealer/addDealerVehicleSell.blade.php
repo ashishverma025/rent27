@@ -1,5 +1,5 @@
-@include('dashboard/includes.admin-head')
-@include('dashboard/includes.admin-sidebar')
+@include('admin/includes.admin-head')
+@include('admin/includes.admin-sidebar')
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -20,7 +20,7 @@
             <!-- SELECT2 EXAMPLE -->
             <div class="card card-default">
                 <div class="card-header">
-                    <h3 class="card-title">{{$button}}  Vehicle </h3>
+                    <h3 class="card-title">{{$button}} {{(@$vehicleDetails->type == 0)? 'Rent': 'Sale' }} </h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -29,8 +29,42 @@
                     @elseif($button == 'Update')
                         @php $action = '/editDealerVehicle/'.@$dvid; @endphp
                     @endif
-                    <form name="frm_vehicle_details" action="{{url($action)}}" method="post" enctype="multipart/form-data"  id="frm_vehicle_details" autocomplete="off">
+                    <form name="frm_vehicle_details" action="{{url('admin')}}/{{@$method}}/{{@$did}}" method="post" id="frm_vehicle_details" autocomplete="off">
                         {{ csrf_field() }}
+                        <div class="form-group">
+                            <label for="types">Truck Type:</label>
+                            <select name="types" id="types" class="form-control">
+                                <option value="0" <?= $vehicleDetails->type == 0 ? 'selected': '' ?> >Add Truck For Rent</option>
+                                <option value="1" <?= $vehicleDetails->type == 1 ? 'selected': '' ?> >For Truck For Sale</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label> Truck Name:</label>
+                            <input type="text" id="fname" name="truck_name" class="form-control" placeholder="Truck Name" value="<?= @$vehicleDetails->truck_name ?>" required>
+                            @if ($errors->has('truck_name'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('truck_name') }}</strong>
+                            </span>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicle_name">Model:</label>
+                            <select name="vehicle_name" id="vehicle_name" class="form-control">
+                                <option value="">Select</option>
+                                <?php
+                                if ($vehicles) {
+                                    foreach ($vehicles as $vehicle) {
+                                        $selected = '';
+                                        if (@$vehicleDetails->vehicle_id == $vehicle->id) {
+                                            $selected = 'selected';
+                                        }
+                                        echo "<option value='{{$vehicle->id}}'  $selected> $vehicle->vehicle_name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label for="vehicle_category">Vehicle Category:</label>
                             <select name="vehicle_category" id="vehicle_category" class="form-control">
@@ -49,7 +83,9 @@
                                 ?>
                             </select>
                             <input type="hidden" name="dealer_id" id="vehicle_id" value="{{ @$did }}">
+                            <input type="hidden" name="type" id="type" value="0">
                         </div>
+
                         <!-- <div class="form-group">
                                 <label for="vehicle_sub_category">Vehicle Sub Category:</label>
                                 <select name="vehicle_sub_category" id="vehicle_sub_category" class="form-control">
@@ -73,43 +109,16 @@
                                 ?>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="vehicle_name">Vehicle:</label>
-                            <select name="vehicle_name" id="vehicle_name" class="form-control">
-                                <option value="">Select</option>
-                                <?php
-                                if ($vehicles) {
-                                    foreach ($vehicles as $vehicle) {
-                                        $selected = '';
-                                        if (@$vehicleDetails->vehicle_id == $vehicle->id) {
-                                            $selected = 'selected';
-                                        }
-
-                                        echo '<option value="' . $vehicle->id . '" ' . $selected . '>' . ucwords($vehicle->vehicle_name) . '</option>';
-                                    }
-                                }
-                                ?>
-                            </select>
-                        </div>
 
                         <div class="form-group">
-                            <label for="advertising_type">Advertising Type:</label>
-                            <select name="advertising_type" id="advertising_type" class="form-control">
-                                <option value="">Select</option>
-                                <option value="0" @if(@$vehicleDetails->type == 0) selected @endif>Sell</option>
-                                <option value="1" @if(@$vehicleDetails->type == 1) selected @endif>Rent</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="vehicle_reg_no">Registration No:</label>
+                            <label for="vehicle_reg_no">Reg. Year :</label>
                             <input type="text" class="form-control" name="vehicle_reg_no" id="vehicle_reg_no" value="{{ @$vehicleDetails->registration_number }}">
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="vehicle_purchase_year">Year of Purchase:</label>
                             <select name="vehicle_purchase_year" id="vehicle_purchase_year" class="form-control">
                                 <option value="">Select</option>
-                                <?php
+                                @php
                                 $currYear = date('Y');
                                 $startYear = date("Y", strtotime("-8 year"));
                                 for ($i = $startYear; $i <= $currYear; $i++) {
@@ -120,17 +129,31 @@
 
                                     echo '<option value="' . $i . '" ' . $selected . '>' . $i . '</option>';
                                 }
-                                ?>
+                                @endphp
                             </select>
-                        </div>
+                        </div> -->
                         <div class="form-group">
-                            <label for="vehicle_distance_covered">Distance Covered:</label>
-                            <input type="text" class="form-control" id="vehicle_distance_covered" name="vehicle_distance_covered" value="{{ @$vehicleDetails->distance_covered }}">
+                            <label for="mileage">Mileage:</label>
+                            <input type="text" class="form-control" id="mileage" name="mileage" value="{{ @$vehicleDetails->mileage }}">
                         </div>
+                        <!-- <div class="form-group">
+                            <label for="pickup_date">Pick Up Date:</label>
+                            <input  name="pickup_date" value="{{ @$vehicleDetails->pickup_date }}" id="pickup_date" type="date" class="form-control" >
+                        </div> -->
                         <div class="form-group">
-                            <label for="vehicle_color">Color:</label>
+                            <label for="vehicle_color">Color(optional): </label>
                             <input type="color" class="form-control" id="vehicle_color" name="vehicle_color" value="{{ @$vehicleDetails->color }}">
                         </div>
+
+                        <!-- <div class="form-group">
+                            <label for="drop_date">Dropping Off Date:</label>
+                            <input  name="drop_date" value="{{ @$vehicleDetails->drop_date }}" id="drop_date" type="date" class="form-control" >
+                        </div> -->
+                        <!-- <div class="form-group">
+                            <label for="vehicle_distance_covered">Distance Covered (optional):</label>
+                            <input type="text" class="form-control" id="vehicle_distance_covered" name="vehicle_distance_covered" value="{{ @$vehicleDetails->distance_covered }}">
+                        </div> -->
+
                         <div class="form-group">
                             <label for="vehicle_air_condition">AC Fitted:</label>
                             <select name="vehicle_air_condition" id="vehicle_air_condition" class="form-control">
@@ -139,21 +162,21 @@
                                 <option value="1" {{ ( @$vehicleDetails->air_condition == '1' ) ? 'selected' : '' }}>Yes</option>
                             </select>
                         </div>
-
-                        <div class="form-group">
-                            <label for="vehicle_renting_policies">Renting Policies:</label>
-                            <textarea name="vehicle_renting_policies" id="vehicle_renting_policies" class="form-control">{{ @$vehicleDetails->renting_policies }}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="vehicle_images">Images (If you do not upload any image then default image will be shown):</label>
-                            <input type="file" multiple="" name="vehicle_images" id="vehicle_images" class="form-control">
-                        </div>
-
-
                         <div class="form-group">
                             <label for="axle_config">Axle Config:</label>
                             <input  name="axle_config" value="{{ @$vehicleDetails->axle_config }}" type="text" class="form-control" id="axle_config">
                         </div>
+                        <!-- <div class="form-group">
+                            <label for="vehicle_renting_policies">Renting Policies:</label>
+                            <textarea name="vehicle_renting_policies" id="vehicle_renting_policies" class="form-control">{{ @$vehicleDetails->renting_policies }}</textarea>
+                        </div>  -->
+                        <!-- <div class="form-group">
+                            <label for="vehicle_images">Images (If you do not upload any image then default image will be shown):</label>
+                            <input type="file" multiple="" name="vehicle_images" id="vehicle_images" class="form-control">
+                        </div> -->
+
+
+                         
                         <div class="form-group">
                             <label for="gross_vehicle_weight">Gross Vehicle Weight:</label>
                             <input  name="gross_vehicle_weight" value="{{ @$vehicleDetails->gross_vehicle_weight }}" type="text" class="form-control" id="gross_vehicle_weight">
@@ -175,10 +198,10 @@
                             <label for="interior_condition">Interior Condition:</label>
                             <input  name="interior_condition" value="{{ @$vehicleDetails->interior_condition }}" id="interior_condition" type="text" class="form-control" >
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="tyre_condition">Tyre Condition:</label>
                             <input  name="tyre_condition" value="{{ @$vehicleDetails->tyre_condition }}" id="tyre_condition" type="text" class="form-control" >
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="driver_position">Driver Position:</label>
                             <input  name="driver_position" value="{{ @$vehicleDetails->driver_position }}" id="driver_position" type="text" class="form-control" >
@@ -209,7 +232,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <label> Truck Image</label>
+                                <label> Truck Image:</label>
 
                                 <div class="row">
                                     <div class="col-md-2">
@@ -228,17 +251,9 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
-                                    <label> Truck Name</label>
-                                    <input type="text" id="fname" name="truck_name" class="form-control" placeholder="Truck Name" value="<?= @$vehicleDetails->truck_name ?>" required>
-                                    @if ($errors->has('truck_name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('truck_name') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                                <div class="form-group">
-                                    <label> Description</label>
+                                    <label> Description:</label>
                                     <textarea  id="editor1" name="description" class="form-control textarea" placeholder="Description" required><?= @$vehicleDetails->description ?></textarea>
                                     @if ($errors->has('description'))
                                     <span class="help-block">
@@ -247,24 +262,24 @@
                                     @endif
                                 </div>
                                 <div class="form-group">
-                                    <label> Source Address</label>
-                                    <input type="text" id="source_address" name="source_address" class="form-control" placeholder="Source address" value="<?= @$vehicleDetails->source_address ?>" required>
+                                    <label> Source Location:</label>
+                                    <input type="text" id="pickup_location" name="source_address" class="form-control" placeholder="Source address" value="<?= @$vehicleDetails->source_address ?>" required>
                                     @if ($errors->has('source_address'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('source_address') }}</strong>
                                     </span>
                                     @endif
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label> Destination Address</label>
-                                    <input type="text" id="fname" name="destination_address" class="form-control" placeholder="Destination address" value="<?= @$vehicleDetails->destination_address ?>" required>
+                                    <input type="text" id="dropping_location" name="destination_address" class="form-control" placeholder="Destination address" value="<?= @$vehicleDetails->destination_address ?>" required>
                                     @if ($errors->has('destination_address'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('destination_address') }}</strong>
                                     </span>
                                     @endif
-                                </div>
-                                <div class="form-group">
+                                </div> -->
+                                <!-- <div class="form-group">
                                     <label> Modal Year</label>
                                     <input type="text" id="year" name="year" class="form-control" placeholder="Year" value="<?= @$vehicleDetails->year ?>" required>
                                     @if ($errors->has('year'))
@@ -272,9 +287,9 @@
                                         <strong>{{ $errors->first('year') }}</strong>
                                     </span>
                                     @endif
-                                </div>
+                                </div> -->
                                 <div class="form-group">
-                                    <label> Truck Weight</label>
+                                    <label> Truck Weight:</label>
                                     <input type="text" id="weight" name="weight" class="form-control" placeholder="Weight" value="<?= @$vehicleDetails->weight ?>" required>
                                     @if ($errors->has('weight'))
                                     <span class="help-block">
@@ -283,10 +298,10 @@
                                     @endif
                                 </div>
                                 <div class="form-group">
-                                    <label> Truck Size</label>
+                                    <label> Truck Size:</label>
                                     <input type="text" id="size" name="size" class="form-control" placeholder="Size" value="<?= @$vehicleDetails->size ?>" required>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label> Leaving</label>
                                     <input type="text" id="leaving" name="leaving" class="form-control" placeholder="Leaving" value="<?= @$vehicleDetails->leaving ?>" required>
 
@@ -295,7 +310,7 @@
                                     <label> To Comming</label>
                                     <input type="text" id="to_comming" name="to_comming" class="form-control" placeholder="To Comming" value="<?= @$vehicleDetails->to_comming ?>" required>
 
-                                </div>
+                                </div> -->
 
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -332,4 +347,8 @@
                                                         }
                                                     }
 </script>
+
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8zMW3rDyRK3rhD5HTLAsJVBIxmZzF18k&libraries=places&callback=activatePlacesSearch1" async defer></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb4KG02YNFocJ6FrUKrlfwe65nyGlUEo4&libraries=places&callback=activatePlacesSearch1" async defer></script>
+        <script  src="{{ asset('assets/sites/js/geo-address.js') }}"></script> 
 @include('dashboard/includes.admin-footer')

@@ -61,6 +61,7 @@ class Kernel extends HttpKernel {
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'guard.verified' => \App\Http\Middleware\EnsureCustomGuardIsVerified::class,
         'checkType' => \App\Http\Middleware\CheckType::class,
+        'CheckDocVerification' => \App\Http\Middleware\CheckDocVerification::class,
     ];
 
     /**

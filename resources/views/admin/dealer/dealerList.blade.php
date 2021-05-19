@@ -63,9 +63,9 @@
                                         <tr role="row">
                                             <th class="wid-20" tabindex="0" rowspan="1" colspan="1">Sl</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Person Name</th>
-                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Individual / Company</th>
-                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Date of Registration</th>
-                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Agreement</th>
+                                            <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Company / Driver</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Reg. Date</th>
+                                            <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Email</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Status</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Action Status</th>
                                             <th class="sorting wid-25" tabindex="0" rowspan="1" colspan="1">Action</th>

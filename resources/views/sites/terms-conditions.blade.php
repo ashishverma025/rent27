@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-   <head>
-      <title>Emptytruck 100 | Terms and conditions</title>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-   </head>
-   <body>
+@extends('sites.layout.Sites')
+@section('content')
+
       <div class="jumbotron text-center">
          <h1>Terms And Conditions</h1>
       </div>
@@ -18,14 +9,12 @@
             <div id="accordion">
                <div class="card">
 			   <div class="card-header">
-                     <h5 class="mb-0">
+                     <h7 class="mb-0">
                       Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy procedure govern Sunshine E Ltd relationship with you in relation to this website. If you disagree with any part of these terms and conditions, please do not use our website.
-
-The term Sunshine E Ltd or Emptytruck100.com refers to the owner of the website whose registered office is 31 Rocky Lane, Anfield, L6 4BA UK Our company registration number is 09608582. Email address is enquiry@emptytruck100.com. This company was registered in London UK. The term Sunshine E Ltd refers to the user or viewer of our website.
-
-The use of this website is subject to the following terms of use:
+                     The term Sunshine E Ltd or Emptytruck100.com refers to the owner of the website whose registered office is 31 Rocky Lane, Anfield, L6 4BA UK Our company registration number is 09608582. Email address is enquiry@emptytruck100.com. This company was registered in London UK. The term Sunshine E Ltd refers to the user or viewer of our website.
+                     The use of this website is subject to the following terms of use:
                         
-                     </h5>
+                     </h7>
                   </div>
                   <div class="card-header" id="headingOne">
                      <h5 class="mb-0">
@@ -246,5 +235,5 @@ The use of this website is subject to the following terms of use:
             </div>
          </div>
       </div>
-   </body>
-</html>
+  
+@endsection

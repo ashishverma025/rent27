@@ -38,12 +38,10 @@ Route::post('/quotes', 'WelcomeController@quotes');
 Route::get('/', 'WelcomeController@landing_index');
 Route::any('/editProfile/{id?}', 'WelcomeController@editProfile');
 Route::get('/thankyou', 'WelcomeController@thankyou');
-Route::any('/listing/truck', 'WelcomeController@listingTruck');
 Route::get('/detail/truck/{id?}', 'WelcomeController@detailTruck');
 Route::get('/buy-truck', 'WelcomeController@buy_truck');
 Route::get('/rent-truck', 'WelcomeController@rent_truck');
 Route::get('/sell-truck', 'WelcomeController@sell_truck');
-Route::get('/advertise-truck', 'WelcomeController@advertise_truck');
 Route::get('/pay-after-loading', 'WelcomeController@pay_after_loading');
 Route::get('/get-verified', 'WelcomeController@get_verified');
 Route::post('/saveReview', 'AjaxController@saveReview');
@@ -54,24 +52,32 @@ Route::get('/send-quotes-email', 'SendEmailController@index');
 Route::get('/custommer-dashboard', 'WelcomeController@customerDashboard');
 Route::get('/driver-dashboard', 'WelcomeController@driverDashboard');
 Route::get('/subscription', 'WelcomeController@subscription');
+Route::get('/sale-subscription', 'WelcomeController@saleSubscription');
 /* Dealer Route */
 
 Route::get('/dealers', 'Dashboard\DealerController@index');
 Route::get('/fetchDealer', 'Dashboard\DealerController@fetchDealer');
 Route::any('/deleteDealer/{id?}', 'Dashboard\DealerController@deleteDealer');
 Route::get('/dealervehicles', 'Dashboard\DealerController@dealerVehicles');
+Route::any('/listing/truck', 'WelcomeController@listingTruck');
 
 Route::get('/fetchvehicles', 'Dashboard\DealerController@fetchVehicles');
 Route::any('/addDealerVehicle/{id?}', 'Dashboard\DealerController@addDealerVehicle');
 Route::any('/addDealerVehicleSell/{id?}', 'Dashboard\DealerController@addDealerVehicleSell');
 Route::any('/editDealerVehicle/{id?}', 'Dashboard\DealerController@editDealerVehicle');
 Route::get('/deleteDealerVehicle/{id?}', 'Dashboard\DealerController@deleteDealerVehicle');
-Route::get('/document-verification', 'TrustSwiftlyController@index');
-Route::post('/documentVerified', 'TrustSwiftlyController@documentVerified');
+
 Route::any('/emptytruck100trustWebhook', 'TrustSwiftlyController@trustWebhook');
+Route::get('/advertise-truck', 'WelcomeController@advertise_truck');
+
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->group(['middleware' => 'CheckDocVerification'], function () use ($router) {
+        Route::any('/profile', 'Dashboard\UserController@edit');
+        Route::get('/document-verification', 'TrustSwiftlyController@index');
+    });
+});
 
 Route::any('/user', 'Dashboard\UserController@index');
-Route::any('/profile', 'Dashboard\UserController@edit');
 Route::get('/user/destroy/{id}', 'Dashboard\UserController@destroy');
 Route::get('/fetchUsers', 'Dashboard\UserController@fetchUsers');
  Route::get('/auth/redirect/{provider}', 'SocialController@redirect');
@@ -161,7 +167,10 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function() {
     /* Enquiry Route */
     Route::get('/fetchEnquiry', 'EnquiryController@fetchEnquiry');
     Route::get('/enquiries', 'EnquiryController@index');
-
+    
+    /* Quotes Route */
+    Route::get('/fetchQuotes', 'QuotesController@fetchQuotes');
+    Route::get('/quotes', 'QuotesController@index');
 
     /* Vehicles Route */
     Route::get('/vehicles', 'VehicleController@index');
@@ -177,7 +186,7 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function() {
     Route::get('/dealervehicles', 'DealerController@dealerVehicles');
     Route::get('/fetchvehicles', 'DealerController@fetchVehicles');
     Route::any('/addDealerVehicle/{id?}', 'DealerController@addDealerVehicle');
-    Route::any('/editDealerVehicle/{id?}', 'DealerController@editDealerVehicle');
+    Route::any('/editDealerVehicle/{id?}/{did?}', 'DealerController@addDealerVehicle');
     Route::get('/deleteDealerVehicle/{id?}', 'DealerController@deleteDealerVehicle');
 
 

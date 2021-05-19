@@ -84,13 +84,13 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
 
                     <div class="social-top">
 
-                        <a href="https://www.facebook.com/empyytruck100/ " target="_blank"> <img src="{{asset('assets/sites/images/fb.png')}}"></a>
-                            <a href="https://twitter.com/EmptyTruck100" target="_blank"> <img src="{{asset('assets/sites/images/twt.png')}}"> </a>
+                        <a href="https://www.facebook.com/empyytruck100/ "> <img src="{{asset('assets/sites/images/fb.png')}}"></a>
+                            <a href="https://twitter.com/EmptyTruck100"> <img src="{{asset('assets/sites/images/twt.png')}}"> </a>
                            <!-- <a href="#">  <img src="{{asset('assets/sites/images/youtube.jpg')}}"> </a>-->
                                <!--<a href="#">  <img src="{{asset('assets/sites/images/ins.png')}}"> </a>-->
                       				
                            <!--<a href="#">  <img src="{{asset('assets/sites/images/google.png')}}"> </a>-->
-                           <a  href="https://twitter.com/EmptyTruck100?ref_src=twsrc%5Etfw" target="_blank">  <img src="{{asset('assets/sites/images/twitter.jpg')}}"> </a>
+                           <a  href="https://twitter.com/EmptyTruck100?ref_src=twsrc%5Etfw">  <img src="{{asset('assets/sites/images/twitter.jpg')}}"> </a>
                     </div>
                     <div class="nav-item dropdown">
 					
@@ -126,7 +126,7 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
             <div class="top-bar"> 
                 <div class="container">
                     <ul>
-                        <li><a href="#"> <span> <i class="fa fa-map-marker" aria-hidden="true"></i> </span> 107 Lawrence Road, Liverpool, UK, L15 0EF</a></li>
+                        <li><a href="#"> <span> <i class="fa fa-map-marker" aria-hidden="true"></i> </span> 107 Lawrence Road, Liverpool, L15 OEF, UK</a></li>
                         <li><a href="#"> <span> <i class="fa fa-send" aria-hidden="true"></i> </span> Info@emptytruck100.com </a></li>
                         <li><a href="#"> <span> <i class="fa fa-phone" aria-hidden="true"></i> </span> 2-555-333-8886 </a></li>
                         @guest

@@ -229,12 +229,29 @@
             <h2> Below is the list of subscription packages.  <span> </span> </h2>
         </div>
 		<div class="package-section">
-<div class="package-col gold-package">
+        <div class="package-col gold-package">
+<ul>
+        <li><h3><?php echo $users[2]->name; ?></h2></li>
+        <li class="package-price"><span>$</span><?php echo $users[2]->price; ?></li>
+        <!-- <li>Description <?php echo $users[2]->description; ?></li> -->
+        <li>PricePer<?php echo $users[2]->price_per; ?></li>
+        <li>You Save <?php echo $users[2]->discount; ?></li>
+        <!-- <li>engagements <?php echo $users[2]->engagements; ?></li> -->
+    
+
+  <div id="pay-pal-button"></div>
+  <input id="payment" type="hidden" value="<?php echo $users[2]->price; ?>"/>
+   </ul> 
+    
+</div>
+
+
+<div class="package-col silver-package">
 	<ul>
 		<li><h3><?php echo $users[0]->name; ?></h3></li>
 		<li class="package-price"><span>$</span><?php echo $users[0]->price; ?></li>
 		<!-- <li>Description <?php echo $users[0]->description; ?> </li> -->
-		<li>PricePer<?php echo $users[0]->price_per; ?></li>
+		<li>Price For 6 <?php echo $users[0]->price_per.'s'; ?></li>
 		<li>You Save <?php echo $users[0]->discount; ?></li>
 		<!-- <li>engagements <?php echo $users[0]->engagements; ?></li> -->
 
@@ -244,29 +261,35 @@
 	</ul>
 </div>
 
-<div class="package-col silver-package">
-<ul>
-		<li><h3><?php echo $users[1]->name; ?></h1></li>
-		<li class="package-price"><span>$</span><?php echo $users[1]->price; ?></li>
-		<!-- <li>Description <?php echo $users[1]->description; ?></li> -->
-		<li>PricePer<?php echo $users[1]->price_per; ?></li>
-		<li>You Save <?php echo $users[1]->discount; ?></li>
-		<!-- <li>engagements <?php echo $users[1]->engagements; ?></li> -->
-	
+<div class="package-col gold-package">
+    <ul>
+            <li><h3><?php echo $users[1]->name; ?></h1></li>
+            <li class="package-price"><span>$</span><?php echo $users[1]->price; ?></li>
+            <!-- <li>Description <?php echo $users[1]->description; ?></li> -->
+            <li>Price For 3 <?php echo $users[1]->price_per.'s'; ?></li>
+            <li>You Save <?php echo $users[1]->discount; ?></li>
+            <!-- <li>engagements <?php echo $users[1]->engagements; ?></li> -->
+        
 
-  <div id="paybutton"></div>
-  <input id="payment" type="hidden" value="<?php echo $users[1]->price; ?>"/>
-	</ul>
+    <div id="paybutton"></div>
+    <input id="payment" type="hidden" value="<?php echo $users[1]->price; ?>"/>
+    </ul>
 	
 </div>
 
-<div class="package-col gold-package">
+
+
+
+
+
+
+<div class="package-col platinum-package">
 <ul>
-        <li><h3><?php echo $users[2]->name; ?></h2></li>
-        <li class="package-price"><span>$</span><?php echo $users[2]->price; ?></li>
-        <!-- <li>Description <?php echo $users[2]->description; ?></li> -->
-        <li>PricePer<?php echo $users[2]->price_per; ?></li>
-        <li>You Save <?php echo $users[2]->discount; ?></li>
+        <li><h3><?php echo $users[3]->name; ?></h2></li>
+        <li class="package-price"><span>$</span><?php echo $users[3]->price; ?></li>
+        <!-- <li>Description <?php echo $users[3]->description; ?></li> -->
+        <li>Price for 12 <?php echo $users[3]->price_per.'s'; ?></li>
+        <li>You Save <?php echo $users[3]->discount; ?></li>
         <!-- <li>engagements <?php echo $users[2]->engagements; ?></li> -->
     
 

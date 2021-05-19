@@ -80,14 +80,13 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
                 <a href="#" style="color:white;font-weight: bold;">{{@$userDetails->company_name}}</a>
 
                     <div class="social-top">
-                        <a href="https://www.facebook.com/empyytruck100/ "> <img src="{{asset('assets/sites/images/fb.png')}}"></a>
-                            <a href="https://twitter.com/EmptyTruck100"> <img src="{{asset('assets/sites/images/twt.png')}}"> </a>
-                           <!-- <a href="#">  <img src="{{asset('assets/sites/images/youtube.jpg')}}"> </a>-->
-                               <!--<a href="#">  <img src="{{asset('assets/sites/images/ins.png')}}"> </a>-->
-                  <!--<a href="#">  <img src="{{asset('assets/sites/images/linked.jpg')}}"> </a>-->
-                      				
-                           <!--<a href="#">  <img src="{{asset('assets/sites/images/google.png')}}"> </a>-->
-                           <a  href="https://twitter.com/EmptyTruck100?ref_src=twsrc%5Etfw">  <img src="{{asset('assets/sites/images/twitter.jpg')}}"> </a>
+                        <a href="https://www.facebook.com/empyytruck100/ " target="_blank"> <img src="{{asset('assets/sites/images/fb.png')}}"></a>
+                        <a href="https://twitter.com/EmptyTruck100" target="_blank"> <img src="{{asset('assets/sites/images/twt.png')}}"> </a>
+                            <!-- <a href="#">  <img src="{{asset('assets/sites/images/youtube.jpg')}}"> </a>-->
+                            <!--<a href="#">  <img src="{{asset('assets/sites/images/ins.png')}}"> </a>-->
+                            <!--<a href="#">  <img src="{{asset('assets/sites/images/linked.jpg')}}"> </a>-->	
+                            <!--<a href="#">  <img src="{{asset('assets/sites/images/google.png')}}"> </a>-->
+                        <a  href="https://twitter.com/EmptyTruck100?ref_src=twsrc%5Etfw" target="_blank">  <img src="{{asset('assets/sites/images/twitter.jpg')}}"> </a>
                     </div>
                     <div class="nav-item dropdown">
 					
@@ -141,9 +140,9 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu main-nava">
-                                    <li><a class="cd-signin" id="customerBtn" onclick="setType(1, 'Customer')" href="#0">Customer </a></li>
+                                    <li><a class="cd-signin" id="customerBtn" onclick="setType(3, 'Customer')" href="#0">Customer </a></li>
                                     <li><a href="#" onclick="setType(2, 'Driver')" id="driverBtn">Driver</a></li>
-                                    <li><a href="#" onclick="setType(3, 'Company')" id="companyBtn">Company</a></li>
+                                    <li><a href="#" onclick="setType(1, 'Company')" id="companyBtn">Company</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -183,25 +182,23 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
                             <span class="navbar-toggler-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbar-list-2">
+
                             <ul class="navbar-nav ml-auto">
-                                <li><div class="dropdown">
-                                <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Services
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="cd-signin" href="{{url('/rent-truck')}}">Rent a Truck </a></li>
-                                      <!-- <li><a class="cd-signin" href="{{url('/sell-truck')}}">Sell Your Truck </a></li> -->
-                                      <li><a class="cd-signin" href="{{url('/buy-truck')}}">Buy a Truck</a></li>
-                                       <li><a class="cd-signin" href="{{url('/advertise-truck')}}">Advertise Your Truck </a></li>
-                                          
-                                </ul>
-                            </div></li>
-                                <!--                                <li class="nav-item">
-                                                                    <a class="nav-link" href="{{url('/')}}"> Home </a>      
-                                                                </li>-->
-                                <!--                                <li class="nav-item">
-                                                                    <a class="nav-link" href="{{url('/aboutus')}}"> About Us </a>      
-                                                                </li>-->
+
+                                <li>
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Services
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="cd-signin" href="{{url('/rent-truck')}}">Rent a Truck </a></li>
+                                            <!-- <li><a class="cd-signin" href="{{url('/sell-truck')}}">Sell Your Truck </a></li> -->
+                                            <li><a class="cd-signin" href="{{url('/buy-truck')}}">Buy a Truck</a></li>
+                                            <li><a class="cd-signin" href="{{url('/advertise-truck')}}">Advertise Your Truck </a></li>
+                                                
+                                        </ul>
+                                    </div>
+                                </li>
                                
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{url('/get_quotes')}}"> Get Quotes </a>      

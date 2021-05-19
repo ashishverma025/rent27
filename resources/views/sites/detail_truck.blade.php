@@ -76,13 +76,16 @@
 
                 <div class="col-md-6">
                     <div class="product-img-detail">
-                        <div class="pro-logo"> <img src="{{asset('assets/sites/images/')}}/a&m-logo.jpg" alt="logo"> </div>
+                        <div class="pro-logo">
+                            <img src="{{ asset('storage/uploads/sites/users') }}<?= !empty($truckDetails->avatar) ? '/' . $truckDetails->user_id . '/' . $truckDetails->avatar : '/dummy.jpg' ?>"" height="60" width="60">
+                            <!-- <img src="{{asset('assets/sites/images/')}}/a&m-logo.jpg" alt="logo"> -->
+                         </div>
 
-                        <h6> A & M Commercials Ltd  </h6>
+                        <h6> {{@$truckDetails->name}}  </h6>
 
                         <ul class="phone-no">
-                            <li> +44(0)88 3333 9999 </li>
-                            <li> +44 (0)88 3333 6666 </li>
+                            <li> {{@$truckDetails->mobile_no}} </li>
+                            <!-- <li> +44 (0)88 3333 6666 </li> -->
                         </ul>
 
 <!--                        <ul class="loc-dir">
@@ -97,9 +100,42 @@
                                                 </div>-->
 
                         <div class="seller-btn">
-                            <a href="#"> email seller </a>
-                            <a href="#"> seller's website </a>
+                            <a href="#" data-toggle="modal" data-target="#forEmailSeller"> email seller </a>
+                            <!-- <a href="#"> seller's website </a> -->
                         </div>
+
+                        <div class="modal fade" id="forEmailSeller" tabindex="-1" role="dialog" aria-labelledby="forEmailSeller" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="forEmailSeller">Send email to Seller</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="leave-comment">
+                                            <form action="#" class="comment-form">
+                                                <div class="row">
+                                                    <!-- <div class="col-lg-12">
+                                                        <label class="d-block mt-3">Title</label>
+                                                        <input type="text" id="complaint_title" class="form-control">
+                                                    </div> -->
+                                                    <div class="col-lg-12">
+                                                        <label class="d-block mt-3">Enter Message</label>
+                                                        <textarea class="form-control" id="email_message" rows="5" placeholder="Write Your Message"></textarea>
+                                                        <button type="submit" id="emailToSaller" class="btn btn-primary mt-4">Send Email</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
 
 <!--                        <div class="inter-sec">
                             <h5> Interested in this vehicle? </h5>
@@ -141,7 +177,8 @@
                     <div class="comment-option">
                         <div class="co-item">
                             <div class="avatar-pic">
-                                <img src="{{asset('storage/uploads/sites/users').'/'.$review->user_id.'/'.$review->avatar}}" alt="">
+                                 <img src="{{ asset('storage/uploads/sites/users') }}<?= !empty($review->avatar) ? '/' . $review->user_id . '/' . $review->avatar : '/dummy.jpg' ?>" id="userImg" height="80" width="80">
+                                <!-- <img src="{{asset('storage/uploads/sites/users').'/'.$review->user_id.'/'.$review->avatar}}" alt=""> -->
                             </div>
                             <div class="avatar-text">
                                 <div class="at-rating">
@@ -190,7 +227,9 @@
                     <div class="comment-option">
                         <div class="co-item">
                             <div class="avatar-pic">
-                                <img src="{{asset('storage/uploads/sites/users').'/'.$complain->user_id.'/'.$complain->avatar}}" alt="">
+                            <img src="{{ asset('storage/uploads/sites/users') }}<?= !empty($complain->avatar) ? '/' . $complain->user_id . '/' . $complain->avatar : '/dummy.jpg' ?>" id="userImg" height="80" width="80">
+
+                                <!-- <img src="{{asset('storage/uploads/sites/users').'/'.$complain->user_id.'/'.$complain->avatar}}" alt=""> -->
                             </div>
                             <div class="avatar-text">
                                 <h5>{{$complain->name}} </h5>
@@ -310,10 +349,10 @@
         <div class="overview">
             <h2> Overview </h2>
             <ul class="overiew-list">
-                <li><img src="{{asset('assets/sites/images/')}}/overview-icon1.png" alt="overview1"> {{@$truckDetails->axle_config?@$truckDetails->axle_config:'N/A'}} Axle </li>                         
-                <li><img src="{{asset('assets/sites/images/')}}/overview-icon2.png" alt="overview1">  {{@$truckDetails->engine_size?@$truckDetails->engine_size:'N/A'}} cc </li>                            
-                <li><img src="{{asset('assets/sites/images/')}}/overview-icon3.png" alt="overview1">  Automatic </li>                          
-                <li><img src="{{asset('assets/sites/images/')}}/overview-icon4.png" alt="overview1">  {{@$truckDetails->distance_covered?@$truckDetails->distance_covered:0}} km </li>
+            @if(@$truckDetails->axle_config) <li><img src="{{asset('assets/sites/images/')}}/overview-icon1.png" alt="overview1"> {{@$truckDetails->axle_config?@$truckDetails->axle_config:'N/A'}} Axle </li>@endif                         
+            @if(@$truckDetails->engine_size) <li><img src="{{asset('assets/sites/images/')}}/overview-icon2.png" alt="overview1">  {{@$truckDetails->engine_size?@$truckDetails->engine_size:'N/A'}} cc </li>@endif                            
+            @if(@$truckDetails->color) <li><img src="{{asset('assets/sites/images/')}}/overview-icon3.png" alt="overview1">  Automatic </li>@endif
+            @if(@$truckDetails->distance_covered) <li><img src="{{asset('assets/sites/images/')}}/overview-icon4.png" alt="overview1">  {{@$truckDetails->distance_covered?@$truckDetails->distance_covered:0}} km </li>@endif
             </ul>
 
             <div class="categary-main">
@@ -321,26 +360,26 @@
                 <div class="row">
                     <div class="col-md-6">
                         <ul>
-                            <li> Category <span> {{@$truckDetails->vehicle_type_id?@$truckDetails->vehicle_type_id:'N/A'}}</span> </li>
-                            <li> Axle Config  <span> {{@$truckDetails->axle_config?@$truckDetails->axle_config:'N/A'}}</span> </li>
-                            <li> Gross Vehicle Weight  <span> {{@$truckDetails->gross_vehicle_weight?@$truckDetails->gross_vehicle_weight:'N/A'}} kg</span> </li>
-                            <li> Engine Size  <span> {{@$truckDetails->engine_size?@$truckDetails->engine_size:'N/A'}} cc</span> </li>
-                            <li> Colour  <span> {{@$truckDetails->color?@$truckDetails->color:'N/A'}}</span> </li>
-                            <li> Transmission  <span> Automatic</span> </li>
-                            <li> Reg Year  <span> {{@$truckDetails->year_of_purchase?@$truckDetails->year_of_purchase:'N/A'}} ( Reg)</span> </li>
+                            @if(@$truckDetails->vehicle_type_id)<li> Category <span> {{@$truckDetails->vehicle_type_id?@$truckDetails->vehicle_type_id:'N/A'}}</span> </li>@endif
+                            @if(@$truckDetails->axle_config)<li> Axle Config  <span> {{@$truckDetails->axle_config?@$truckDetails->axle_config:'N/A'}}</span> </li>@endif
+                            @if(@$truckDetails->gross_vehicle_weight)<li> Gross Vehicle Weight  <span> {{@$truckDetails->gross_vehicle_weight?@$truckDetails->gross_vehicle_weight:'N/A'}} kg</span> </li>@endif
+                            @if(@$truckDetails->engine_size)<li> Engine Size  <span> {{@$truckDetails->engine_size?@$truckDetails->engine_size:'N/A'}} cc</span> </li>@endif
+                            @if(@$truckDetails->color) <li> Colour  <span> {{@$truckDetails->color?@$truckDetails->color:'N/A'}}</span> </li>@endif
+                            @if(@$truckDetails->axle_config)<li> Transmission  <span> Automatic</span> </li>@endif
+                            @if(@$truckDetails->year_of_purchase)<li> Reg Year  <span> {{@$truckDetails->year_of_purchase?@$truckDetails->year_of_purchase:'N/A'}} ( Reg)</span> </li>@endif
                         </ul>
 
                     </div>
 
                     <div class="col-md-6">
                         <ul>
-                            <li> Brake Horse Power  <span> {{@$truckDetails->brake_horse_power?@$truckDetails->brake_horse_power:'N/A'}} BHP </span> </li>
-                            <li> Fuel Type  <span> {{@$truckDetails->fuel_type_id?@$truckDetails->fuel_type_id:'N/A'}}</span> </li>
-                            <li> Interior Condition  <span> {{@$truckDetails->interior_condition?@$truckDetails->interior_condition:'N/A'}}</span> </li>
-                            <li> Tyre Condition  <span> {{@$truckDetails->tyre_condition?@$truckDetails->tyre_condition:'N/A'}}%</span> </li>
-                            <li> Driver Position   <span> {{@$truckDetails->driver_position?@$truckDetails->driver_position:'N/A'}}</span> </li>
-                            <li> Number of Seats  <span> {{@$truckDetails->number_of_seats?@$truckDetails->number_of_seats:'N/A'}}</span> </li>
-                            <li> Condition  <span> {{@$truckDetails->condition?@$truckDetails->condition:'N/A'}} </span> </li>
+                        @if(@$truckDetails->brake_horse_power)<li> Brake Horse Power  <span> {{@$truckDetails->brake_horse_power?@$truckDetails->brake_horse_power:'N/A'}} BHP </span> </li>@endif
+                        @if(@$truckDetails->fuel_type_id)<li> Fuel Type  <span> {{@$truckDetails->fuel_type_id?@$truckDetails->fuel_type_id:'N/A'}}</span> </li>@endif
+                        @if(@$truckDetails->interior_condition)<li> Interior Condition  <span> {{@$truckDetails->interior_condition?@$truckDetails->interior_condition:'N/A'}}</span> </li>@endif
+                        @if(@$truckDetails->tyre_condition)<li> Tyre Condition  <span> {{@$truckDetails->tyre_condition?@$truckDetails->tyre_condition:'N/A'}}%</span> </li>@endif
+                        @if(@$truckDetails->driver_position)<li> Driver Position   <span> {{@$truckDetails->driver_position?@$truckDetails->driver_position:'N/A'}}</span> </li>@endif
+                        @if(@$truckDetails->number_of_seats)<li> Number of Seats  <span> {{@$truckDetails->number_of_seats?@$truckDetails->number_of_seats:'N/A'}}</span> </li>@endif
+                        @if(@$truckDetails->condition)<li> Condition  <span> {{@$truckDetails->condition?@$truckDetails->condition:'N/A'}} </span> </li>@endif
                         </ul>
                     </div>
                 </div>
@@ -452,7 +491,7 @@
     <div class="container">
         <div class="about-seller">
             <h2> About this seller </h2>
-            <h5> A & M Commercials Ltd </h5>
+            <h5> {{@$truckDetails->name}}</h5>
 
             <p>
                 Have been in the truck business for over 30 years and offers the widest range of used tractor units, rigid HGVs, trailers, plant equipment and vans, as well as a full export service from its three locations in the United Kingdom and Republic of Ireland. This family-run business can be found just off the M62 at Risley, near Warrington; south-west of Keady in County Armagh, Northern Ireland and in Castleshane, County Monaghan in the Republic of Ireland.

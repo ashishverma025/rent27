@@ -10,9 +10,7 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
     width: 100%;
     height: 100%;
 }
-.eRrMSG{
-    color: red !important;
-}
+
 </style>
 
         <meta charset="utf-8">
@@ -41,7 +39,7 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
 
         <!--<link rel="stylesheet" href="{{ asset('assets/sites/css/all.css') }}">-->
         <link rel="stylesheet" href="{{ asset('assets/sites/css/bootstrap.min.css') }}">
-        <link rel='stylesheet' href="{{ asset('assets/sites/css/owl.carousel.min.css') }}">
+        <link rel='stylesheet' href='{{ asset('assets/sites/css/owl.carousel.min.css') }}'>
         <link rel="stylesheet" type="text/css" href="{{asset('assets/sites/css/font-awesome.min.css')}}">
 
         <!-- BOOTSTRAP SELECT BOX STYLE SHEET -->
@@ -70,7 +68,6 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
         $dob = get_custom_dob();
         $userDetails = getUserDetails();
         $name = @$userDetails->name;
-        $roleId = @$userDetails->role_id;
         $segment = Request::segment(1);
 //        prd($segment);
         ?>
@@ -83,41 +80,49 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
                 <a href="#" style="color:white;font-weight: bold;">{{@$userDetails->company_name}}</a>
 
                     <div class="social-top">
-
-                        <a href="https://www.facebook.com/empyytruck100/ " target="_blank"> <img src="{{asset('assets/sites/images/fb.png')}}"></a>
-                            <a href="https://twitter.com/EmptyTruck100" target="_blank"> <img src="{{asset('assets/sites/images/twt.png')}}"> </a>
+                        <a href="https://www.facebook.com/empyytruck100/ "> <img src="{{asset('assets/sites/images/fb.png')}}"></a>
+                            <a href="https://twitter.com/EmptyTruck100"> <img src="{{asset('assets/sites/images/twt.png')}}"> </a>
                            <!-- <a href="#">  <img src="{{asset('assets/sites/images/youtube.jpg')}}"> </a>-->
                                <!--<a href="#">  <img src="{{asset('assets/sites/images/ins.png')}}"> </a>-->
+                  <!--<a href="#">  <img src="{{asset('assets/sites/images/linked.jpg')}}"> </a>-->
                       				
                            <!--<a href="#">  <img src="{{asset('assets/sites/images/google.png')}}"> </a>-->
-                           <a  href="https://twitter.com/EmptyTruck100?ref_src=twsrc%5Etfw" target="_blank">  <img src="{{asset('assets/sites/images/twitter.jpg')}}"> </a>
+                           <a  href="https://twitter.com/EmptyTruck100?ref_src=twsrc%5Etfw">  <img src="{{asset('assets/sites/images/twitter.jpg')}}"> </a>
                     </div>
                     <div class="nav-item dropdown">
 					
                                                      <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span  class="flag-icon-squared icon main-img" > </span> </a>
                         <div class="dropdown-menu" aria-labelledby="dropdown09">
-                            <script>
-                                $( document ).ready(function() {
-                                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                                    $.ajax({
-                                            /* the route pointing to the post function */
-                                            url: '{{url("/getCountries")}}',
-                                            type: 'GET',
-                                            /* send the csrf-token and the input to the controller */
-                                            data: {_token: CSRF_TOKEN},
-                                            dataType: 'JSON',
-                                            /* remind that 'data' is the response of the AjaxController */
-                                            success: function (data) {
-                                                jQuery.each(data, function(i, val) {
-                                                  $("#country-dropdown").append('<a class="dropdown-item" href="#fr"> <img src="https://flagcdn.com/w20/'+i+'.jpg"> '+val+' </a>');
-                                                });
-                                            }
-                                    });
+                        <script>
+                            $( document ).ready(function() {
+                                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                                $.ajax({
+                                        /* the route pointing to the post function */
+                                        url: '{{url("/getCountries")}}',
+                                        type: 'GET',
+                                        /* send the csrf-token and the input to the controller */
+                                        data: {_token: CSRF_TOKEN},
+                                        dataType: 'JSON',
+                                        /* remind that 'data' is the response of the AjaxController */
+                                        success: function (data) {
+                                            jQuery.each(data, function(i, val) {
+                                              $("#country-dropdown").append('<a class="dropdown-item" href="#fr"> <img src="https://flagcdn.com/w20/'+i+'.jpg"> '+'('+i+') '+val+' </a>');
+                                            });
+                                        }
                                 });
-                            </script>
-                            <div id="country-dropdown" style="overflow-y: scroll; max-height: 300px">
-                                
-                            </div>
+                            });
+                        </script>
+                        <div id="country-dropdown" style="overflow-y: scroll; max-height: 300px">
+                            
+                        </div>
+                               <!-- <a class="dropdown-item" href="#fr"> <img src="{{asset('assets/sites/images/fran.png')}}"> France (+33)</a>
+    <a class="dropdown-item" href="#it"> <img src="{{asset('assets/sites/images/ity.png')}}"> Italy (+39) </a>
+    <a class="dropdown-item" href="#ru"><img src="{{asset('assets/sites/images/ruma.jpg')}}"> Romania (+40)</a>
+    <a class="dropdown-item" href="#ru"><img src="{{asset('assets/sites/images/germany-flag.jpg')}}"> Germany (+49)</a>
+    <a class="dropdown-item" href="#ru"><img src="{{asset('assets/sites/images/spain-flag.jpg')}}"> Spain (+34)</a>
+    <a class="dropdown-item" href="#ru"><img src="{{asset('assets/sites/images/switzerland-flag.jpg')}}"> Switzerland (+41)</a>
+    <a class="dropdown-item" href="#ru"><img src="{{asset('assets/sites/images/china-flag.jpg')}}"> China (+86)</a>
+    <a class="dropdown-item" href="#ru"><img src="{{asset('assets/sites/images/sweden-flag.jpg')}}"> Sweden (+46)</a> -->
                         </div>
                     </div>
                 </div> 
@@ -149,7 +154,8 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu main-nava">
-                                    <li><a class="cd-signin" href="{{url('/profile')}}">My Account </a></li>
+                                <li><a class="cd-signin" href="{{url('/profile')}}">My Account </a></li>
+
                                     <li>
                                         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -177,30 +183,23 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
                             <span class="navbar-toggler-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbar-list-2">
+
                             <ul class="navbar-nav ml-auto">
 
                                 <li>
-                                    @if($roleId != 3) 
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Services
                                             <span class="caret"></span>
                                         </button>
-                                        <ul class="dropdown-menu" {{Request::segment(1)}}>
+                                        <ul class="dropdown-menu">
                                             <li><a class="cd-signin" href="{{url('/rent-truck')}}">Rent a Truck </a></li>
-                                            @if((Request::segment(1) != 'advertise-truck') || (Request::segment(1) != 'dealervehicles') || (Request::segment(1) != 'subscription'))
                                             <!-- <li><a class="cd-signin" href="{{url('/sell-truck')}}">Sell Your Truck </a></li> -->
-                                            @endif
                                             <li><a class="cd-signin" href="{{url('/buy-truck')}}">Buy a Truck</a></li>
                                             <li><a class="cd-signin" href="{{url('/advertise-truck')}}">Advertise Your Truck </a></li>
                                                 
                                         </ul>
                                     </div>
-                                    @endif
                                 </li>
-
-                                <!--                                <li class="nav-item">
-                                                                    <a class="nav-link" href="{{url('/aboutus')}}"> About Us </a>      
-                                                                </li>-->
                                
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{url('/get_quotes')}}"> Get Quotes </a>      
@@ -216,14 +215,14 @@ background-image: url('{{ asset('assets/sites/images/uss.png')}}');
                                     <a class="nav-link" href="{{url('/contactus')}}"> Contact Us </a>      
                                 </li>
                                 
-@if(Auth::user())
+                                							@if(Auth::user())
 <li class="upgradebutton">
     <a href="{{ url('subscription') }}" class="button">
         Upgrade
     </a>
 	</li> 
 @endif 
-<li class="nav-item">
+                                                 <li class="nav-item">
    
 <form action="
 https://www.paypal.com/donate
@@ -271,17 +270,16 @@ https://www.paypal.com/en_GB/i/scr/pixel.gif
 
         @if($segment == 'listing')
         <!--banner ends-->
-        <form action="{{url('listing/truck')}}" method="post" id="searchForm">
+        <form action="{{url('listing/truck')}}" method="get" id="searchForm">
             @csrf
-            <section id="banner-sec" >
+            <!-- <section id="banner-sec" >
                 <div class="container-fluid">
                     <img src="{{asset('assets/sites/images/slider-01.jpg')}}" alt="slider">
                     <div class="overlay-main">
                         <h1>FIND BEST RENTAL TRUCK</h1>
                         <div class="banner-overlay">
                             <p class="search-para"> Search for Cheap Rental Trucks Wherever Your Are </p>
-                            <div class="over-form"> 
-                                <!-- Include Bootstrap Datepicker -->
+                            <div class="over-form">
                                 <div class="row dates">
                                     <div class="col-lg-4"><label>Name</label><input type="text" value="{{@$userDetails->name?@$userDetails->name:@$queryString['name']}}"  placeholder="Name" id="name" name="name" autocomplete="off"></div>
                                     <div class="col-lg-4 start_date"><label>Email</label><input type="text" value="{{@$userDetails->email?@$userDetails->email:@$queryString['email']}}" name="email" id="email"  placeholder="Email" autocomplete="off"></div>
@@ -293,12 +291,10 @@ https://www.paypal.com/en_GB/i/scr/pixel.gif
                                 <div class="row dates">
                                     <div class="col-lg-6"><label>Picking Up Location</label><input type="text" value="{{@$queryString['pickup_location']}}" placeholder="" id="pickup_location" name="pickup_location"> <i class="fa fa-map-marker" aria-hidden="true"></i></div>
                                     <div class="col-lg-6 start_date"><label>Picking Up Date</label><input type="text" value="{{@$queryString['pickup_date']}}" class="start_date" name="pickup_date" id="startdate_datepicker"  placeholder="Picking Up Date" autocomplete="off"> <i class="fa fa-calendar" aria-hidden="true"></i></div>
-                                    <!--<div class="col-lg-3"><label>Picking Up Hour</label><input type="time" placeholder="" name="pickup_hour" id="pickup_hour"> </div>-->
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6"><label>Dropping Off Location</label><input type="text" value="{{@$queryString['dropping_location']}}" placeholder="" id="dropping_location" name="dropping_location"> <i class="fa fa-map-marker" aria-hidden="true"></i></div>
                                     <div class="col-lg-6 end_date"><label>Dropping Off  Date</label><input type="text" value="{{@$queryString['drop_date']}}" class="end_date" name="drop_date" id="enddate_datepicker"   placeholder="Dropping Off  Date" autocomplete="off"> <i class="fa fa-calendar" aria-hidden="true"></i></div>
-                                    <span class="eRrMSG" id="dateValErr"></span>
                                 </div>
                             </div>
                             <div class="all-btns-main">
@@ -308,13 +304,12 @@ https://www.paypal.com/en_GB/i/scr/pixel.gif
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> -->
         </form>
         @endif
          @if($segment == '')
-
         <!--banner ends-->
-        <form action="{{url('listing/truck')}}" method="post" id="searchForm">
+        <form action="{{url('listing/truck')}}" method="get" id="searchForm">
             @csrf
             <section id="banner-sec" >
                 <div class="container-fluid">
@@ -339,8 +334,7 @@ https://www.paypal.com/en_GB/i/scr/pixel.gif
                                 </div>
                             </div>
                             <div class="all-btns-main">
-                                <!-- <button type="submit" class="all-btns  find-btn">Find Truck</button> -->
-                                <a href="javascript:void(0)" id="findTruck" class="all-btns  find-btn">Find Truck</a>
+                                <a href="#" id="findTruck" class="all-btns  find-btn">Find Truck</a>
 							
                                
                             </div>
@@ -353,22 +347,23 @@ https://www.paypal.com/en_GB/i/scr/pixel.gif
         @if (Session::has('message'))
         <div style="height:100px; width:500px;color:red;margin-left: 403px;" class="alert alert-info ">{{ Session::get('message') }}</div>
         @endif
-
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8zMW3rDyRK3rhD5HTLAsJVBIxmZzF18k&libraries=places&callback=activatePlacesSearch2" async defer></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb4KG02YNFocJ6FrUKrlfwe65nyGlUEo4&libraries=places&callback=activatePlacesSearch2" async defer></script>
         <script>
 
-            $('#getQuote').click(function () {
-                $('#searchForm').attr('action', "{{url('saveEnquiry')}}");
-                setTimeout(function () {
-                    $("#searchForm").submit()
-                }, 2000);
+                                            $('#getQuote').click(function () {
+                                                $('#searchForm').attr('action', "{{url('saveEnquiry')}}");
+                                                setTimeout(function () {
+                                                    $("#searchForm").submit()
+                                                }, 2000);
 
-            });
+                                            });
 
-            $('#findTruck').click(function () {
-                
-                $("#searchForm").submit()
+                                            $('#findTruck').click(function () {
+												
+                                                $("#searchForm").submit()
 
-            });
+                                            });
         </script>
 
 

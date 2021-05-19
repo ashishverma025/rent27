@@ -63,6 +63,10 @@
 <script src="{{URL::asset('public/admn/js/ckeditor.js')}}"></script>
 <script src="{{URL::asset('public/student/plugins/summernote/summernote-bs4.js')}}"></script>
 
+<script src="{{ asset('assets/sites/js/geo-address.js') }}"></script> 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb4KG02YNFocJ6FrUKrlfwe65nyGlUEo4&callback=initAutocomplete&libraries=places&v=weekly"
+      async></script>
+
 <!--<script>
 $(function () {
     // Replace the <textarea id="editor1"> with a CKEditor

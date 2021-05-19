@@ -119,6 +119,7 @@ jQuery(document).ready(function ($) {
             data: {'email': email,'password': password,'role_id': role_type},
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function (response) {
+                console.log(response)
                 if(response.errors)
                 {
                     $.each(response.errors, function(key, value) {
@@ -129,16 +130,26 @@ jQuery(document).ready(function ($) {
                         }
                     });
                 }
-
                 if (response.success) {
-
-                    $('#loginErrMsg').html(response.message);
-                    if (response.goldUser ) {
-                        window.location.href = routeUrl + '/' + 'listing/truck?from=login';
-                    } else {
-                    window.location.href = routeUrl + '/' + 'listing/truck?from=login';
+                    if(response.goldUser){
+                        if(response.roleId == 1 || response.roleId == 2){
+                            window.location.href = routeUrl + '/' + 'advertise-truck';
+                        }else{
+                            window.location.href = routeUrl + '/' + 'listing/truck?from=login';
+                        }
+                    }else{
+                        if(response.roleId == 1 || response.roleId == 2){
+                            window.location.href = routeUrl + '/' + 'advertise-truck';
+                        }else{
+                            window.location.href = routeUrl + '/' + 'listing/truck?from=login';
+                        }
                     }
                 } else {
+                    // if (response.docVerification) {
+                    //     console.log(response)
+                    //     $('#loginErrMsg').html(response.message);
+                    //     window.location.href = routeUrl + '/' + 'document-verification';
+                    // }
                     $form_login.find('input[type="email"]').toggleClass('has-error').next('span').toggleClass('is-visible');
                     $('#loginErrMesg').html(response.message);
                 }

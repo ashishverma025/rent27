@@ -48,25 +48,6 @@ use RegistersUsers;
     }
 
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data) {
-        return Validator::make($data, [
-                    'fname' => ['required', 'string', 'max:255'],
-                    'lname' => ['required', 'string', 'max:255'],
-//                    'city' => ['required', 'string', 'max:255'],
-//                    'state' => ['required', 'string', 'max:255'],
-//                    'country' => ['required', 'string', 'max:255'],
-                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                    //'dob' => ['required', 'string', 'max:255'],
-                    'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
-
-    /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
@@ -87,6 +68,7 @@ use RegistersUsers;
         'company_registration_number' => @$data['company_registration_number'],
         'verifyTocken' => $data['verifyTocken'],
         'mobile_no' => $data['mobile_no'],
+        'email_verified_at' => null,
       ]);
     }
 
@@ -136,10 +118,8 @@ use RegistersUsers;
             $requestData = $request->all();
             $requestData['verifyTocken'] = Str::random(40);
             event(new Registered($user = $this->create($requestData)));
-            $user_id = $user->id;
+
             $email = $user->email;
-            $pass_for_auth = $user->password;
-      			$post = array('password' => $pass_for_auth, 'email' => $email);
       			$res['resCode'] = 0;
             $data = [];
             $data['verify_token'] = $requestData['verifyTocken'];
@@ -162,12 +142,13 @@ use RegistersUsers;
         if($userData->verifyTocken === $verify_token)
         {
           User::where('email', $userData->email)->update(
-            ['verifyTocken' => NULL, 'status' => 1, 'email_verified_at' => date('yyyy-mm-dd h:i:s')]
+            ['verifyTocken' => NULL, 'status' => 1, 'email_verified_at' => date('Y-m-d H:i:s')]
           );
           Auth::login($userData);
-          return "Your Email is verified successfully.<br><a href='https://www.emptytruck100.com/'>Go to website.</a>";
+          $url = url('advertise-truck');
+          return "Your Email is verified successfully.<br><a href='$url'>Go to website.</a>";
         }
-        return "User Not Found";
+        return "User not found";
       }
       else
       {

@@ -56,6 +56,6 @@ class SendEmailController extends Controller
       $emails = $allEmail;
       echo "Quotes mail has been successfully send to all drivers and companies on following mail id's <h3>".implode(', ',$allEmail)." </h3>";
 
-    //   $sendMailStatus = sendMail($data, 'EmptyTruck100 ', $emails, 'EmptyTruck100 users quotes. ', "support@emptytruck100.com", 'sendQuotesToDriver');
+      $sendMailStatus = sendMail($data, 'EmptyTruck100 ', $emails, 'EmptyTruck100 users quotes. ', "support@emptytruck100.com", 'sendQuotesToDriver');
     }
 }

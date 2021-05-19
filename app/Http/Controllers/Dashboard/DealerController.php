@@ -220,9 +220,8 @@ class DealerController extends Controller {
      */
     public function dealerVehicles(Request $request) {
 
-        $id = Auth::User()->id;
-
-        // Get User checkIfUserSubscribed
+        // $id = Auth::User()->id;
+        // // Get User checkIfUserSubscribed
         // if(checkIfUserSubscribed($id) == false)
         // {
         //     return redirect('/subscription');
@@ -322,6 +321,7 @@ class DealerController extends Controller {
                         . '<i class="fa fa-trash text-danger"></i></a>';
                 $truckImage = !empty($vehicle->truck_logo) ? asset('storage/uploads/truck') . '/' . $vehicle->truck_logo : asset('storage/images') . '/not-available.jpg';
 
+
                 $response['aaData'][$k] = [
                     $k + 1,
                     ucwords(strtolower($vehicle->name)),
@@ -331,7 +331,7 @@ class DealerController extends Controller {
                     $vehicle->truck_name,
                     $vehicle->source_address,
                     $vehicle->destination_address,
-                    $status,
+                    @$status,
                     $pauseBtn . $action
                 ];
                 $k++;
@@ -381,41 +381,25 @@ class DealerController extends Controller {
            $DealerDetails = new DealerVehicle();
 //            prd($DealerDetails);
 
-            $DealerDetails->dealer_id = !empty($userId) ? $userId : $DealerDetails->dealer_id;
             $DealerDetails->vehicle_type_id = !empty($postData['vehicle_category']) ? $postData['vehicle_category'] : $DealerDetails->vehicle_type_id;
             $DealerDetails->fuel_type_id = !empty($postData['vehicle_fuel_type']) ? $postData['vehicle_fuel_type'] : $DealerDetails->fuel_type_id;
-            $DealerDetails->vehicle_id = !empty($postData['vehicle_name']) ? $postData['vehicle_name'] : $DealerDetails->vehicle_name;
+            $DealerDetails->vehicle_id = !empty($postData['vehicle_id']) ? $postData['vehicle_id'] : $DealerDetails->vehicle_id;
             $DealerDetails->registration_number = !empty($postData['vehicle_reg_no']) ? $postData['vehicle_reg_no'] : $DealerDetails->registration_number;
             $DealerDetails->distance_covered = !empty($postData['vehicle_distance_covered']) ? $postData['vehicle_distance_covered'] : $DealerDetails->distance_covered;
             $DealerDetails->color = !empty($postData['vehicle_color']) ? $postData['vehicle_color'] : $DealerDetails->vehicle_color;
-            $DealerDetails->air_condition = !empty($postData['vehicle_air_condition']) ? $postData['vehicle_air_condition'] : $DealerDetails->air_condition;
             $DealerDetails->renting_policies = !empty($postData['vehicle_renting_policies']) ? $postData['vehicle_renting_policies'] : $DealerDetails->renting_policies;
-            $DealerDetails->status = 1;
+            $DealerDetails->status = 0;
 
             $DealerDetails->axle_config = !empty($postData['axle_config']) ? $postData['axle_config'] : $DealerDetails->axle_config;
             $DealerDetails->gross_vehicle_weight = !empty($postData['gross_vehicle_weight']) ? $postData['gross_vehicle_weight'] : $DealerDetails->gross_vehicle_weight;
-            $DealerDetails->engine_size = !empty($postData['engine_size']) ? $postData['engine_size'] : $DealerDetails->engine_size;
             $DealerDetails->transmission = !empty($postData['transmission']) ? $postData['transmission'] : $DealerDetails->transmission;
-            $DealerDetails->brake_horse_power = !empty($postData['brake_horse_power']) ? $postData['brake_horse_power'] : $DealerDetails->brake_horse_power;
-            $DealerDetails->interior_condition = !empty($postData['interior_condition']) ? $postData['interior_condition'] : $DealerDetails->interior_condition;
-            $DealerDetails->tyre_condition = !empty($postData['tyre_condition']) ? $postData['tyre_condition'] : $DealerDetails->tyre_condition;
-            $DealerDetails->driver_position = !empty($postData['driver_position']) ? $postData['driver_position'] : $DealerDetails->driver_position;
-            $DealerDetails->number_of_seats = !empty($postData['number_of_seats']) ? $postData['number_of_seats'] : $DealerDetails->number_of_seats;
-            $DealerDetails->condition = !empty($postData['condition']) ? $postData['condition'] : $DealerDetails->condition;
-
-            $DealerDetails->year_of_purchase = !empty($postData['vehicle_purchase_year']) ? $postData['vehicle_purchase_year'] : $DealerDetails->year_of_purchase;
             $DealerDetails->comment = !empty($postData['comment']) ? $postData['comment'] : $DealerDetails->comment;
-
             //TRUCK DETAILS
             $DealerDetails->truck_name = !empty($postData['truck_name']) ? $postData['truck_name'] : $DealerDetails->truck_name;
             $DealerDetails->source_address = !empty($postData['source_address']) ? $postData['source_address'] : $DealerDetails->source_address;
             $DealerDetails->destination_address = !empty($postData['destination_address']) ? $postData['destination_address'] : $DealerDetails->destination_address;
-            $DealerDetails->weight = !empty($postData['weight']) ? $postData['weight'] : $DealerDetails->weight;
-            $DealerDetails->year = !empty($postData['year']) ? $postData['year'] : $DealerDetails->year;
             $DealerDetails->description = !empty($postData['description']) ? $postData['description'] : $DealerDetails->description;
             $DealerDetails->size = !empty($postData['size']) ? $postData['size'] : $DealerDetails->size;
-            $DealerDetails->leaving = !empty($postData['leaving']) ? $postData['leaving'] : $DealerDetails->leaving;
-            $DealerDetails->to_comming = !empty($postData['to_comming']) ? $postData['to_comming'] : $DealerDetails->to_comming;
             $DealerDetails->pickup_date = !empty($postData['drop_date']) ? $postData['drop_date'] : date('Y-m-d');
             $duration = '30 days';
             $DealerDetails->drop_date = !empty($postData['drop_date']) ? $postData['drop_date'] : createDate(date('Y-m-d'), "+" . $duration, 'Y-m-d');
@@ -428,7 +412,7 @@ class DealerController extends Controller {
                 }
             }
             //TRUCK DETAILS END
-//            prd($postData);
+        //    prd($postData);
             $vehicleImage = $request->file('vehicle_images');
             if (!empty($vehicleImage)) {
                 $logoFileName = upload_admin_images($vehicleImage, 'dealervehicle');
@@ -437,13 +421,28 @@ class DealerController extends Controller {
                 }
             }
 
+            $DealerDetails->air_condition = !empty($postData['vehicle_air_condition']) ? $postData['vehicle_air_condition'] : $DealerDetails->air_condition;
+            $DealerDetails->engine_size = !empty($postData['engine_size']) ? $postData['engine_size'] : $DealerDetails->engine_size;
+            $DealerDetails->brake_horse_power = !empty($postData['brake_horse_power']) ? $postData['brake_horse_power'] : $DealerDetails->brake_horse_power;
+            $DealerDetails->interior_condition = !empty($postData['interior_condition']) ? $postData['interior_condition'] : $DealerDetails->interior_condition;
+            $DealerDetails->tyre_condition = !empty($postData['tyre_condition']) ? $postData['tyre_condition'] : $DealerDetails->tyre_condition;
+            $DealerDetails->driver_position = !empty($postData['driver_position']) ? $postData['driver_position'] : $DealerDetails->driver_position;
+            $DealerDetails->number_of_seats = !empty($postData['number_of_seats']) ? $postData['number_of_seats'] : $DealerDetails->number_of_seats;
+            $DealerDetails->condition = !empty($postData['condition']) ? $postData['condition'] : $DealerDetails->condition;
+            $DealerDetails->year_of_purchase = !empty($postData['vehicle_purchase_year']) ? $postData['vehicle_purchase_year'] : $DealerDetails->year_of_purchase;
+            $DealerDetails->leaving = !empty($postData['leaving']) ? $postData['leaving'] : $DealerDetails->leaving;
+            $DealerDetails->to_comming = !empty($postData['to_comming']) ? $postData['to_comming'] : $DealerDetails->to_comming;
+            $DealerDetails->weight = !empty($postData['weight']) ? $postData['weight'] : $DealerDetails->weight;
+            $DealerDetails->year = !empty($postData['year']) ? $postData['year'] : $DealerDetails->year;
+            $DealerDetails->type = '0';
+            
+
             $DealerDetails->created_at = date('Y-m-d H:i:s');
+            $DealerDetails->dealer_id = !empty($userId) ? $userId : $DealerDetails->dealer_id;
+
             $DealerDetails->save();
             set_flash_message('Dealer Vehicle Added Successfully.', 'alert-success');
 
-            $DealerDetails->updated_at = date('Y-m-d H:i:s');
-            $DealerDetails->update();
-            set_flash_message('Dealer Vehicle Updated successfully', 'alert-success');
               $user_type = getUser_Detail_ByParam('user_type');
             if ($user_type != 'Gold') {
                 return redirect('/subscription');
@@ -495,7 +494,7 @@ class DealerController extends Controller {
 
            // $DealerDetails = empty($dvid) ? new DealerVehicle() : DealerVehicle::where(['id' => $dvid])->first();
            $DealerDetails = new DealerVehicle();
-//            prd($DealerDetails);
+        //    prd($DealerDetails);
 
             $DealerDetails->dealer_id = !empty($userId) ? $userId : $DealerDetails->dealer_id;
             $DealerDetails->vehicle_type_id = !empty($postData['vehicle_category']) ? $postData['vehicle_category'] : $DealerDetails->vehicle_type_id;
@@ -504,34 +503,19 @@ class DealerController extends Controller {
             $DealerDetails->registration_number = !empty($postData['vehicle_reg_no']) ? $postData['vehicle_reg_no'] : $DealerDetails->registration_number;
             $DealerDetails->distance_covered = !empty($postData['vehicle_distance_covered']) ? $postData['vehicle_distance_covered'] : $DealerDetails->distance_covered;
             $DealerDetails->color = !empty($postData['vehicle_color']) ? $postData['vehicle_color'] : $DealerDetails->vehicle_color;
-            $DealerDetails->air_condition = !empty($postData['vehicle_air_condition']) ? $postData['vehicle_air_condition'] : $DealerDetails->air_condition;
             $DealerDetails->renting_policies = !empty($postData['vehicle_renting_policies']) ? $postData['vehicle_renting_policies'] : $DealerDetails->renting_policies;
-            $DealerDetails->status = 1;
+            $DealerDetails->status = 0;
 
-            $DealerDetails->axle_config = !empty($postData['axle_config']) ? $postData['axle_config'] : $DealerDetails->axle_config;
-            $DealerDetails->gross_vehicle_weight = !empty($postData['gross_vehicle_weight']) ? $postData['gross_vehicle_weight'] : $DealerDetails->gross_vehicle_weight;
-            $DealerDetails->engine_size = !empty($postData['engine_size']) ? $postData['engine_size'] : $DealerDetails->engine_size;
             $DealerDetails->transmission = !empty($postData['transmission']) ? $postData['transmission'] : $DealerDetails->transmission;
-            $DealerDetails->brake_horse_power = !empty($postData['brake_horse_power']) ? $postData['brake_horse_power'] : $DealerDetails->brake_horse_power;
-            $DealerDetails->interior_condition = !empty($postData['interior_condition']) ? $postData['interior_condition'] : $DealerDetails->interior_condition;
-            $DealerDetails->tyre_condition = !empty($postData['tyre_condition']) ? $postData['tyre_condition'] : $DealerDetails->tyre_condition;
-            $DealerDetails->driver_position = !empty($postData['driver_position']) ? $postData['driver_position'] : $DealerDetails->driver_position;
-            $DealerDetails->number_of_seats = !empty($postData['number_of_seats']) ? $postData['number_of_seats'] : $DealerDetails->number_of_seats;
-            $DealerDetails->condition = !empty($postData['condition']) ? $postData['condition'] : $DealerDetails->condition;
-
-            $DealerDetails->year_of_purchase = !empty($postData['vehicle_purchase_year']) ? $postData['vehicle_purchase_year'] : $DealerDetails->year_of_purchase;
             $DealerDetails->comment = !empty($postData['comment']) ? $postData['comment'] : $DealerDetails->comment;
 
             //TRUCK DETAILS
             $DealerDetails->truck_name = !empty($postData['truck_name']) ? $postData['truck_name'] : $DealerDetails->truck_name;
             $DealerDetails->source_address = !empty($postData['source_address']) ? $postData['source_address'] : $DealerDetails->source_address;
             $DealerDetails->destination_address = !empty($postData['destination_address']) ? $postData['destination_address'] : $DealerDetails->destination_address;
-            $DealerDetails->weight = !empty($postData['weight']) ? $postData['weight'] : $DealerDetails->weight;
             $DealerDetails->year = !empty($postData['year']) ? $postData['year'] : $DealerDetails->year;
             $DealerDetails->description = !empty($postData['description']) ? $postData['description'] : $DealerDetails->description;
             $DealerDetails->size = !empty($postData['size']) ? $postData['size'] : $DealerDetails->size;
-            $DealerDetails->leaving = !empty($postData['leaving']) ? $postData['leaving'] : $DealerDetails->leaving;
-            $DealerDetails->to_comming = !empty($postData['to_comming']) ? $postData['to_comming'] : $DealerDetails->to_comming;
             $DealerDetails->pickup_date = !empty($postData['drop_date']) ? $postData['drop_date'] : date('Y-m-d');
             $duration = '30 days';
             $DealerDetails->drop_date = !empty($postData['drop_date']) ? $postData['drop_date'] : createDate(date('Y-m-d'), "+" . $duration, 'Y-m-d');
@@ -543,8 +527,25 @@ class DealerController extends Controller {
                     $DealerDetails->truck_logo = $logoFileName;
                 }
             }
+            $DealerDetails->price_for_sale = !empty($postData['price_for_sale']) ? $postData['price_for_sale'] : $DealerDetails->price_for_sale;
+            $DealerDetails->weight = !empty($postData['weight']) ? $postData['weight'] : $DealerDetails->weight;
+            $DealerDetails->leaving = !empty($postData['leaving']) ? $postData['leaving'] : $DealerDetails->leaving;
+            $DealerDetails->to_comming = !empty($postData['to_comming']) ? $postData['to_comming'] : $DealerDetails->to_comming;
+            $DealerDetails->brake_horse_power = !empty($postData['brake_horse_power']) ? $postData['brake_horse_power'] : $DealerDetails->brake_horse_power;
+            $DealerDetails->interior_condition = !empty($postData['interior_condition']) ? $postData['interior_condition'] : $DealerDetails->interior_condition;
+            $DealerDetails->tyre_condition = !empty($postData['tyre_condition']) ? $postData['tyre_condition'] : $DealerDetails->tyre_condition;
+            $DealerDetails->driver_position = !empty($postData['driver_position']) ? $postData['driver_position'] : $DealerDetails->driver_position;
+            $DealerDetails->number_of_seats = !empty($postData['number_of_seats']) ? $postData['number_of_seats'] : $DealerDetails->number_of_seats;
+            $DealerDetails->condition = !empty($postData['condition']) ? $postData['condition'] : $DealerDetails->condition;
+            $DealerDetails->year_of_purchase = !empty($postData['vehicle_purchase_year']) ? $postData['vehicle_purchase_year'] : $DealerDetails->year_of_purchase;
+            $DealerDetails->axle_config = !empty($postData['axle_config']) ? $postData['axle_config'] : $DealerDetails->axle_config;
+            $DealerDetails->gross_vehicle_weight = !empty($postData['gross_vehicle_weight']) ? $postData['gross_vehicle_weight'] : $DealerDetails->gross_vehicle_weight;
+            $DealerDetails->engine_size = !empty($postData['engine_size']) ? $postData['engine_size'] : $DealerDetails->engine_size;
+            $DealerDetails->air_condition = !empty($postData['vehicle_air_condition']) ? $postData['vehicle_air_condition'] : $DealerDetails->air_condition;
+            $DealerDetails->type = '1';
+
             //TRUCK DETAILS END
-//            prd($postData);
+        //    prd($postData);
             $vehicleImage = $request->file('vehicle_images');
             if (!empty($vehicleImage)) {
                 $logoFileName = upload_admin_images($vehicleImage, 'dealervehicle');
@@ -557,12 +558,12 @@ class DealerController extends Controller {
             $DealerDetails->save();
             set_flash_message('Dealer Vehicle Added Successfully.', 'alert-success');
 
-            $DealerDetails->updated_at = date('Y-m-d H:i:s');
-            $DealerDetails->update();
-            set_flash_message('Dealer Vehicle Updated successfully', 'alert-success');
+            // $DealerDetails->updated_at = date('Y-m-d H:i:s');
+            // $DealerDetails->update();
+            // set_flash_message('Dealer Vehicle Updated successfully', 'alert-success');
               $user_type = getUser_Detail_ByParam('user_type');
             if ($user_type != 'Gold') {
-                return redirect('/subscription');
+                return redirect('/sale-subscription');
             }
             else
             {
@@ -603,18 +604,16 @@ class DealerController extends Controller {
             $postData = $request->all();
 
             $DealerDetails = DealerVehicle::where(['id' => $dvid])->first();
-//            prd($DealerDetails);
 
             $DealerDetails->dealer_id = !empty($userId) ? $userId : $DealerDetails->dealer_id;
             $DealerDetails->vehicle_type_id = !empty($postData['vehicle_category']) ? $postData['vehicle_category'] : $DealerDetails->vehicle_type_id;
             $DealerDetails->fuel_type_id = !empty($postData['vehicle_fuel_type']) ? $postData['vehicle_fuel_type'] : $DealerDetails->fuel_type_id;
-            $DealerDetails->vehicle_id = !empty($postData['vehicle_name']) ? $postData['vehicle_name'] : $DealerDetails->vehicle_name;
+            $DealerDetails->vehicle_id = !empty($postData['vehicle_id']) ? $postData['vehicle_id'] : $DealerDetails->vehicle_id;
             $DealerDetails->registration_number = !empty($postData['vehicle_reg_no']) ? $postData['vehicle_reg_no'] : $DealerDetails->registration_number;
             $DealerDetails->distance_covered = !empty($postData['vehicle_distance_covered']) ? $postData['vehicle_distance_covered'] : $DealerDetails->distance_covered;
             $DealerDetails->color = !empty($postData['vehicle_color']) ? $postData['vehicle_color'] : $DealerDetails->vehicle_color;
             $DealerDetails->air_condition = !empty($postData['vehicle_air_condition']) ? $postData['vehicle_air_condition'] : $DealerDetails->air_condition;
             $DealerDetails->renting_policies = !empty($postData['vehicle_renting_policies']) ? $postData['vehicle_renting_policies'] : $DealerDetails->renting_policies;
-            $DealerDetails->status = 1;
 
             $DealerDetails->axle_config = !empty($postData['axle_config']) ? $postData['axle_config'] : $DealerDetails->axle_config;
             $DealerDetails->gross_vehicle_weight = !empty($postData['gross_vehicle_weight']) ? $postData['gross_vehicle_weight'] : $DealerDetails->gross_vehicle_weight;
@@ -631,6 +630,7 @@ class DealerController extends Controller {
             $DealerDetails->comment = !empty($postData['comment']) ? $postData['comment'] : $DealerDetails->comment;
 
             //TRUCK DETAILS
+            $DealerDetails->price_for_sale = !empty($postData['price_for_sale']) ? $postData['price_for_sale'] : $DealerDetails->price_for_sale;
             $DealerDetails->truck_name = !empty($postData['truck_name']) ? $postData['truck_name'] : $DealerDetails->truck_name;
             $DealerDetails->source_address = !empty($postData['source_address']) ? $postData['source_address'] : $DealerDetails->source_address;
             $DealerDetails->destination_address = !empty($postData['destination_address']) ? $postData['destination_address'] : $DealerDetails->destination_address;
@@ -640,10 +640,10 @@ class DealerController extends Controller {
             $DealerDetails->size = !empty($postData['size']) ? $postData['size'] : $DealerDetails->size;
             $DealerDetails->leaving = !empty($postData['leaving']) ? $postData['leaving'] : $DealerDetails->leaving;
             $DealerDetails->to_comming = !empty($postData['to_comming']) ? $postData['to_comming'] : $DealerDetails->to_comming;
-            $DealerDetails->type = !empty($postData['type']) ? $postData['type'] : 1;
             $DealerDetails->pickup_date = !empty($postData['pickup_date']) ? $postData['pickup_date'] : date('Y-m-d');
             $duration = '30 days';
             $DealerDetails->drop_date = !empty($postData['drop_date']) ? $postData['drop_date'] : createDate(date('Y-m-d'), "+" . $duration, 'Y-m-d');
+        //    prd($DealerDetails);
 
             $truckLogo = $request->file('truck_logo');
             if (!empty($truckLogo)) {
